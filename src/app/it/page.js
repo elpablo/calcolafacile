@@ -17,9 +17,9 @@ const tools = [
     },
     {
         href: "/it/convertitore-unita",
-        title: "Convertitore unità di misura (cm, kg, °C, ...)",
+        title: "Convertitore unità di misura",
         description:
-            "Converti lunghezza, peso, temperatura, volume, area, velocità e pressione.",
+            "cm → pollici, kg → lb, °C → °F, volume, area, velocità e pressione.",
     },
     {
         href: "/it/calcolo-percentuale",
@@ -72,20 +72,34 @@ export default function Home() {
                 </h2>
 
                 <div className="grid gap-4 sm:grid-cols-2">
-                    {tools.map((tool) => (
-                        <Link
-                            key={tool.href}
-                            href={tool.href}
-                            className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:border-blue-300 hover:bg-blue-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-blue-500 dark:hover:bg-zinc-800"
-                        >
-                            <h3 className="mb-2 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-                                {tool.title}
-                            </h3>
-                            <p className="text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-                                {tool.description}
-                            </p>
-                        </Link>
-                    ))}
+                    {tools.map((tool) => {
+                        const isFeatured = tool.href === "/it/convertitore-unita";
+
+                        return (
+                            <Link
+                                key={tool.href}
+                                href={tool.href}
+                                className={`min-h-[120px] rounded-xl border p-5 shadow-sm transition ${{
+                                    true: "border-blue-300 bg-blue-50 dark:border-blue-500 dark:bg-zinc-800",
+                                    false: "border-zinc-200 bg-white hover:border-blue-300 hover:bg-blue-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-blue-500 dark:hover:bg-zinc-800"
+                                }[isFeatured]}`}
+                            >
+                                <div className="mb-2">
+                                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                                        {tool.title}
+                                    </h3>
+                                    {isFeatured && (
+                                        <span className="mt-2 inline-flex rounded bg-blue-600 px-2 py-0.5 text-xs font-semibold text-white">
+                                            Consigliato
+                                        </span>
+                                    )}
+                                </div>
+                                <p className="text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+                                    {tool.description}
+                                </p>
+                            </Link>
+                        );
+                    })}
                 </div>
             </section>
 
