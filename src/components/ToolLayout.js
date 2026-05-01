@@ -21,6 +21,17 @@ const defaultRelatedTools = [
         title: "Calcolo markup",
         description: "Calcola il ricarico percentuale rispetto al costo.",
     },
+    {
+        href: "/it/calcolo-stipendio-netto",
+        title: "Calcolo stipendio netto",
+        description: "Stima lo stipendio netto partendo dalla RAL lorda.",
+    },
+    {
+        href: "/it/calcolo-sconto-inverso",
+        title: "Calcolo sconto inverso",
+        description:
+            "Trova il prezzo originale partendo da prezzo scontato e sconto.",
+    },
 ];
 
 export default function ToolLayout({
