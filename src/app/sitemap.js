@@ -1,7 +1,9 @@
+import { conversions } from "@/config/conversions";
+
 export default function sitemap() {
     const baseUrl = "https://calcolafacile.org";
 
-    const routes = [
+    const staticRoutes = [
         "",
         "/it",
         "/it/calcolatore-iva",
@@ -11,13 +13,13 @@ export default function sitemap() {
         "/it/calcolo-stipendio-netto",
         "/it/calcolo-sconto-inverso",
         "/it/convertitore-unita",
-        "/it/oz-a-g",
-        "/it/g-a-oz",
-        "/it/cm-a-pollici",
-        "/it/pollici-a-cm",
-        "/it/kg-a-libbre",
-        "/it/libbre-a-kg",
     ];
+
+    const conversionRoutes = conversions.map(
+        (conversion) => `/it/${conversion.slug}`
+    );
+
+    const routes = [...staticRoutes, ...conversionRoutes];
 
     return routes.map((route) => ({
         url: `${baseUrl}${route}`,
