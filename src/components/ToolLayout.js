@@ -45,6 +45,11 @@ const defaultRelatedTools = [
         title: "JWT Decoder",
         description: "Decodifica header e payload di un JSON Web Token nel browser.",
     },
+    {
+        href: "/it/token-estimator",
+        title: "Stima token LLM",
+        description: "Stima token e costo indicativo per testi usati con modelli AI.",
+    },
 ];
 
 export function ToolInput({

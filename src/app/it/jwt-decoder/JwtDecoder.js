@@ -1,8 +1,7 @@
-
-
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import ToolLayout, { ResultBox } from "@/components/ToolLayout";
 
 const sampleToken =
@@ -83,6 +82,10 @@ export default function JwtDecoder() {
         ? `Header:\n${formatJson(decoded.data.header)}\n\nPayload:\n${formatJson(decoded.data.payload)}`
         : "";
 
+    const tokenEstimatorHref = decoded.data
+        ? `/it/token-estimator?text=${encodeURIComponent(formatJson(decoded.data.payload))}`
+        : "/it/token-estimator";
+
     return (
         <ToolLayout
             title="JWT Decoder online"
@@ -133,6 +136,17 @@ export default function JwtDecoder() {
                 >
                     Pulisci
                 </button>
+            </div>
+
+            <div className="mb-4 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-zinc-700 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-zinc-300">
+                Stai analizzando token o payload per un progetto AI?{" "}
+                <Link
+                    href={tokenEstimatorHref}
+                    className="font-semibold text-blue-700 underline underline-offset-2 transition hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-200"
+                >
+                    Stima token e costo del payload
+                </Link>
+                .
             </div>
 
             {decoded.error && (

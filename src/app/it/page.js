@@ -3,7 +3,7 @@ import Link from "next/link";
 export const metadata = {
     title: "Calcolatori online semplici, gratuiti e veloci",
     description:
-        "Strumenti pratici per calcolare IVA, percentuali, margine, markup, stipendio netto, sconti e conversioni di unità senza registrazione.",
+        "Strumenti pratici per calcolare IVA, percentuali, margine, markup, stipendio netto, conversioni di unità e utility per sviluppatori.",
     alternates: {
         canonical: "https://calcolafacile.org/it",
     },
@@ -53,6 +53,12 @@ const tools = [
         description:
             "Decodifica header e payload di un JSON Web Token direttamente nel browser.",
     },
+    {
+        href: "/it/token-estimator",
+        title: "Stima token LLM",
+        description:
+            "Stima token e costo indicativo per testi usati con modelli AI.",
+    },
 ];
 
 export default function Home() {
@@ -67,8 +73,8 @@ export default function Home() {
                 </h1>
                 <p className="text-lg leading-8 text-zinc-600 dark:text-zinc-300">
                     Strumenti pratici per calcolare IVA, percentuali, margine,
-                    markup, stipendio netto, sconti e conversioni di unità senza
-                    registrazione e senza complicazioni.
+                    markup, stipendio netto, conversioni di unità e utility per
+                    sviluppatori senza registrazione e senza complicazioni.
                 </p>
             </section>
 
@@ -116,9 +122,10 @@ export default function Home() {
                 <p className="max-w-3xl leading-7 text-zinc-600 dark:text-zinc-300">
                     CalcolaFacile raccoglie piccoli strumenti online pensati per
                     risolvere calcoli quotidiani in modo rapido: calcoli fiscali,
-                    percentuali, margini, sconti, stipendio netto e conversioni
-                    di unità di misura. Ogni pagina offre spiegazioni semplici,
-                    esempi e risultati immediati.
+                    percentuali, margini, sconti, stipendio netto, conversioni
+                    di unità di misura e piccole utility per sviluppatori e AI.
+                    Ogni pagina offre spiegazioni semplici, esempi e risultati
+                    immediati.
                 </p>
             </section>
         </main>

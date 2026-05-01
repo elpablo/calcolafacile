@@ -16,6 +16,7 @@ export default function sitemap() {
         "/it/calcolo-sconto-inverso",
         "/it/convertitore-unita",
         "/it/jwt-decoder",
+        "/it/token-estimator",
     ];
 
     const conversionRoutes = conversions.map(
