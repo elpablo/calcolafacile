@@ -32,6 +32,11 @@ const defaultRelatedTools = [
         description:
             "Trova il prezzo originale partendo da prezzo scontato e sconto.",
     },
+    {
+        href: "/it/convertitore-unita",
+        title: "Convertitore unità di misura",
+        description: "Converti lunghezza, peso, temperatura e volume in modo rapido.",
+    },
 ];
 
 export function ToolInput({
