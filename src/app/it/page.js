@@ -3,7 +3,7 @@ import Link from "next/link";
 export const metadata = {
     title: "Calcolatori online semplici, gratuiti e veloci",
     description:
-        "Strumenti pratici per calcolare IVA, percentuali, margine e markup senza registrazione e senza complicazioni.",
+        "Strumenti pratici per calcolare IVA, percentuali, margine, markup, stipendio netto, sconti e conversioni di unità senza registrazione.",
     alternates: {
         canonical: "https://calcolafacile.org/it",
     },
@@ -14,6 +14,12 @@ const tools = [
         href: "/it/calcolatore-iva",
         title: "Calcolatore IVA",
         description: "Aggiungi o scorpora IVA al 22%, 10% e 4%.",
+    },
+    {
+        href: "/it/convertitore-unita",
+        title: "Convertitore unità di misura (cm, kg, °C, ...)",
+        description:
+            "Converti lunghezza, peso, temperatura, volume, area, velocità e pressione.",
     },
     {
         href: "/it/calcolo-percentuale",
@@ -55,8 +61,8 @@ export default function Home() {
                 </h1>
                 <p className="text-lg leading-8 text-zinc-600 dark:text-zinc-300">
                     Strumenti pratici per calcolare IVA, percentuali, margine,
-                    markup, stipendio netto e sconto inverso senza registrazione
-                    e senza complicazioni.
+                    markup, stipendio netto, sconti e conversioni di unità senza
+                    registrazione e senza complicazioni.
                 </p>
             </section>
 
@@ -89,8 +95,9 @@ export default function Home() {
                 </h2>
                 <p className="max-w-3xl leading-7 text-zinc-600 dark:text-zinc-300">
                     CalcolaFacile raccoglie piccoli strumenti online pensati per
-                    risolvere calcoli quotidiani in modo rapido. Ogni pagina è
-                    dedicata a un singolo calcolo, con spiegazioni semplici,
+                    risolvere calcoli quotidiani in modo rapido: calcoli fiscali,
+                    percentuali, margini, sconti, stipendio netto e conversioni
+                    di unità di misura. Ogni pagina offre spiegazioni semplici,
                     esempi e risultati immediati.
                 </p>
             </section>

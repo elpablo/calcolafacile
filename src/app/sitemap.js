@@ -10,6 +10,13 @@ export default function sitemap() {
         "/it/calcolo-markup",
         "/it/calcolo-stipendio-netto",
         "/it/calcolo-sconto-inverso",
+        "/it/convertitore-unita",
+        "/it/oz-a-g",
+        "/it/g-a-oz",
+        "/it/cm-a-pollici",
+        "/it/pollici-a-cm",
+        "/it/kg-a-libbre",
+        "/it/libbre-a-kg",
     ];
 
     return routes.map((route) => ({
