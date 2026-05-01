@@ -239,7 +239,7 @@ export default function PercentageCalculator() {
                 </>
             )}
 
-            <ResultBox>
+            <ResultBox copyText={`${result.title}: ${result.value}`}>
                 <p className="text-sm text-zinc-500 dark:text-zinc-400">{result.title}</p>
                 <p className="text-2xl font-bold text-blue-600 dark:text-blue-300">
                     {result.value}

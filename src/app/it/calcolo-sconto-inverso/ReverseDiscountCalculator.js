@@ -71,7 +71,7 @@ export default function ReverseDiscountCalculator() {
                 placeholder="Es. 30"
             />
 
-            <ResultBox>
+            <ResultBox copyText={isValid ? `${formatEuro(prezzoOriginale)} €` : ""}>
                 <p className="text-sm text-zinc-500 dark:text-zinc-400">Prezzo originale</p>
                 <p className="text-2xl font-bold text-blue-600 dark:text-blue-300">
                     {formatEuro(prezzoOriginale)} €

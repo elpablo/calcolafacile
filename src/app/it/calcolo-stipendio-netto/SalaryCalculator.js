@@ -55,7 +55,7 @@ export default function SalaryCalculator() {
                 helpText="Inserisci la retribuzione annua lorda"
             />
 
-            <ResultBox>
+            <ResultBox copyText={isValid ? `${formatEuro(nettoMensile)} € al mese` : ""}>
                 <p className="text-sm text-zinc-500 dark:text-zinc-400">Netto mensile stimato</p>
                 <p className="text-2xl font-bold text-blue-600 dark:text-blue-300">
                     {formatEuro(nettoMensile)} €

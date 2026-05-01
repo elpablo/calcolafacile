@@ -294,7 +294,7 @@ export default function UnitConverter({
                 </div>
             </div>
 
-            <ResultBox>
+            <ResultBox copyText={isValid ? `${formatNumber(numericAmount)} ${fromUnit} = ${formatNumber(result)} ${toUnit}` : ""}>
                 <p className="text-sm text-zinc-500 dark:text-zinc-400">Risultato</p>
                 <p className="text-2xl font-bold text-blue-600 dark:text-blue-300">
                     {formatNumber(result)} {toUnit}

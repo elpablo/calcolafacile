@@ -1,3 +1,6 @@
+"use client";
+
+import { useRef, useState } from "react";
 import Link from "next/link";
 
 const defaultRelatedTools = [
@@ -78,10 +81,44 @@ export function ToolInput({
     );
 }
 
-export function ResultBox({ children }) {
+export function ResultBox({ children, copyText }) {
+    const contentRef = useRef(null);
+    const [copied, setCopied] = useState(false);
+
+    const handleCopy = async () => {
+        try {
+            const text = copyText ?? contentRef.current?.innerText;
+
+            if (text) {
+                await navigator.clipboard.writeText(text);
+                setCopied(true);
+                window.setTimeout(() => setCopied(false), 1200);
+            }
+        } catch (err) {
+            console.error("Errore copia:", err);
+        }
+    };
+
     return (
         <div className="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-4 shadow-sm dark:border-blue-900/60 dark:bg-blue-950/40">
-            {children}
+            <div className="flex items-start justify-between gap-3">
+                <div ref={contentRef} className="flex-1">
+                    {children}
+                </div>
+                <button
+                    type="button"
+                    onClick={handleCopy}
+                    className={`flex h-9 min-w-9 items-center justify-center rounded-lg border text-sm font-medium shadow-sm transition hover:scale-105 active:scale-95 ${
+                        copied
+                            ? "border-green-300 bg-green-50 text-green-700 dark:border-green-700 dark:bg-green-950/40 dark:text-green-300"
+                            : "border-blue-300 bg-white text-zinc-700 hover:bg-blue-100 dark:border-blue-700 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
+                    }`}
+                    aria-label={copied ? "Risultato copiato" : "Copia risultato"}
+                    title={copied ? "Copiato" : "Copia risultato"}
+                >
+                    {copied ? "✓" : "📋"}
+                </button>
+            </div>
         </div>
     );
 }
