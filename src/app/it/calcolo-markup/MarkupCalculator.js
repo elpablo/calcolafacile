@@ -1,22 +1,39 @@
 "use client";
 
 import { useState } from "react";
-import ToolLayout from "@/components/ToolLayout";
+import ToolLayout, { ToolInput, ResultBox } from "@/components/ToolLayout";
 
 export default function MarkupCalculator() {
+    const [mode, setMode] = useState("fromPrice");
     const [costo, setCosto] = useState(60);
     const [prezzoVendita, setPrezzoVendita] = useState(100);
+    const [markupTarget, setMarkupTarget] = useState(50);
 
     const costoNumber = parseFloat(costo);
     const prezzoNumber = parseFloat(prezzoVendita);
+    const markupTargetNumber = parseFloat(markupTarget);
 
-    const isValid =
+    const isFromPriceValid =
         !isNaN(costoNumber) &&
         !isNaN(prezzoNumber) &&
-        costoNumber > 0;
+        costoNumber > 0 &&
+        prezzoNumber >= 0;
 
-    const profitto = isValid ? prezzoNumber - costoNumber : 0;
-    const markup = isValid ? (profitto / costoNumber) * 100 : 0;
+    const isTargetMarkupValid =
+        !isNaN(costoNumber) &&
+        !isNaN(markupTargetNumber) &&
+        costoNumber > 0 &&
+        markupTargetNumber >= 0;
+
+    const isValid = mode === "fromPrice" ? isFromPriceValid : isTargetMarkupValid;
+
+    const profitto = isFromPriceValid ? prezzoNumber - costoNumber : 0;
+    const markup = isFromPriceValid ? (profitto / costoNumber) * 100 : 0;
+
+    const prezzoDaMarkup = isTargetMarkupValid
+        ? costoNumber * (1 + markupTargetNumber / 100)
+        : 0;
+    const profittoDaMarkup = isTargetMarkupValid ? prezzoDaMarkup - costoNumber : 0;
 
     const formatEuro = (value) =>
         value.toLocaleString("it-IT", {
@@ -29,14 +46,12 @@ export default function MarkupCalculator() {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
         });
-    const fieldClass =
-        "w-full rounded border border-zinc-300 bg-white p-2 text-zinc-900 placeholder:text-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-blue-400";
 
     return (
         <ToolLayout
             title="Calcolo markup online"
             currentPath="/it/calcolo-markup"
-            description="Questo calcolatore markup ti permette di calcolare il ricarico percentuale partendo dal costo e dal prezzo di vendita. È utile per ecommerce, negozi, freelance e piccole attività che vogliono capire quanto ricarico applicano sui propri prodotti o servizi."
+            description="Questo calcolatore markup ti permette di calcolare il ricarico percentuale partendo dal costo e dal prezzo di vendita, oppure di trovare il prezzo di vendita necessario per applicare un markup desiderato. È utile per ecommerce, negozi, freelance e piccole attività."
             faq={
                 <>
                     <h3 className="font-semibold">Come si calcola il markup?</h3>
@@ -48,45 +63,102 @@ export default function MarkupCalculator() {
                     <p>
                         Il markup misura il ricarico rispetto al costo, mentre il margine misura il profitto rispetto al prezzo di vendita.
                     </p>
+
+                    <h3 className="font-semibold mt-2">Come calcolo il prezzo di vendita partendo dal markup desiderato?</h3>
+                    <p>
+                        Moltiplica il costo per 1 più il markup espresso in forma decimale. Ad esempio, con un costo di 60 € e un markup del 50%, il prezzo di vendita è 90 €.
+                    </p>
                 </>
             }
         >
-            <div className="mb-4">
-                <label className="mb-1 block text-zinc-700 dark:text-zinc-300">Costo</label>
-                <input
-                    type="number"
-                    step="0.01"
-                    value={costo}
-                    onChange={(e) => setCosto(e.target.value)}
-                    className={fieldClass}
-                    placeholder="Inserisci il costo (es. 60)"
-                />
+            <div className="mb-6">
+                <label className="mb-1 block text-zinc-700 dark:text-zinc-300">Tipo di calcolo</label>
+                <select
+                    value={mode}
+                    onChange={(e) => setMode(e.target.value)}
+                    className="w-full rounded border border-zinc-300 bg-white p-2 text-zinc-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-blue-400"
+                >
+                    <option value="fromPrice">Calcola markup da costo e prezzo</option>
+                    <option value="targetMarkup">Calcola prezzo da markup desiderato</option>
+                </select>
             </div>
 
-            <div className="mb-4">
-                <label className="mb-1 block text-zinc-700 dark:text-zinc-300">Prezzo di vendita</label>
-                <input
-                    type="number"
-                    step="0.01"
+            <ToolInput
+                label="Costo"
+                value={costo}
+                onChange={(e) => setCosto(e.target.value)}
+                suffix="€"
+                placeholder="Es. 60"
+                helpText="Inserisci il costo del prodotto"
+            />
+
+            {mode === "fromPrice" && (
+                <ToolInput
+                    label="Prezzo di vendita"
                     value={prezzoVendita}
                     onChange={(e) => setPrezzoVendita(e.target.value)}
-                    className={fieldClass}
-                    placeholder="Inserisci il prezzo di vendita (es. 100)"
+                    suffix="€"
+                    placeholder="Es. 100"
                 />
-            </div>
+            )}
 
-            <div className="mt-4 rounded border border-blue-200 bg-blue-50 p-4 dark:border-blue-900/60 dark:bg-blue-950/40">
-                <p className="text-lg text-zinc-800 dark:text-zinc-100">
-                    Profitto: <strong className="text-blue-700 dark:text-blue-300">{formatEuro(profitto)} €</strong>
-                </p>
-                <p className="text-lg text-zinc-800 dark:text-zinc-100">
-                    Markup: <strong className="text-blue-700 dark:text-blue-300">{formatPercent(markup)}%</strong>
-                </p>
-                <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
-                    Con un costo di {formatEuro(isNaN(costoNumber) ? 0 : costoNumber)} € e un prezzo di vendita di{" "}
-                    {formatEuro(isNaN(prezzoNumber) ? 0 : prezzoNumber)} €, il markup è pari al {formatPercent(markup)}%.
-                </p>
-            </div>
+            {mode === "targetMarkup" && (
+                <ToolInput
+                    label="Markup desiderato"
+                    value={markupTarget}
+                    onChange={(e) => setMarkupTarget(e.target.value)}
+                    suffix="%"
+                    placeholder="Es. 50"
+                />
+            )}
+
+            <ResultBox>
+                {mode === "fromPrice" ? (
+                    <>
+                        <p className="text-sm text-zinc-500 dark:text-zinc-400">Profitto</p>
+                        <p className="text-2xl font-bold text-blue-600 dark:text-blue-300">
+                            {formatEuro(profitto)} €
+                        </p>
+
+                        <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400">Markup</p>
+                        <p className="text-xl font-semibold text-blue-500 dark:text-blue-300">
+                            {formatPercent(markup)}%
+                        </p>
+
+                        {!isValid ? (
+                            <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
+                                Inserisci un costo maggiore di 0 e un prezzo di vendita valido (≥ 0).
+                            </p>
+                        ) : (
+                            <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
+                                Con un costo di {formatEuro(costoNumber)} € e un prezzo di vendita di {formatEuro(prezzoNumber)} €, il markup è pari al {formatPercent(markup)}%.
+                            </p>
+                        )}
+                    </>
+                ) : (
+                    <>
+                        <p className="text-sm text-zinc-500 dark:text-zinc-400">Prezzo di vendita</p>
+                        <p className="text-2xl font-bold text-blue-600 dark:text-blue-300">
+                            {formatEuro(prezzoDaMarkup)} €
+                        </p>
+
+                        <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400">Profitto</p>
+                        <p className="text-xl font-semibold text-blue-500 dark:text-blue-300">
+                            {formatEuro(profittoDaMarkup)} €
+                        </p>
+
+                        {!isValid ? (
+                            <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
+                                Inserisci un costo maggiore di 0 e un markup desiderato valido (≥ 0%).
+                            </p>
+                        ) : (
+                            <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
+                                Con un costo di {formatEuro(costoNumber)} € e un markup desiderato del {formatPercent(markupTargetNumber)}%, il prezzo di vendita dovrebbe essere {formatEuro(prezzoDaMarkup)} €.
+                            </p>
+                        )}
+                    </>
+                )}
+            </ResultBox>
         </ToolLayout>
     );
 }

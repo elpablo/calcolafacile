@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import ToolLayout from "@/components/ToolLayout";
+import ToolLayout, { ToolInput, ResultBox } from "@/components/ToolLayout";
 
 export default function ReverseDiscountCalculator() {
     const [prezzoScontato, setPrezzoScontato] = useState(70);
@@ -13,6 +13,7 @@ export default function ReverseDiscountCalculator() {
     const isValid =
         !isNaN(prezzoNumber) &&
         !isNaN(scontoNumber) &&
+        prezzoNumber >= 0 &&
         scontoNumber >= 0 &&
         scontoNumber < 100;
 
@@ -53,44 +54,44 @@ export default function ReverseDiscountCalculator() {
                 </>
             }
         >
-            <div className="mb-4">
-                <label className="mb-1 block">Prezzo scontato</label>
-                <input
-                    type="number"
-                    step="0.01"
-                    value={prezzoScontato}
-                    onChange={(e) => setPrezzoScontato(e.target.value)}
-                    className="w-full rounded border p-2"
-                    placeholder="Es. 70"
-                />
-            </div>
+            <ToolInput
+                label="Prezzo scontato"
+                value={prezzoScontato}
+                onChange={(e) => setPrezzoScontato(e.target.value)}
+                suffix="€"
+                placeholder="Es. 70"
+                helpText="Inserisci il prezzo finale dopo lo sconto"
+            />
 
-            <div className="mb-4">
-                <label className="mb-1 block">Sconto applicato (%)</label>
-                <input
-                    type="number"
-                    step="0.01"
-                    value={sconto}
-                    onChange={(e) => setSconto(e.target.value)}
-                    className="w-full rounded border p-2"
-                    placeholder="Es. 30"
-                />
-            </div>
+            <ToolInput
+                label="Sconto applicato"
+                value={sconto}
+                onChange={(e) => setSconto(e.target.value)}
+                suffix="%"
+                placeholder="Es. 30"
+            />
 
-            <div className="mt-4 rounded border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950/40">
-                <p className="text-lg">
-                    Prezzo originale:{" "}
-                    <strong className="text-blue-700 dark:text-blue-300">
-                        {formatEuro(prezzoOriginale)} €
-                    </strong>
+            <ResultBox>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400">Prezzo originale</p>
+                <p className="text-2xl font-bold text-blue-600 dark:text-blue-300">
+                    {formatEuro(prezzoOriginale)} €
                 </p>
-                <p className="text-lg">
-                    Risparmio:{" "}
-                    <strong className="text-blue-700 dark:text-blue-300">
-                        {formatEuro(risparmio)} €
-                    </strong>
+
+                <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400">Risparmio</p>
+                <p className="text-xl font-semibold text-blue-500 dark:text-blue-300">
+                    {formatEuro(risparmio)} €
                 </p>
-            </div>
+
+                {!isValid ? (
+                    <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
+                        Inserisci un prezzo scontato valido e uno sconto compreso tra 0% e 99,99%.
+                    </p>
+                ) : (
+                    <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
+                        Con un prezzo scontato di {formatEuro(prezzoNumber)} € e uno sconto del {scontoNumber.toLocaleString("it-IT")}%, il prezzo originale era {formatEuro(prezzoOriginale)} €.
+                    </p>
+                )}
+            </ResultBox>
         </ToolLayout>
     );
 }

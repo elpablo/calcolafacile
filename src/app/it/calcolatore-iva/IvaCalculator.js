@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import ToolLayout from "@/components/ToolLayout";
+import ToolLayout, { ToolInput, ResultBox } from "@/components/ToolLayout";
 
 export default function CalcolatoreIVA() {
     const [importo, setImporto] = useState("");
@@ -10,7 +10,7 @@ export default function CalcolatoreIVA() {
 
     const calcola = () => {
         const value = parseFloat(importo);
-        if (isNaN(value)) return { netto: 0, iva: 0, lordo: 0 };
+        if (isNaN(value) || value < 0) return { netto: 0, iva: 0, lordo: 0 };
 
         if (tipo === "aggiungi") {
             const iva = value * (aliquota / 100);
@@ -31,8 +31,12 @@ export default function CalcolatoreIVA() {
     };
 
     const result = calcola();
-    const fieldClass =
-      "w-full rounded border border-zinc-300 bg-white p-2 text-zinc-900 placeholder:text-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-blue-400";
+
+    const formatEuro = (value) =>
+      value.toLocaleString("it-IT", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
 
     return (
       <ToolLayout
@@ -53,24 +57,21 @@ export default function CalcolatoreIVA() {
           </>
         }
       >
-        <div className="mb-4">
-          <label className="mb-1 block text-zinc-700 dark:text-zinc-300">Importo</label>
-          <input
-            type="number"
-            step="0.01"
-            value={importo}
-            onChange={(e) => setImporto(e.target.value)}
-            className={fieldClass}
-            placeholder="Inserisci importo (es. 100)"
-          />
-        </div>
+        <ToolInput
+          label="Importo"
+          value={importo}
+          onChange={(e) => setImporto(e.target.value)}
+          suffix="€"
+          placeholder="Es. 100"
+          helpText="Inserisci l'importo su cui calcolare l'IVA"
+        />
 
         <div className="mb-4">
           <label className="mb-1 block text-zinc-700 dark:text-zinc-300">Aliquota IVA (%)</label>
           <select
             value={aliquota}
             onChange={(e) => setAliquota(Number(e.target.value))}
-            className={fieldClass}
+            className="w-full rounded border border-zinc-300 bg-white p-2 text-zinc-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-blue-400"
           >
             <option value={22}>22%</option>
             <option value={10}>10%</option>
@@ -83,39 +84,40 @@ export default function CalcolatoreIVA() {
           <select
             value={tipo}
             onChange={(e) => setTipo(e.target.value)}
-            className={fieldClass}
+            className="w-full rounded border border-zinc-300 bg-white p-2 text-zinc-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-blue-400"
           >
             <option value="aggiungi">Aggiungi IVA</option>
             <option value="scorpora">Scorpora IVA</option>
           </select>
         </div>
 
-        <div className="mt-4 rounded border border-blue-200 bg-blue-50 p-4 dark:border-blue-900/60 dark:bg-blue-950/40">
-          <p className="text-lg text-zinc-800 dark:text-zinc-100">
-            Netto: <strong className="text-blue-700 dark:text-blue-300">
-              {result.netto.toLocaleString("it-IT", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })} €
-            </strong>
+        <ResultBox>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">Totale</p>
+          <p className="text-2xl font-bold text-blue-600 dark:text-blue-300">
+            {formatEuro(result.lordo)} €
           </p>
-          <p className="text-lg text-zinc-800 dark:text-zinc-100">
-            IVA: <strong className="text-blue-700 dark:text-blue-300">
-              {result.iva.toLocaleString("it-IT", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })} €
-            </strong>
-          </p>
-          <p className="text-lg text-zinc-800 dark:text-zinc-100">
-            Totale: <strong className="text-blue-700 dark:text-blue-300">
-              {result.lordo.toLocaleString("it-IT", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })} €
-            </strong>
-          </p>
-        </div>
+
+          <div className="mt-3 grid gap-3 sm:grid-cols-2">
+            <div>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400">Netto</p>
+              <p className="text-xl font-semibold text-blue-500 dark:text-blue-300">
+                {formatEuro(result.netto)} €
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400">IVA</p>
+              <p className="text-xl font-semibold text-blue-500 dark:text-blue-300">
+                {formatEuro(result.iva)} €
+              </p>
+            </div>
+          </div>
+
+          {parseFloat(importo) < 0 && (
+            <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
+              Inserisci un importo valido maggiore o uguale a 0.
+            </p>
+          )}
+        </ResultBox>
       </ToolLayout>
     );
 }

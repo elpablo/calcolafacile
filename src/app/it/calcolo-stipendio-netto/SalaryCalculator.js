@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import ToolLayout from "@/components/ToolLayout";
+import ToolLayout, { ToolInput, ResultBox } from "@/components/ToolLayout";
 
 export default function SalaryCalculator() {
     const [ral, setRal] = useState(30000);
@@ -17,6 +17,9 @@ export default function SalaryCalculator() {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
         });
+
+
+    const isValid = !isNaN(ralNumber) && ralNumber > 0;
 
     return (
         <ToolLayout
@@ -44,32 +47,36 @@ export default function SalaryCalculator() {
                 </>
             }
         >
-            <div className="mb-4">
-                <label className="mb-1 block text-zinc-700 dark:text-zinc-300">RAL (lordo annuo)</label>
-                <input
-                    type="number"
-                    value={ral}
-                    onChange={(e) => setRal(e.target.value)}
-                    className="w-full rounded border border-zinc-300 bg-white p-2 text-zinc-900 placeholder:text-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-blue-400"
-                    placeholder="Es. 30000"
-                />
-            </div>
+            <ToolInput
+                label="RAL (lordo annuo)"
+                value={ral}
+                onChange={(e) => setRal(e.target.value)}
+                suffix="€"
+                placeholder="Es. 30000"
+                helpText="Inserisci la retribuzione annua lorda"
+            />
 
-            <div className="mt-4 rounded border border-blue-200 bg-blue-50 p-4 dark:border-blue-900/60 dark:bg-blue-950/40">
-                <p className="text-lg text-zinc-800 dark:text-zinc-100">
-                    Netto annuo:{" "}
-                    <strong className="text-blue-700 dark:text-blue-300">
-                        {formatEuro(nettoAnnuale)} €
-                    </strong>
+            <ResultBox>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400">Netto mensile stimato</p>
+                <p className="text-2xl font-bold text-blue-600 dark:text-blue-300">
+                    {formatEuro(nettoMensile)} €
                 </p>
 
-                <p className="text-lg text-zinc-800 dark:text-zinc-100">
-                    Netto mensile:{" "}
-                    <strong className="text-blue-700 dark:text-blue-300">
-                        {formatEuro(nettoMensile)} €
-                    </strong>
+                <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400">Netto annuo stimato</p>
+                <p className="text-xl font-semibold text-blue-500 dark:text-blue-300">
+                    {formatEuro(nettoAnnuale)} €
                 </p>
-            </div>
+
+                {!isValid ? (
+                    <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
+                        Inserisci una RAL valida maggiore di 0.
+                    </p>
+                ) : (
+                    <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
+                        Con una RAL di {formatEuro(ralNumber)} €, il netto stimato è di {formatEuro(nettoMensile)} € al mese.
+                    </p>
+                )}
+            </ResultBox>
         </ToolLayout>
     );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import ToolLayout from "@/components/ToolLayout";
+import ToolLayout, { ToolInput, ResultBox } from "@/components/ToolLayout";
 
 const modes = {
     percentOf: "percentOf",
@@ -64,6 +64,15 @@ export default function PercentageCalculator() {
         if (mode === modes.change) {
             const baseNumber = parseNumber(base);
             const variazioneNumber = parseNumber(variazione);
+
+            if (tipoVariazione === "riduzione" && variazioneNumber !== null && variazioneNumber > 100) {
+                return {
+                    title: "Valore non valido",
+                    value: "-",
+                    detail: "La riduzione non può essere superiore al 100%.",
+                };
+            }
+
             const multiplier = tipoVariazione === "aumento" ? 1 : -1;
             const delta = baseNumber === null || variazioneNumber === null ? 0 : (baseNumber * variazioneNumber) / 100;
             const risultato = baseNumber === null ? 0 : baseNumber + multiplier * delta;
@@ -77,6 +86,15 @@ export default function PercentageCalculator() {
 
         const prezzoNumber = parseNumber(prezzo);
         const scontoNumber = parseNumber(sconto);
+
+        if (scontoNumber !== null && scontoNumber > 100) {
+            return {
+                title: "Sconto non valido",
+                value: "-",
+                detail: "Lo sconto non può essere superiore al 100%.",
+            };
+        }
+
         const risparmio = prezzoNumber === null || scontoNumber === null ? 0 : (prezzoNumber * scontoNumber) / 100;
         const prezzoFinale = prezzoNumber === null ? 0 : prezzoNumber - risparmio;
 
@@ -88,8 +106,6 @@ export default function PercentageCalculator() {
     };
 
     const result = renderResult();
-    const fieldClass =
-        "w-full rounded border border-zinc-300 bg-white p-2 text-zinc-900 placeholder:text-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-blue-400";
 
     return (
         <ToolLayout
@@ -120,7 +136,7 @@ export default function PercentageCalculator() {
                 <select
                     value={mode}
                     onChange={(e) => setMode(e.target.value)}
-                    className={fieldClass}
+                    className="w-full rounded border border-zinc-300 bg-white p-2 text-zinc-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-blue-400"
                 >
                     <option value={modes.percentOf}>Quanto è X% di un numero</option>
                     <option value={modes.ratio}>Un numero è che percentuale del totale</option>
@@ -131,92 +147,64 @@ export default function PercentageCalculator() {
 
             {mode === modes.percentOf && (
                 <>
-                    <div className="mb-4">
-                        <label className="mb-1 block text-zinc-700 dark:text-zinc-300">Numero di partenza</label>
-                        <input
-                            type="number"
-                            step="0.01"
-                            value={valore}
-                            onChange={(e) => setValore(e.target.value)}
-                            className={fieldClass}
-                            placeholder="Inserisci un numero (es. 100)"
-                        />
-                    </div>
+                    <ToolInput
+                        label="Numero di partenza"
+                        value={valore}
+                        onChange={(e) => setValore(e.target.value)}
+                        placeholder="Es. 100"
+                    />
 
-                    <div className="mb-4">
-                        <label className="mb-1 block text-zinc-700 dark:text-zinc-300">Percentuale (%)</label>
-                        <input
-                            type="number"
-                            step="0.01"
-                            value={percentuale}
-                            onChange={(e) => setPercentuale(e.target.value)}
-                            className={fieldClass}
-                            placeholder="Inserisci la percentuale (es. 22)"
-                        />
-                    </div>
+                    <ToolInput
+                        label="Percentuale"
+                        value={percentuale}
+                        onChange={(e) => setPercentuale(e.target.value)}
+                        suffix="%"
+                        placeholder="Es. 22"
+                    />
                 </>
             )}
 
             {mode === modes.ratio && (
                 <>
-                    <div className="mb-4">
-                        <label className="mb-1 block text-zinc-700 dark:text-zinc-300">Parte</label>
-                        <input
-                            type="number"
-                            step="0.01"
-                            value={parte}
-                            onChange={(e) => setParte(e.target.value)}
-                            className={fieldClass}
-                            placeholder="Inserisci la parte (es. 25)"
-                        />
-                    </div>
+                    <ToolInput
+                        label="Parte"
+                        value={parte}
+                        onChange={(e) => setParte(e.target.value)}
+                        placeholder="Es. 25"
+                    />
 
-                    <div className="mb-4">
-                        <label className="mb-1 block text-zinc-700 dark:text-zinc-300">Totale</label>
-                        <input
-                            type="number"
-                            step="0.01"
-                            value={totale}
-                            onChange={(e) => setTotale(e.target.value)}
-                            className={fieldClass}
-                            placeholder="Inserisci il totale (es. 200)"
-                        />
-                    </div>
+                    <ToolInput
+                        label="Totale"
+                        value={totale}
+                        onChange={(e) => setTotale(e.target.value)}
+                        placeholder="Es. 200"
+                    />
                 </>
             )}
 
             {mode === modes.change && (
                 <>
-                    <div className="mb-4">
-                        <label className="mb-1 block text-zinc-700 dark:text-zinc-300">Numero di partenza</label>
-                        <input
-                            type="number"
-                            step="0.01"
-                            value={base}
-                            onChange={(e) => setBase(e.target.value)}
-                            className={fieldClass}
-                            placeholder="Inserisci un numero (es. 100)"
-                        />
-                    </div>
+                    <ToolInput
+                        label="Numero di partenza"
+                        value={base}
+                        onChange={(e) => setBase(e.target.value)}
+                        placeholder="Es. 100"
+                    />
 
-                    <div className="mb-4">
-                        <label className="mb-1 block text-zinc-700 dark:text-zinc-300">Variazione (%)</label>
-                        <input
-                            type="number"
-                            step="0.01"
-                            value={variazione}
-                            onChange={(e) => setVariazione(e.target.value)}
-                            className={fieldClass}
-                            placeholder="Inserisci la variazione (es. 10)"
-                        />
-                    </div>
+                    <ToolInput
+                        label="Variazione"
+                        value={variazione}
+                        onChange={(e) => setVariazione(e.target.value)}
+                        suffix="%"
+                        placeholder="Es. 10"
+                    />
 
                     <div className="mb-4">
                         <label className="mb-1 block text-zinc-700 dark:text-zinc-300">Tipo variazione</label>
                         <select
                             value={tipoVariazione}
                             onChange={(e) => setTipoVariazione(e.target.value)}
-                            className={fieldClass}
+                            className="w-full rounded border border-zinc-300 bg-white p-2 text-zinc-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-blue-400"
                         >
                             <option value="aumento">Aumento</option>
                             <option value="riduzione">Riduzione</option>
@@ -227,38 +215,31 @@ export default function PercentageCalculator() {
 
             {mode === modes.discount && (
                 <>
-                    <div className="mb-4">
-                        <label className="mb-1 block text-zinc-700 dark:text-zinc-300">Prezzo iniziale</label>
-                        <input
-                            type="number"
-                            step="0.01"
-                            value={prezzo}
-                            onChange={(e) => setPrezzo(e.target.value)}
-                            className={fieldClass}
-                            placeholder="Inserisci il prezzo (es. 120)"
-                        />
-                    </div>
+                    <ToolInput
+                        label="Prezzo iniziale"
+                        value={prezzo}
+                        onChange={(e) => setPrezzo(e.target.value)}
+                        suffix="€"
+                        placeholder="Es. 120"
+                    />
 
-                    <div className="mb-4">
-                        <label className="mb-1 block text-zinc-700 dark:text-zinc-300">Sconto (%)</label>
-                        <input
-                            type="number"
-                            step="0.01"
-                            value={sconto}
-                            onChange={(e) => setSconto(e.target.value)}
-                            className={fieldClass}
-                            placeholder="Inserisci lo sconto (es. 30)"
-                        />
-                    </div>
+                    <ToolInput
+                        label="Sconto"
+                        value={sconto}
+                        onChange={(e) => setSconto(e.target.value)}
+                        suffix="%"
+                        placeholder="Es. 30"
+                    />
                 </>
             )}
 
-            <div className="mt-4 rounded border border-blue-200 bg-blue-50 p-4 dark:border-blue-900/60 dark:bg-blue-950/40">
-                <p className="text-lg text-zinc-800 dark:text-zinc-100">
-                    {result.title}: <strong className="text-blue-700 dark:text-blue-300">{result.value}</strong>
+            <ResultBox>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400">{result.title}</p>
+                <p className="text-2xl font-bold text-blue-600 dark:text-blue-300">
+                    {result.value}
                 </p>
                 <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">{result.detail}</p>
-            </div>
+            </ResultBox>
         </ToolLayout>
     );
 }
