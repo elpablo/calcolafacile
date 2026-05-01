@@ -79,7 +79,7 @@ export default function Home() {
                             <Link
                                 key={tool.href}
                                 href={tool.href}
-                                className={`min-h-[120px] rounded-xl border p-5 shadow-sm transition ${{
+                                className={`min-h-30 rounded-xl border p-5 shadow-sm transition ${{
                                     true: "border-blue-300 bg-blue-50 dark:border-blue-500 dark:bg-zinc-800",
                                     false: "border-zinc-200 bg-white hover:border-blue-300 hover:bg-blue-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-blue-500 dark:hover:bg-zinc-800"
                                 }[isFeatured]}`}
