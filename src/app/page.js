@@ -21,6 +21,17 @@ const tools = [
     title: "Calcolo markup",
     description: "Calcola il ricarico percentuale rispetto al costo.",
   },
+  {
+    href: "/it/calcolo-stipendio-netto",
+    title: "Calcolo stipendio netto",
+    description: "Stima lo stipendio netto partendo dalla RAL lorda.",
+  },
+  {
+    href: "/it/calcolo-sconto-inverso",
+    title: "Calcolo sconto inverso",
+    description:
+      "Trova il prezzo originale partendo da prezzo scontato e sconto.",
+  },
 ];
 
 export default function Home() {
@@ -34,7 +45,7 @@ export default function Home() {
           Calcolatori online semplici, gratuiti e veloci
         </h1>
         <p className="text-lg leading-8 text-zinc-600 dark:text-zinc-300">
-          Strumenti pratici per calcolare IVA, percentuali, margine e markup senza registrazione e senza complicazioni.
+          Strumenti pratici per calcolare IVA, percentuali, margine, markup, stipendio netto e sconto inverso senza registrazione e senza complicazioni.
         </p>
       </section>
 
