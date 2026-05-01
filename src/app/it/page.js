@@ -5,7 +5,7 @@ export const metadata = {
     description:
         "Strumenti pratici per calcolare IVA, percentuali, margine e markup senza registrazione e senza complicazioni.",
     alternates: {
-        canonical: "https://calcolafacile-gamma.vercel.app/it",
+        canonical: "https://calcolafacile.org/it",
     },
 };
 

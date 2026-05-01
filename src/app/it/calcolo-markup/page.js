@@ -5,7 +5,7 @@ export const metadata = {
     description:
         "Calcola facilmente il markup (ricarico) partendo dal costo. Scopri a quanto vendere per ottenere il ricarico desiderato.",
     alternates: {
-        canonical: "https://calcolafacile-gamma.vercel.app/it/calcolo-markup",
+        canonical: "https://calcolafacile.org/it/calcolo-markup",
     },
 };
 

@@ -1,5 +1,5 @@
 export default function sitemap() {
-    const baseUrl = "https://calcolafacile-gamma.vercel.app";
+    const baseUrl = "https://calcolafacile.org";
 
     const routes = [
         "",

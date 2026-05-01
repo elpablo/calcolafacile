@@ -4,6 +4,6 @@ export default function robots() {
             userAgent: "*",
             allow: "/",
         },
-        sitemap: "https://calcolafacile-gamma.vercel.app/sitemap.xml",
+        sitemap: "https://calcolafacile.org/sitemap.xml",
     };
 }

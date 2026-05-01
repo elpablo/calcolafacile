@@ -20,7 +20,7 @@ export const metadata = {
     },
     description:
         "Calcolatori online gratuiti per IVA, stipendio, percentuali e molto altro.",
-    metadataBase: new URL("https://calcolafacile-gamma.vercel.app"),
+    metadataBase: new URL("https://calcolafacile.org"),
 };
 
 export default function RootLayout({ children }) {

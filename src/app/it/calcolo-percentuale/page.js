@@ -5,7 +5,7 @@ export const metadata = {
     description:
         "Calcola percentuali online gratis: trova il X% di un numero, scopri che percentuale è un valore, applica aumenti, riduzioni e sconti.",
     alternates: {
-        canonical: "https://calcolafacile-gamma.vercel.app/it/calcolo-percentuale",
+        canonical: "https://calcolafacile.org/it/calcolo-percentuale",
     },
 };
 

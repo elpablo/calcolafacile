@@ -7,7 +7,7 @@ export const metadata = {
     description:
         "Calcola facilmente il margine di profitto partendo da costo e prezzo di vendita. Strumento gratuito per freelance, ecommerce e piccole attività.",
     alternates: {
-        canonical: "https://calcolafacile-gamma.vercel.app/it/calcolo-margine",
+        canonical: "https://calcolafacile.org/it/calcolo-margine",
     },
 };
 

@@ -5,7 +5,7 @@ export const metadata = {
     description:
         "Calcola il prezzo originale partendo dal prezzo scontato e dalla percentuale di sconto.",
     alternates: {
-        canonical: "https://calcolafacile-gamma.vercel.app/it/calcolo-sconto-inverso",
+        canonical: "https://calcolafacile.org/it/calcolo-sconto-inverso",
     },
 };
 
