@@ -21,6 +21,7 @@ export const metadata = {
     description:
         "Calcolatori online gratuiti per IVA, stipendio, percentuali e molto altro.",
     metadataBase: new URL("https://calcolafacile.org"),
+    manifest: "/manifest.json",
 };
 
 export default function RootLayout({ children }) {
