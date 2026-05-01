@@ -47,6 +47,12 @@ const tools = [
         description:
             "Trova il prezzo originale partendo da prezzo scontato e sconto.",
     },
+    {
+        href: "/it/jwt-decoder",
+        title: "JWT Decoder",
+        description:
+            "Decodifica header e payload di un JSON Web Token direttamente nel browser.",
+    },
 ];
 
 export default function Home() {

@@ -15,6 +15,7 @@ export default function sitemap() {
         "/it/calcolo-stipendio-netto",
         "/it/calcolo-sconto-inverso",
         "/it/convertitore-unita",
+        "/it/jwt-decoder",
     ];
 
     const conversionRoutes = conversions.map(

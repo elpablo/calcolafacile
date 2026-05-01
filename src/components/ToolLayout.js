@@ -40,6 +40,11 @@ const defaultRelatedTools = [
         title: "Convertitore unità di misura",
         description: "Converti lunghezza, peso, temperatura e volume in modo rapido.",
     },
+    {
+        href: "/it/jwt-decoder",
+        title: "JWT Decoder",
+        description: "Decodifica header e payload di un JSON Web Token nel browser.",
+    },
 ];
 
 export function ToolInput({
