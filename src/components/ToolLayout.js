@@ -50,6 +50,11 @@ const defaultRelatedTools = [
         title: "Stima token LLM",
         description: "Stima token e costo indicativo per testi usati con modelli AI.",
     },
+    {
+        href: "/it/json-formatter",
+        title: "JSON Formatter",
+        description: "Formatta e valida JSON direttamente nel browser.",
+    },
 ];
 
 export function ToolInput({

@@ -3,7 +3,7 @@ import Link from "next/link";
 export const metadata = {
     title: "Calcolatori online semplici, gratuiti e veloci",
     description:
-        "Strumenti pratici per calcolare IVA, percentuali, margine, markup, stipendio netto, conversioni di unità e utility per sviluppatori.",
+        "Strumenti pratici per calcolare IVA, percentuali, margine, markup, stipendio netto, conversioni di unità e utility per sviluppatori come JWT, JSON e token LLM.",
     alternates: {
         canonical: "https://calcolafacile.org/it",
     },
@@ -59,6 +59,12 @@ const tools = [
         description:
             "Stima token e costo indicativo per testi usati con modelli AI.",
     },
+    {
+        href: "/it/json-formatter",
+        title: "JSON Formatter",
+        description:
+            "Formatta, valida e copia JSON direttamente nel browser.",
+    },
 ];
 
 export default function Home() {
@@ -74,7 +80,7 @@ export default function Home() {
                 <p className="text-lg leading-8 text-zinc-600 dark:text-zinc-300">
                     Strumenti pratici per calcolare IVA, percentuali, margine,
                     markup, stipendio netto, conversioni di unità e utility per
-                    sviluppatori senza registrazione e senza complicazioni.
+                    sviluppatori, API e AI senza registrazione e senza complicazioni.
                 </p>
             </section>
 
@@ -123,9 +129,9 @@ export default function Home() {
                     CalcolaFacile raccoglie piccoli strumenti online pensati per
                     risolvere calcoli quotidiani in modo rapido: calcoli fiscali,
                     percentuali, margini, sconti, stipendio netto, conversioni
-                    di unità di misura e piccole utility per sviluppatori e AI.
+                    di unità di misura e piccole utility per sviluppatori, API e AI.
                     Ogni pagina offre spiegazioni semplici, esempi e risultati
-                    immediati.
+                    immediati direttamente nel browser.
                 </p>
             </section>
         </main>

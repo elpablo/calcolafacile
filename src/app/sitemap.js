@@ -17,6 +17,7 @@ export default function sitemap() {
         "/it/convertitore-unita",
         "/it/jwt-decoder",
         "/it/token-estimator",
+        "/it/json-formatter",
     ];
 
     const conversionRoutes = conversions.map(
