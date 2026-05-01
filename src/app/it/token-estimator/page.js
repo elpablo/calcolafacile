@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import TokenEstimator from "./TokenEstimator";
 
 export const metadata = {
@@ -10,5 +11,9 @@ export const metadata = {
 };
 
 export default function TokenEstimatorPage() {
-    return <TokenEstimator />;
+    return (
+        <Suspense fallback={null}>
+            <TokenEstimator />
+        </Suspense>
+    );
 }
