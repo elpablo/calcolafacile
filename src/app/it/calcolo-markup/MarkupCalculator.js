@@ -47,6 +47,12 @@ export default function MarkupCalculator() {
             maximumFractionDigits: 2,
         });
 
+    const selectClass =
+        "h-12 w-full rounded-lg border border-zinc-300 bg-white px-3 text-base font-medium leading-none text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-blue-400";
+
+    const labelClass =
+        "mb-1.5 block text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300";
+
     return (
         <ToolLayout
             title="Calcolo markup online"
@@ -72,11 +78,11 @@ export default function MarkupCalculator() {
             }
         >
             <div className="mb-6">
-                <label className="mb-1 block text-zinc-700 dark:text-zinc-300">Tipo di calcolo</label>
+                <label className={labelClass}>Tipo di calcolo</label>
                 <select
                     value={mode}
                     onChange={(e) => setMode(e.target.value)}
-                    className="w-full rounded border border-zinc-300 bg-white p-2 text-zinc-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-blue-400"
+                    className={selectClass}
                 >
                     <option value="fromPrice">Calcola markup da costo e prezzo</option>
                     <option value="targetMarkup">Calcola prezzo da markup desiderato</option>

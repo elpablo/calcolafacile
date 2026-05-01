@@ -38,6 +38,12 @@ export default function CalcolatoreIVA() {
         maximumFractionDigits: 2,
       });
 
+    const selectClass =
+      "h-12 w-full rounded-lg border border-zinc-300 bg-white px-3 text-base font-medium leading-none text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-blue-400";
+
+    const labelClass =
+      "mb-1.5 block text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300";
+
     return (
       <ToolLayout
         title="Calcolatore IVA online (scorporo e aggiunta)"
@@ -67,11 +73,11 @@ export default function CalcolatoreIVA() {
         />
 
         <div className="mb-4">
-          <label className="mb-1 block text-zinc-700 dark:text-zinc-300">Aliquota IVA (%)</label>
+          <label className={labelClass}>Aliquota IVA</label>
           <select
             value={aliquota}
             onChange={(e) => setAliquota(Number(e.target.value))}
-            className="w-full rounded border border-zinc-300 bg-white p-2 text-zinc-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-blue-400"
+            className={selectClass}
           >
             <option value={22}>22%</option>
             <option value={10}>10%</option>
@@ -80,11 +86,11 @@ export default function CalcolatoreIVA() {
         </div>
 
         <div className="mb-4">
-          <label className="mb-1 block text-zinc-700 dark:text-zinc-300">Tipo calcolo</label>
+          <label className={labelClass}>Tipo calcolo</label>
           <select
             value={tipo}
             onChange={(e) => setTipo(e.target.value)}
-            className="w-full rounded border border-zinc-300 bg-white p-2 text-zinc-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-blue-400"
+            className={selectClass}
           >
             <option value="aggiungi">Aggiungi IVA</option>
             <option value="scorpora">Scorpora IVA</option>

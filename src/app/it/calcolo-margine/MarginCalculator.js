@@ -47,8 +47,12 @@ export default function MarginCalculator() {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
         });
-    const fieldClass =
-        "w-full rounded border border-zinc-300 bg-white p-2 text-zinc-900 placeholder:text-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-blue-400";
+
+    const selectClass =
+        "h-12 w-full rounded-lg border border-zinc-300 bg-white px-3 text-base font-medium leading-none text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-blue-400";
+
+    const labelClass =
+        "mb-1.5 block text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300";
 
     return (
         <ToolLayout
@@ -75,11 +79,11 @@ export default function MarginCalculator() {
             }
         >
             <div className="mb-6">
-                <label className="mb-1 block text-zinc-700 dark:text-zinc-300">Tipo di calcolo</label>
+                <label className={labelClass}>Tipo di calcolo</label>
                 <select
                     value={mode}
                     onChange={(e) => setMode(e.target.value)}
-                    className={fieldClass}
+                    className={selectClass}
                 >
                     <option value="fromPrice">Calcola margine da costo e prezzo</option>
                     <option value="targetMargin">Calcola prezzo da margine desiderato</option>
@@ -118,13 +122,13 @@ export default function MarginCalculator() {
             <ResultBox>
                 {mode === "fromPrice" ? (
                     <>
-                        <p className="text-sm text-zinc-500">Profitto</p>
-                        <p className="text-2xl font-bold text-blue-600">
+                        <p className="text-sm text-zinc-500 dark:text-zinc-400">Profitto</p>
+                        <p className="text-2xl font-bold text-blue-600 dark:text-blue-300">
                             {formatEuro(profitto)} €
                         </p>
 
-                        <p className="mt-3 text-sm text-zinc-500">Margine</p>
-                        <p className="text-xl font-semibold text-blue-500">
+                        <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400">Margine</p>
+                        <p className="text-xl font-semibold text-blue-500 dark:text-blue-300">
                             {formatPercent(margine)}%
                         </p>
 
@@ -140,13 +144,13 @@ export default function MarginCalculator() {
                     </>
                 ) : (
                     <>
-                        <p className="text-sm text-zinc-500">Prezzo di vendita</p>
-                        <p className="text-2xl font-bold text-blue-600">
+                        <p className="text-sm text-zinc-500 dark:text-zinc-400">Prezzo di vendita</p>
+                        <p className="text-2xl font-bold text-blue-600 dark:text-blue-300">
                             {formatEuro(prezzoDaMargine)} €
                         </p>
 
-                        <p className="mt-3 text-sm text-zinc-500">Profitto</p>
-                        <p className="text-xl font-semibold text-blue-500">
+                        <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400">Profitto</p>
+                        <p className="text-xl font-semibold text-blue-500 dark:text-blue-300">
                             {formatEuro(profittoDaMargine)} €
                         </p>
 

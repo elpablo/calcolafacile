@@ -7,8 +7,9 @@ export default function SalaryCalculator() {
     const [ral, setRal] = useState(30000);
 
     const ralNumber = parseFloat(ral);
+    const isValid = !isNaN(ralNumber) && ralNumber > 0;
 
-    const nettoAnnuale = isNaN(ralNumber) ? 0 : ralNumber * 0.7;
+    const nettoAnnuale = isValid ? ralNumber * 0.7 : 0;
 
     const nettoMensile = nettoAnnuale / 12;
 
@@ -18,8 +19,6 @@ export default function SalaryCalculator() {
             maximumFractionDigits: 2,
         });
 
-
-    const isValid = !isNaN(ralNumber) && ralNumber > 0;
 
     return (
         <ToolLayout
