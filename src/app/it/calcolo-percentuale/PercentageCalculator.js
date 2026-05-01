@@ -94,6 +94,7 @@ export default function PercentageCalculator() {
     return (
         <ToolLayout
             title="Calcolo percentuale online"
+            currentPath="/it/calcolo-percentuale"
             description="Questo calcolatore percentuale ti permette di calcolare rapidamente percentuali, rapporti percentuali, aumenti, riduzioni e sconti. È utile per acquisti, lavoro, scuola, preventivi e calcoli quotidiani."
             faq={
                 <>

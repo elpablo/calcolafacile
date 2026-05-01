@@ -19,15 +19,15 @@ export default function CalcolatoreIVA() {
                 iva,
                 lordo: value + iva,
             };
-        } else {
-            const netto = value / (1 + aliquota / 100);
-            const iva = value - netto;
-            return {
-                netto,
-                iva,
-                lordo: value,
-            };
         }
+
+        const netto = value / (1 + aliquota / 100);
+        const iva = value - netto;
+        return {
+            netto,
+            iva,
+            lordo: value,
+        };
     };
 
     const result = calcola();
@@ -37,6 +37,7 @@ export default function CalcolatoreIVA() {
     return (
       <ToolLayout
         title="Calcolatore IVA online (scorporo e aggiunta)"
+        currentPath="/it/calcolatore-iva"
         description="Questo calcolatore IVA ti permette di calcolare facilmente l'IVA al 22%, 10% e 4% in Italia, sia per aggiungere l'imposta a un importo netto, sia per scorporarla da un totale lordo."
         faq={
           <>

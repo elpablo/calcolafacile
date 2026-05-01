@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useState } from "react";
@@ -37,6 +35,7 @@ export default function MarkupCalculator() {
     return (
         <ToolLayout
             title="Calcolo markup online"
+            currentPath="/it/calcolo-markup"
             description="Questo calcolatore markup ti permette di calcolare il ricarico percentuale partendo dal costo e dal prezzo di vendita. È utile per ecommerce, negozi, freelance e piccole attività che vogliono capire quanto ricarico applicano sui propri prodotti o servizi."
             faq={
                 <>
@@ -84,7 +83,8 @@ export default function MarkupCalculator() {
                     Markup: <strong className="text-blue-700 dark:text-blue-300">{formatPercent(markup)}%</strong>
                 </p>
                 <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
-                    Con un costo di {formatEuro(isNaN(costoNumber) ? 0 : costoNumber)} € e un prezzo di vendita di {formatEuro(isNaN(prezzoNumber) ? 0 : prezzoNumber)} €, il markup è pari al {formatPercent(markup)}%.
+                    Con un costo di {formatEuro(isNaN(costoNumber) ? 0 : costoNumber)} € e un prezzo di vendita di{" "}
+                    {formatEuro(isNaN(prezzoNumber) ? 0 : prezzoNumber)} €, il markup è pari al {formatPercent(markup)}%.
                 </p>
             </div>
         </ToolLayout>

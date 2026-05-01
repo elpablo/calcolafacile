@@ -35,6 +35,7 @@ export default function MarginCalculator() {
     return (
         <ToolLayout
             title="Calcolo margine online"
+            currentPath="/it/calcolo-margine"
             description="Questo calcolatore margine ti permette di calcolare il margine di profitto partendo dal costo di acquisto o produzione e dal prezzo di vendita. È utile per freelance, ecommerce, negozi e piccole attività che vogliono capire quanto margine rimane su ogni vendita."
             faq={
                 <>
