@@ -51,7 +51,7 @@ export function ToolInput({
 }) {
     return (
         <div className="mb-4">
-            <label className="mb-1 block text-zinc-700 dark:text-zinc-300">
+            <label className="mb-1.5 block text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300">
                 {label}
             </label>
             <div className="relative">
@@ -60,17 +60,17 @@ export function ToolInput({
                     step={step}
                     value={value}
                     onChange={onChange}
-                    className={`w-full rounded border border-zinc-300 bg-white p-2 text-zinc-900 placeholder:text-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-blue-400 ${suffix ? "pr-10" : ""}`}
+                    className={`w-full rounded-lg border border-zinc-300 bg-white px-3 py-3 text-base font-medium text-zinc-900 shadow-sm placeholder:text-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-blue-400 ${suffix ? "pr-10" : ""}`}
                     placeholder={placeholder}
                 />
                 {suffix && (
-                    <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm text-zinc-400 dark:text-zinc-500">
+                    <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm font-medium text-zinc-400 dark:text-zinc-500">
                         {suffix}
                     </span>
                 )}
             </div>
             {helpText && (
-                <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+                <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400">
                     {helpText}
                 </p>
             )}
@@ -100,6 +100,14 @@ export default function ToolLayout({
 
     return (
         <main className="mx-auto max-w-3xl p-6">
+            <div className="mb-4">
+                <Link
+                    href="/it"
+                    className="inline-flex items-center text-sm font-medium text-blue-600 transition hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                >
+                    ← Torna alla home
+                </Link>
+            </div>
             <p className="mb-2 text-sm text-zinc-500 dark:text-zinc-400">
                 Gratuito • Nessuna registrazione • Veloce
             </p>
