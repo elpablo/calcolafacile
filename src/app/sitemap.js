@@ -2,6 +2,8 @@ import { conversions } from "@/config/conversions";
 
 export default function sitemap() {
     const baseUrl = "https://calcolafacile.org";
+    const staticLastModified = new Date("2026-05-01");
+    const conversionLastModified = new Date();
 
     const staticRoutes = [
         "",
@@ -20,10 +22,13 @@ export default function sitemap() {
     );
 
     const routes = [...staticRoutes, ...conversionRoutes];
+    const conversionSet = new Set(conversionRoutes);
 
     return routes.map((route) => ({
         url: `${baseUrl}${route}`,
-        lastModified: new Date(),
+        lastModified: conversionSet.has(route)
+            ? conversionLastModified
+            : staticLastModified,
         changeFrequency: "weekly",
         priority: route === "" || route === "/it" ? 1 : 0.8,
     }));
