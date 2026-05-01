@@ -25,17 +25,21 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="it"
-      suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <head>
-        <Script
-          id="theme-init"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
+      <html
+          lang="it"
+          suppressHydrationWarning
+          className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      >
+          <head>
+              <meta
+                  name="google-site-verification"
+                  content="rHl_ZrT78GhkQnlqRyoGtu1kYkLlNwD9hvs6q4uOInE"
+              />
+              <Script
+                  id="theme-init"
+                  strategy="beforeInteractive"
+                  dangerouslySetInnerHTML={{
+                      __html: `
               (function () {
                 try {
                   var key = "cf-theme";
@@ -55,15 +59,15 @@ export default function RootLayout({ children }) {
                 }
               })();
             `,
-          }}
-        />
-      </head>
-      <body className="min-h-full flex flex-col" suppressHydrationWarning>
-        <div className="fixed right-4 top-4 z-50">
-          <ThemeToggle />
-        </div>
-        {children}
-      </body>
-    </html>
+                  }}
+              />
+          </head>
+          <body className="min-h-full flex flex-col" suppressHydrationWarning>
+              <div className="fixed right-4 top-4 z-50">
+                  <ThemeToggle />
+              </div>
+              {children}
+          </body>
+      </html>
   );
 }
