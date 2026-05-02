@@ -3,7 +3,7 @@ import Link from "next/link";
 export const metadata = {
     title: "Calcolatori online semplici, gratuiti e veloci",
     description:
-        "Strumenti pratici per calcolare IVA, percentuali, margine, markup, stipendio netto, conversioni di unità e utility per sviluppatori come JWT, JSON, Base64 e token LLM.",
+        "Strumenti pratici per calcolare IVA, percentuali, margine, markup, stipendio netto, conversioni di unità e utility per sviluppatori come JWT, JSON, Base64, timestamp e token LLM.",
     alternates: {
         canonical: "https://calcolafacile.org/it",
     },
@@ -71,6 +71,12 @@ const tools = [
         description:
             "Codifica e decodifica Base64 direttamente nel browser.",
     },
+    {
+        href: "/it/timestamp-converter",
+        title: "Timestamp Converter",
+        description:
+            "Converti Unix timestamp in date leggibili e viceversa.",
+    },
 ];
 
 export default function Home() {
@@ -136,7 +142,7 @@ export default function Home() {
                     risolvere calcoli quotidiani in modo rapido: calcoli fiscali,
                     percentuali, margini, sconti, stipendio netto, conversioni
                     di unità di misura e piccole utility per sviluppatori, API e AI,
-                    come JWT, JSON e Base64.
+                    come JWT, JSON, Base64 e timestamp.
                     Ogni pagina offre spiegazioni semplici, esempi e risultati
                     immediati direttamente nel browser.
                 </p>

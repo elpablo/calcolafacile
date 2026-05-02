@@ -19,6 +19,7 @@ export default function sitemap() {
         "/it/token-estimator",
         "/it/json-formatter",
         "/it/base64-tool",
+        "/it/timestamp-converter",
     ];
 
     const conversionRoutes = conversions.map(
