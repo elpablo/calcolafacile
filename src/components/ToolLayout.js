@@ -65,6 +65,11 @@ const defaultRelatedTools = [
         title: "Timestamp Converter",
         description: "Converti Unix timestamp in date leggibili e viceversa.",
     },
+    {
+        href: "/it/url-encoder-decoder",
+        title: "URL Encoder/Decoder",
+        description: "Codifica e decodifica URL per query string, API e redirect.",
+    },
 ];
 
 export function ToolInput({
@@ -157,7 +162,7 @@ function ContextualToolLinks({ tools }) {
     }
 
     return (
-        <div className="mb-4 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-zinc-700 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-zinc-300">
+        <div className="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-zinc-700 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-zinc-300">
             <p className="mb-2 font-semibold text-zinc-800 dark:text-zinc-100">
                 Strumenti utili collegati
             </p>
@@ -209,8 +214,8 @@ export default function ToolLayout({
             </h1>
 
             <div className="mb-8 rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
-                <ContextualToolLinks tools={contextualTools} />
                 {children}
+                <ContextualToolLinks tools={contextualTools} />
             </div>
 
             {description && (

@@ -20,6 +20,7 @@ export default function sitemap() {
         "/it/json-formatter",
         "/it/base64-tool",
         "/it/timestamp-converter",
+        "/it/url-encoder-decoder",
     ];
 
     const conversionRoutes = conversions.map(
