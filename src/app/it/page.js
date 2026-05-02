@@ -3,7 +3,7 @@ import Link from "next/link";
 export const metadata = {
     title: "Calcolatori online semplici, gratuiti e veloci",
     description:
-        "Strumenti pratici per calcolare IVA, percentuali, margine, markup, stipendio netto, conversioni di unità e utility per sviluppatori come JWT, JSON e token LLM.",
+        "Strumenti pratici per calcolare IVA, percentuali, margine, markup, stipendio netto, conversioni di unità e utility per sviluppatori come JWT, JSON, Base64 e token LLM.",
     alternates: {
         canonical: "https://calcolafacile.org/it",
     },
@@ -64,6 +64,12 @@ const tools = [
         title: "JSON Formatter",
         description:
             "Formatta, valida e copia JSON direttamente nel browser.",
+    },
+    {
+        href: "/it/base64-tool",
+        title: "Base64 Encode/Decode",
+        description:
+            "Codifica e decodifica Base64 direttamente nel browser.",
     },
 ];
 
@@ -129,7 +135,8 @@ export default function Home() {
                     CalcolaFacile raccoglie piccoli strumenti online pensati per
                     risolvere calcoli quotidiani in modo rapido: calcoli fiscali,
                     percentuali, margini, sconti, stipendio netto, conversioni
-                    di unità di misura e piccole utility per sviluppatori, API e AI.
+                    di unità di misura e piccole utility per sviluppatori, API e AI,
+                    come JWT, JSON e Base64.
                     Ogni pagina offre spiegazioni semplici, esempi e risultati
                     immediati direttamente nel browser.
                 </p>

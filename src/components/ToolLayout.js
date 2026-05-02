@@ -55,6 +55,11 @@ const defaultRelatedTools = [
         title: "JSON Formatter",
         description: "Formatta e valida JSON direttamente nel browser.",
     },
+    {
+        href: "/it/base64-tool",
+        title: "Base64 Encode/Decode",
+        description: "Codifica e decodifica Base64 direttamente nel browser.",
+    },
 ];
 
 export function ToolInput({

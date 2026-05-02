@@ -18,6 +18,7 @@ export default function sitemap() {
         "/it/jwt-decoder",
         "/it/token-estimator",
         "/it/json-formatter",
+        "/it/base64-tool",
     ];
 
     const conversionRoutes = conversions.map(

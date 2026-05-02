@@ -22,6 +22,15 @@ function formatJson(text) {
 
 export default function JsonFormatter() {
     const [input, setInput] = useState("");
+    const [viewMode, setViewMode] = useState("pretty"); // 'pretty' | 'minified'
+
+    const getMinified = (text) => {
+        try {
+            return JSON.stringify(JSON.parse(text));
+        } catch {
+            return null;
+        }
+    };
 
     const result = useMemo(() => {
         if (!input.trim()) {
@@ -29,6 +38,14 @@ export default function JsonFormatter() {
         }
         return formatJson(input);
     }, [input]);
+
+    const displayedOutput = useMemo(() => {
+        if (!result.formatted) return null;
+        if (viewMode === "minified") {
+            return getMinified(input);
+        }
+        return result.formatted;
+    }, [result, viewMode, input]);
 
     return (
         <ToolLayout
@@ -65,7 +82,7 @@ export default function JsonFormatter() {
             </div>
 
             {/* BUTTONS */}
-            <div className="mb-4 flex gap-2">
+            <div className="mb-4 flex gap-2 flex-wrap">
                 <button
                     onClick={() => setInput(sampleJson)}
                     className="rounded-lg border px-3 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
@@ -78,6 +95,18 @@ export default function JsonFormatter() {
                 >
                     Pulisci
                 </button>
+                <button
+                    onClick={() => setViewMode("pretty")}
+                    className={`rounded-lg border px-3 py-2 text-sm ${viewMode === "pretty" ? "bg-blue-100 dark:bg-blue-900" : "hover:bg-zinc-100 dark:hover:bg-zinc-800"}`}
+                >
+                    Vista Pretty
+                </button>
+                <button
+                    onClick={() => setViewMode("minified")}
+                    className={`rounded-lg border px-3 py-2 text-sm ${viewMode === "minified" ? "bg-blue-100 dark:bg-blue-900" : "hover:bg-zinc-100 dark:hover:bg-zinc-800"}`}
+                >
+                    Vista Minified
+                </button>
             </div>
 
             {/* ERROR */}
@@ -88,12 +117,17 @@ export default function JsonFormatter() {
             )}
 
             {/* RESULT */}
-            {result.formatted && (
-                <ResultBox copyText={result.formatted}>
-                    <pre className="overflow-x-auto rounded-lg bg-zinc-950 p-3 text-sm text-zinc-100">
-                        {result.formatted}
-                    </pre>
-                </ResultBox>
+            {displayedOutput && (
+                <>
+                    <p className="mb-2 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
+                        Formato: {viewMode === "pretty" ? "Pretty" : "Minified"}
+                    </p>
+                    <ResultBox copyText={displayedOutput}>
+                        <pre className="max-w-full overflow-hidden whitespace-pre-wrap break-all rounded-lg bg-zinc-950 p-3 text-sm text-zinc-100">
+                            {displayedOutput}
+                        </pre>
+                    </ResultBox>
+                </>
             )}
         </ToolLayout>
     );
