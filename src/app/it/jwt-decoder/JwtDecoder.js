@@ -90,6 +90,23 @@ export default function JwtDecoder() {
         <ToolLayout
             title="JWT Decoder online"
             currentPath="/it/jwt-decoder"
+            contextualTools={[
+                {
+                    href: tokenEstimatorHref,
+                    title: "Stima token e costo del payload",
+                    description: "se vuoi usarlo in un prompt o in un flusso AI.",
+                },
+                {
+                    href: "/it/timestamp-converter",
+                    title: "Converti timestamp Unix",
+                    description: "per leggere meglio campi come exp, iat e nbf.",
+                },
+                {
+                    href: "/it/base64-tool",
+                    title: "Codifica e decodifica Base64",
+                    description: "per lavorare con payload, token e stringhe codificate.",
+                },
+            ]}
             description="Incolla un JSON Web Token e visualizza header e payload decodificati. La decodifica avviene localmente nel browser: nessun token viene inviato a server esterni."
             faq={
                 <>
@@ -136,17 +153,6 @@ export default function JwtDecoder() {
                 >
                     Pulisci
                 </button>
-            </div>
-
-            <div className="mb-4 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-zinc-700 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-zinc-300">
-                Stai analizzando token o payload per un progetto AI?{" "}
-                <Link
-                    href={tokenEstimatorHref}
-                    className="font-semibold text-blue-700 underline underline-offset-2 transition hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-200"
-                >
-                    Stima token e costo del payload
-                </Link>
-                .
             </div>
 
             {decoded.error && (

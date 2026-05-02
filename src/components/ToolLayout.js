@@ -151,12 +151,40 @@ export function ResultBox({ children, copyText, label = "Risultato" }) {
     );
 }
 
+function ContextualToolLinks({ tools }) {
+    if (!tools?.length) {
+        return null;
+    }
+
+    return (
+        <div className="mb-4 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-zinc-700 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-zinc-300">
+            <p className="mb-2 font-semibold text-zinc-800 dark:text-zinc-100">
+                Strumenti utili collegati
+            </p>
+            <ul className="space-y-1">
+                {tools.map((tool) => (
+                    <li key={tool.href}>
+                        <Link
+                            href={tool.href}
+                            className="font-semibold text-blue-700 underline underline-offset-2 transition hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-200"
+                        >
+                            {tool.title}
+                        </Link>
+                        {tool.description && <> {tool.description}</>}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+}
+
 export default function ToolLayout({
     title,
     children,
     description,
     faq,
     currentPath,
+    contextualTools,
     relatedTools = defaultRelatedTools,
 }) {
     const visibleRelatedTools = currentPath
@@ -181,6 +209,7 @@ export default function ToolLayout({
             </h1>
 
             <div className="mb-8 rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
+                <ContextualToolLinks tools={contextualTools} />
                 {children}
             </div>
 
@@ -205,7 +234,7 @@ export default function ToolLayout({
             {visibleRelatedTools?.length > 0 && (
                 <section className="mt-8 border-t border-zinc-200 pt-6 dark:border-zinc-700">
                     <h2 className="mb-4 text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
-                        Prova anche questi calcolatori
+                        Prova anche questi strumenti
                     </h2>
                     <div className="grid gap-3 sm:grid-cols-2">
                         {visibleRelatedTools.map((tool) => (

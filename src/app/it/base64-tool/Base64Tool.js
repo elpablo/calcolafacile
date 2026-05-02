@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useMemo, useState } from "react";
@@ -51,6 +49,23 @@ export default function Base64Tool() {
         <ToolLayout
             title="Base64 Encode e Decode online"
             currentPath="/it/base64-tool"
+            contextualTools={[
+                {
+                    href: "/it/jwt-decoder",
+                    title: "Decodifica JWT",
+                    description: "se stai lavorando con token composti da header, payload e signature.",
+                },
+                {
+                    href: "/it/json-formatter",
+                    title: "Formatta JSON",
+                    description: "per leggere meglio payload e risposte API.",
+                },
+                {
+                    href: "/it/token-estimator",
+                    title: "Stima token LLM",
+                    description: "se vuoi usare il contenuto decodificato in un prompt AI.",
+                },
+            ]}
             description="Codifica e decodifica Base64 direttamente nel browser. Utile per token, payload API e debugging senza inviare dati a server esterni."
             faq={
                 <>

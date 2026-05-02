@@ -51,6 +51,23 @@ export default function JsonFormatter() {
         <ToolLayout
             title="JSON Formatter online"
             currentPath="/it/json-formatter"
+            contextualTools={[
+                {
+                    href: "/it/token-estimator",
+                    title: "Stima token LLM",
+                    description: "se vuoi usare il JSON in prompt, payload o flussi AI.",
+                },
+                {
+                    href: "/it/base64-tool",
+                    title: "Codifica e decodifica Base64",
+                    description: "per convertire JSON, payload o stringhe usate nelle API.",
+                },
+                {
+                    href: "/it/jwt-decoder",
+                    title: "Decodifica JWT",
+                    description: "se il JSON arriva dal payload di un token.",
+                },
+            ]}
             description="Incolla JSON e ottieni una versione formattata e leggibile. La validazione avviene localmente nel browser."
             faq={
                 <>
