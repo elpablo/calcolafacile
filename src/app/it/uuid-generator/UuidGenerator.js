@@ -64,6 +64,23 @@ export default function UuidGenerator() {
                 },
             ]}
             description="Genera uno o più UUID v4 direttamente nel browser. Utile per sviluppo software, API, database, test e identificatori univoci."
+            examples={[
+                {
+                    title: "Generare ID univoci per database",
+                    description:
+                        "Usa gli UUID come chiavi primarie o identificatori unici in database relazionali o NoSQL.",
+                },
+                {
+                    title: "Creare identificatori per API e sistemi distribuiti",
+                    description:
+                        "Gli UUID sono ideali per identificare risorse, richieste o eventi senza rischio di collisioni.",
+                },
+                {
+                    title: "Generare dati per test e sviluppo",
+                    description:
+                        "Puoi creare rapidamente liste di UUID da usare in fixture, test automatici o simulazioni.",
+                },
+            ]}
             faq={
                 <>
                     <h3 className="font-semibold">Che cos&apos;è un UUID?</h3>

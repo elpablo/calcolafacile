@@ -108,6 +108,23 @@ export default function JwtDecoder() {
                 },
             ]}
             description="Incolla un JSON Web Token e visualizza header e payload decodificati. La decodifica avviene localmente nel browser: nessun token viene inviato a server esterni."
+            examples={[
+                {
+                    title: "Controllare il payload di una risposta API",
+                    description:
+                        "Incolla il JWT ricevuto da login o refresh token per leggere claim come sub, name, email, roles o permessi applicativi.",
+                },
+                {
+                    title: "Verificare scadenza e validità temporale",
+                    description:
+                        "Se il token contiene exp, iat o nbf, il tool converte automaticamente quei timestamp in date leggibili.",
+                },
+                {
+                    title: "Preparare il payload per debug o prompt AI",
+                    description:
+                        "Puoi copiare header e payload formattati oppure passare il payload al Token Estimator per stimare lunghezza e costo in un flusso LLM.",
+                },
+            ]}
             faq={
                 <>
                     <h3 className="font-semibold">Questo tool verifica la firma del JWT?</h3>

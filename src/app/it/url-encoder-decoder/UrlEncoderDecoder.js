@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useMemo, useState } from "react";
@@ -68,6 +66,23 @@ export default function UrlEncoderDecoder() {
                 },
             ]}
             description="Codifica e decodifica URL direttamente nel browser. Utile per query string, parametri API, redirect e callback OAuth senza inviare dati a server esterni."
+            examples={[
+                {
+                    title: "Codificare parametri in una query string",
+                    description:
+                        "Se devi passare testo con spazi o caratteri speciali in una URL, usa Encode per ottenere una stringa valida da inserire nei parametri.",
+                },
+                {
+                    title: "Gestire redirect e callback OAuth",
+                    description:
+                        "Quando lavori con login OAuth o redirect URL, puoi codificare o decodificare i parametri per verificare che siano corretti.",
+                },
+                {
+                    title: "Debug di URL provenienti da API",
+                    description:
+                        "Se ricevi una URL encoded da una API, usa Decode per leggere rapidamente il contenuto e capire cosa contiene.",
+                },
+            ]}
             faq={
                 <>
                     <h3 className="font-semibold">I dati vengono inviati a un server?</h3>

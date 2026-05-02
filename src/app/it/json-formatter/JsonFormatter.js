@@ -22,7 +22,7 @@ function formatJson(text) {
 
 export default function JsonFormatter() {
     const [input, setInput] = useState("");
-    const [viewMode, setViewMode] = useState("pretty"); // 'pretty' | 'minified'
+    const [viewMode, setViewMode] = useState("pretty");
 
     const getMinified = (text) => {
         try {
@@ -69,23 +69,33 @@ export default function JsonFormatter() {
                 },
             ]}
             description="Incolla JSON e ottieni una versione formattata e leggibile. La validazione avviene localmente nel browser."
+            examples={[
+                {
+                    title: "Formattare una risposta API",
+                    description:
+                        "Incolla il JSON restituito da una API per renderlo leggibile, controllare campi annidati e copiare il risultato già formattato.",
+                },
+                {
+                    title: "Validare un JSON prima di usarlo nel codice",
+                    description:
+                        "Se il JSON contiene una virgola mancante, una parentesi errata o una stringa non chiusa, il tool mostra subito l'errore di parsing.",
+                },
+                {
+                    title: "Minificare JSON per payload e configurazioni",
+                    description:
+                        "Passa alla vista Minified quando ti serve una versione compatta da incollare in richieste HTTP, variabili d'ambiente o configurazioni.",
+                },
+            ]}
             faq={
                 <>
-                    <h3 className="font-semibold">
-                        Il JSON viene inviato a un server?
-                    </h3>
+                    <h3 className="font-semibold">Il JSON viene inviato a un server?</h3>
                     <p>No. Tutto avviene nel browser.</p>
 
-                    <h3 className="mt-2 font-semibold">
-                        Cosa succede se il JSON è invalido?
-                    </h3>
-                    <p>
-                        Viene mostrato un errore con la posizione del problema.
-                    </p>
+                    <h3 className="mt-2 font-semibold">Cosa succede se il JSON è invalido?</h3>
+                    <p>Viene mostrato un errore con la posizione del problema.</p>
                 </>
             }
         >
-            {/* INPUT */}
             <div className="mb-4">
                 <label className="mb-1.5 block text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300">
                     JSON
@@ -98,42 +108,27 @@ export default function JsonFormatter() {
                 />
             </div>
 
-            {/* BUTTONS */}
             <div className="mb-4 flex gap-2 flex-wrap">
-                <button
-                    onClick={() => setInput(sampleJson)}
-                    className="rounded-lg border px-3 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
-                >
+                <button onClick={() => setInput(sampleJson)} className="rounded-lg border px-3 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800">
                     Usa esempio
                 </button>
-                <button
-                    onClick={() => setInput("")}
-                    className="rounded-lg border px-3 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
-                >
+                <button onClick={() => setInput("")} className="rounded-lg border px-3 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800">
                     Pulisci
                 </button>
-                <button
-                    onClick={() => setViewMode("pretty")}
-                    className={`rounded-lg border px-3 py-2 text-sm ${viewMode === "pretty" ? "bg-blue-100 dark:bg-blue-900" : "hover:bg-zinc-100 dark:hover:bg-zinc-800"}`}
-                >
+                <button onClick={() => setViewMode("pretty")} className={`rounded-lg border px-3 py-2 text-sm ${viewMode === "pretty" ? "bg-blue-100 dark:bg-blue-900" : "hover:bg-zinc-100 dark:hover:bg-zinc-800"}`}>
                     Vista Pretty
                 </button>
-                <button
-                    onClick={() => setViewMode("minified")}
-                    className={`rounded-lg border px-3 py-2 text-sm ${viewMode === "minified" ? "bg-blue-100 dark:bg-blue-900" : "hover:bg-zinc-100 dark:hover:bg-zinc-800"}`}
-                >
+                <button onClick={() => setViewMode("minified")} className={`rounded-lg border px-3 py-2 text-sm ${viewMode === "minified" ? "bg-blue-100 dark:bg-blue-900" : "hover:bg-zinc-100 dark:hover:bg-zinc-800"}`}>
                     Vista Minified
                 </button>
             </div>
 
-            {/* ERROR */}
             {result.error && (
                 <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
                     {result.error}
                 </div>
             )}
 
-            {/* RESULT */}
             {displayedOutput && (
                 <>
                     <p className="mb-2 text-sm font-semibold text-zinc-600 dark:text-zinc-300">

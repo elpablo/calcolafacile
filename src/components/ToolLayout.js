@@ -188,10 +188,40 @@ function ContextualToolLinks({ tools }) {
     );
 }
 
+function PracticalExamples({ examples }) {
+    if (!examples?.length) {
+        return null;
+    }
+
+    return (
+        <section className="mb-8 text-zinc-700 dark:text-zinc-300">
+            <h2 className="mb-3 text-2xl font-semibold text-zinc-800 dark:text-zinc-200">
+                Esempi pratici
+            </h2>
+            <div className="space-y-3">
+                {examples.map((example) => (
+                    <article
+                        key={example.title}
+                        className="cursor-default rounded-xl border-l-4 border-zinc-300 bg-zinc-50 p-4 dark:border-zinc-600 dark:bg-zinc-900/60"
+                    >
+                        <h3 className="font-semibold text-zinc-900 dark:text-zinc-100">
+                            {example.title}
+                        </h3>
+                        <p className="mt-1 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+                            {example.description}
+                        </p>
+                    </article>
+                ))}
+            </div>
+        </section>
+    );
+}
+
 export default function ToolLayout({
     title,
     children,
     description,
+    examples,
     faq,
     currentPath,
     contextualTools,
@@ -231,6 +261,8 @@ export default function ToolLayout({
                     <p>{description}</p>
                 </section>
             )}
+
+            <PracticalExamples examples={examples} />
 
             {faq && (
                 <section className="text-zinc-700 dark:text-zinc-300">

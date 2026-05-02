@@ -112,6 +112,23 @@ export default function TokenEstimator() {
             title="Stima token LLM online"
             currentPath="/it/token-estimator"
             description="Incolla un testo e ottieni una stima dei token usati da un modello LLM, insieme a un costo indicativo per input e output. La stima è approssimativa e avviene localmente nel browser."
+            examples={[
+                {
+                    title: "Stimare il costo di un prompt prima di inviarlo",
+                    description:
+                        "Incolla prompt, istruzioni o documentazione per avere una stima dei token input e del costo indicativo sul modello selezionato.",
+                },
+                {
+                    title: "Valutare una risposta LLM prevista",
+                    description:
+                        "Imposta il numero di token output che ti aspetti di ricevere per stimare il costo totale di una chiamata API.",
+                },
+                {
+                    title: "Analizzare payload JSON o contenuti da API",
+                    description:
+                        "Puoi incollare JSON, payload o testi tecnici per capire se sono troppo lunghi per un flusso AI o un contesto LLM.",
+                },
+            ]}
             faq={
                 <>
                     <h3 className="font-semibold">La stima dei token è precisa?</h3>

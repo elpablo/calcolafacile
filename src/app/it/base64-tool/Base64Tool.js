@@ -67,6 +67,23 @@ export default function Base64Tool() {
                 },
             ]}
             description="Codifica e decodifica Base64 direttamente nel browser. Utile per token, payload API e debugging senza inviare dati a server esterni."
+            examples={[
+                {
+                    title: "Decodificare il payload di un token",
+                    description:
+                        "Se hai una stringa Base64 da JWT o API, puoi decodificarla per leggere il contenuto in chiaro.",
+                },
+                {
+                    title: "Codificare dati per richieste HTTP",
+                    description:
+                        "Alcune API richiedono dati in formato Base64 (ad esempio file o credenziali). Inserisci il testo e copia la versione codificata.",
+                },
+                {
+                    title: "Gestire stringhe con caratteri speciali",
+                    description:
+                        "Il tool supporta UTF-8, quindi puoi codificare e decodificare testi con accenti, emoji e caratteri non ASCII senza problemi.",
+                },
+            ]}
             faq={
                 <>
                     <h3 className="font-semibold">I dati vengono inviati a un server?</h3>

@@ -145,6 +145,23 @@ export default function TimestampConverter() {
             title="Timestamp Converter online"
             currentPath="/it/timestamp-converter"
             description="Converti Unix timestamp in date leggibili e date in timestamp. Utile per API, log, database e campi JWT come exp, iat e nbf."
+            examples={[
+                {
+                    title: "Leggere la scadenza di un JWT",
+                    description:
+                        "Copia il valore exp, iat o nbf dal payload di un token JWT e convertilo in una data leggibile.",
+                },
+                {
+                    title: "Interpretare timestamp da log e API",
+                    description:
+                        "Quando un log o una risposta API contiene un timestamp Unix, puoi convertirlo rapidamente in data locale e formato ISO.",
+                },
+                {
+                    title: "Convertire una data locale in Unix timestamp",
+                    description:
+                        "Inserisci una data nel formato gg/mm/aaaa hh:mm per ottenere il timestamp in secondi e millisecondi da usare in codice, query o test.",
+                },
+            ]}
             faq={
                 <>
                     <h3 className="font-semibold">Che cos&apos;è un Unix timestamp?</h3>
