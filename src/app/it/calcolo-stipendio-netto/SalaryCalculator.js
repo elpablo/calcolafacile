@@ -25,6 +25,23 @@ export default function SalaryCalculator() {
             title="Calcolo stipendio netto da lordo"
             currentPath="/it/calcolo-stipendio-netto"
             description="Questo calcolatore ti permette di stimare lo stipendio netto partendo dalla RAL (reddito annuo lordo). Il risultato è una stima media utile per avere un'idea del netto mensile."
+            examples={[
+                {
+                    title: "Calcolare lo stipendio netto da una RAL di 30.000 €",
+                    description:
+                        "Inserisci 30000 come RAL per ottenere una stima del netto mensile e annuale.",
+                },
+                {
+                    title: "Confrontare offerte di lavoro",
+                    description:
+                        "Puoi inserire diverse RAL per capire quanto cambia il netto tra due proposte di lavoro.",
+                },
+                {
+                    title: "Stimare il netto prima di accettare un contratto",
+                    description:
+                        "Usa il calcolatore per avere un'idea del netto mensile prima di firmare un nuovo contratto.",
+                },
+            ]}
             faq={
                 <>
                     <h3 className="font-semibold">

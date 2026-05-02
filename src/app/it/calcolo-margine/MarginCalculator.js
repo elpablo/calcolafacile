@@ -59,6 +59,23 @@ export default function MarginCalculator() {
             title="Calcolo margine online"
             currentPath="/it/calcolo-margine"
             description="Questo calcolatore margine ti permette di calcolare il margine di profitto partendo dal costo e dal prezzo di vendita, oppure di trovare il prezzo di vendita necessario per ottenere un margine desiderato. È utile per freelance, ecommerce, negozi e piccole attività."
+            examples={[
+                {
+                    title: "Calcolare il margine su un prodotto venduto online",
+                    description:
+                        "Inserisci il costo di acquisto e il prezzo di vendita per sapere quanto profitto generi e quale margine percentuale ottieni.",
+                },
+                {
+                    title: "Trovare il prezzo di vendita partendo da un margine desiderato",
+                    description:
+                        "Se vuoi ottenere un margine del 30%, inserisci il costo del prodotto e il margine target per calcolare il prezzo minimo di vendita.",
+                },
+                {
+                    title: "Confrontare margine e profitto prima di pubblicare un listino",
+                    description:
+                        "Usa il calcolatore per verificare rapidamente se un prezzo copre i costi e lascia un margine sostenibile per la tua attività.",
+                },
+            ]}
             faq={
                 <>
                     <h3 className="font-semibold">Come si calcola il margine?</h3>

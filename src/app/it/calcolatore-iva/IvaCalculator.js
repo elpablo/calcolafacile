@@ -49,6 +49,23 @@ export default function CalcolatoreIVA() {
         title="Calcolatore IVA online (scorporo e aggiunta)"
         currentPath="/it/calcolatore-iva"
         description="Questo calcolatore IVA ti permette di calcolare facilmente l'IVA al 22%, 10% e 4% in Italia, sia per aggiungere l'imposta a un importo netto, sia per scorporarla da un totale lordo."
+        examples={[
+          {
+            title: "Aggiungere l'IVA al 22% a un importo netto",
+            description:
+              "Inserisci un importo netto, scegli l'aliquota 22% e seleziona 'Aggiungi IVA' per ottenere IVA e totale lordo.",
+          },
+          {
+            title: "Scorporare l'IVA da un prezzo lordo",
+            description:
+              "Se hai un totale già comprensivo di IVA, seleziona 'Scorpora IVA' per calcolare imponibile netto e imposta inclusa.",
+          },
+          {
+            title: "Calcolare IVA al 10% o al 4%",
+            description:
+              "Puoi usare le aliquote ridotte per prodotti o servizi soggetti a IVA agevolata, confrontando netto, IVA e totale.",
+          },
+        ]}
         faq={
           <>
             <h3 className="font-semibold">Come si calcola l&apos;IVA al 22%?</h3>

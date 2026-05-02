@@ -34,6 +34,23 @@ export default function ReverseDiscountCalculator() {
             title="Calcolo sconto inverso online"
             currentPath="/it/calcolo-sconto-inverso"
             description="Questo calcolatore ti permette di trovare il prezzo originale partendo dal prezzo già scontato e dalla percentuale di sconto applicata."
+            examples={[
+                {
+                    title: "Trovare il prezzo originale durante i saldi",
+                    description:
+                        "Se un prodotto costa 70 € dopo uno sconto del 30%, inserisci prezzo scontato e percentuale per risalire al prezzo iniziale.",
+                },
+                {
+                    title: "Verificare se lo sconto dichiarato è corretto",
+                    description:
+                        "Usa il calcolo inverso per controllare se il prezzo originale mostrato dal negozio è coerente con lo sconto applicato.",
+                },
+                {
+                    title: "Calcolare risparmio e prezzo di partenza",
+                    description:
+                        "Il tool mostra sia il prezzo originale sia il risparmio ottenuto, utile per confrontare offerte e promozioni.",
+                },
+            ]}
             faq={
                 <>
                     <h3 className="font-semibold">

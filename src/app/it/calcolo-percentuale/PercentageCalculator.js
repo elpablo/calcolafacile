@@ -118,6 +118,23 @@ export default function PercentageCalculator() {
             title="Calcolo percentuale online"
             currentPath="/it/calcolo-percentuale"
             description="Questo calcolatore percentuale ti permette di calcolare rapidamente percentuali, rapporti percentuali, aumenti, riduzioni e sconti. È utile per acquisti, lavoro, scuola, preventivi e calcoli quotidiani."
+            examples={[
+                {
+                    title: "Calcolare il 20% di un importo",
+                    description:
+                        "Seleziona 'Quanto è X% di un numero', inserisci 20 come percentuale e 150 come numero di partenza per ottenere 30.",
+                },
+                {
+                    title: "Calcolare uno sconto percentuale",
+                    description:
+                        "Usa la modalità prezzo scontato per sapere quanto paghi un prodotto dopo uno sconto, ad esempio 30% su 120 €.",
+                },
+                {
+                    title: "Calcolare un aumento o una riduzione",
+                    description:
+                        "Puoi aumentare o ridurre un valore di una percentuale, ad esempio per stimare un rincaro del 10% o una riduzione del 15%.",
+                },
+            ]}
             faq={
                 <>
                     <h3 className="font-semibold">Come si calcola il 20% di un numero?</h3>
