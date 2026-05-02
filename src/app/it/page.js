@@ -3,7 +3,7 @@ import Link from "next/link";
 export const metadata = {
     title: "Calcolatori online semplici, gratuiti e veloci",
     description:
-        "Strumenti pratici per calcolare IVA, percentuali, margine, markup, stipendio netto, conversioni di unità e utility per sviluppatori come JWT, JSON, Base64, timestamp, URL encoding e token LLM.",
+        "Strumenti pratici per calcolare IVA, percentuali, margine, markup, stipendio netto, conversioni di unità e utility per sviluppatori come JWT, JSON, Base64, timestamp, URL encoding, UUID e token LLM.",
     alternates: {
         canonical: "https://calcolafacile.org/it",
     },
@@ -83,6 +83,12 @@ const tools = [
         description:
             "Codifica e decodifica URL per query string, API e redirect.",
     },
+    {
+        href: "/it/uuid-generator",
+        title: "UUID Generator",
+        description:
+            "Genera UUID v4 per API, database, test e sviluppo software.",
+    },
 ];
 
 export default function Home() {
@@ -148,7 +154,7 @@ export default function Home() {
                     risolvere calcoli quotidiani in modo rapido: calcoli fiscali,
                     percentuali, margini, sconti, stipendio netto, conversioni
                     di unità di misura e piccole utility per sviluppatori, API e AI,
-                    come JWT, JSON, Base64, timestamp e URL encoding.
+                    come JWT, JSON, Base64, timestamp, URL encoding e UUID.
                     Ogni pagina offre spiegazioni semplici, esempi e risultati
                     immediati direttamente nel browser.
                 </p>

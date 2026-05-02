@@ -70,6 +70,11 @@ const defaultRelatedTools = [
         title: "URL Encoder/Decoder",
         description: "Codifica e decodifica URL per query string, API e redirect.",
     },
+    {
+        href: "/it/uuid-generator",
+        title: "UUID Generator",
+        description: "Genera UUID v4 per API, database, test e sviluppo software.",
+    },
 ];
 
 export function ToolInput({

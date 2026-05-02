@@ -21,6 +21,7 @@ export default function sitemap() {
         "/it/base64-tool",
         "/it/timestamp-converter",
         "/it/url-encoder-decoder",
+        "/it/uuid-generator",
     ];
 
     const conversionRoutes = conversions.map(
