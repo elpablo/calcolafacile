@@ -1,51 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState, useSyncExternalStore } from "react";
+import { useMemo, useState } from "react";
 import ToolLayout, { ResultBox } from "@/components/ToolLayout";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import {
-    oneDark,
-    oneLight,
-} from "react-syntax-highlighter/dist/esm/styles/prism";
-
-const highContrastLight = {
-    ...oneLight,
-    'code[class*="language-"]': {
-        ...oneLight['code[class*="language-"]'],
-        color: "#111827",
-        background: "transparent",
-    },
-    'pre[class*="language-"]': {
-        ...oneLight['pre[class*="language-"]'],
-        color: "#111827",
-        background: "transparent",
-    },
-    property: {
-        ...oneLight.property,
-        color: "#b91c1c",
-    },
-    string: {
-        ...oneLight.string,
-        color: "#166534",
-    },
-    number: {
-        ...oneLight.number,
-        color: "#b45309",
-    },
-    boolean: {
-        ...oneLight.boolean,
-        color: "#7c3aed",
-    },
-    null: {
-        ...oneLight.null,
-        color: "#6d28d9",
-    },
-    punctuation: {
-        ...oneLight.punctuation,
-        color: "#374151",
-    },
-};
+import JsonCodeBlock from "@/components/tools/json/JsonCodeBlock";
 
 function formatJson(text) {
     try {
@@ -60,25 +18,6 @@ function formatJson(text) {
             error: err.message,
         };
     }
-}
-
-function getThemeSnapshot() {
-    if (typeof document === "undefined") return "light";
-    return document.documentElement.classList.contains("dark") ? "dark" : "light";
-}
-
-function getServerSnapshot() {
-    return "light";
-}
-
-function subscribeToTheme(callback) {
-    const observer = new MutationObserver(callback);
-    observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ["class"],
-    });
-
-    return () => observer.disconnect();
 }
 
 export default function JsonFormatterCore({ content }) {
@@ -97,12 +36,6 @@ export default function JsonFormatterCore({ content }) {
 
     const [input, setInput] = useState("");
     const [viewMode, setViewMode] = useState("pretty");
-    const theme = useSyncExternalStore(
-        subscribeToTheme,
-        getThemeSnapshot,
-        getServerSnapshot
-    );
-    const syntaxTheme = theme === "dark" ? oneDark : highContrastLight;
 
     const getMinified = (text) => {
         try {
@@ -229,24 +162,7 @@ export default function JsonFormatterCore({ content }) {
                             : labels.minified}
                     </p>
                     <ResultBox copyText={displayedOutput} lang={lang}>
-                        <SyntaxHighlighter
-                            language="json"
-                            style={syntaxTheme}
-                            wrapLines={true}
-                            lineProps={{
-                                style: { background: "transparent" },
-                            }}
-                            codeTagProps={{
-                                style: { background: "transparent" },
-                            }}
-                            customStyle={{
-                                margin: 0,
-                                background: "transparent",
-                                fontSize: "0.875rem",
-                            }}
-                        >
-                            {displayedOutput}
-                        </SyntaxHighlighter>
+                        <JsonCodeBlock value={displayedOutput} />
                     </ResultBox>
                 </>
             )}
