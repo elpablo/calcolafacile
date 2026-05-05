@@ -78,6 +78,7 @@ const timestampConverterIt = {
             millisecondsFull: "Unix timestamp (millisecondi)",
         },
         localDateTime: "Data e ora locale",
+        utcDateTime: "Data e ora UTC",
         datePlaceholder: "Es. 01/05/2024 12:00",
         dateHelper:
             "Usa il formato gg/mm/aaaa hh:mm. La data viene interpretata nel fuso orario locale del browser e convertita in Unix time.",

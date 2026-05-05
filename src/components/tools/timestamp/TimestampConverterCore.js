@@ -19,6 +19,14 @@ function formatDate(date, locale) {
     });
 }
 
+function formatUtcDate(date, locale) {
+    return date.toLocaleString(locale, {
+        dateStyle: "medium",
+        timeStyle: "medium",
+        timeZone: "UTC",
+    });
+}
+
 function formatNumber(value, locale) {
     return value.toLocaleString(locale);
 }
@@ -153,13 +161,14 @@ export default function TimestampConverterCore({ content }) {
                 error: null,
                 lines: [
                     { label: labels.localDateTime, value: formatDate(date, locale) },
+                    { label: labels.utcDateTime, value: formatUtcDate(date, locale) },
                     { label: "ISO", value: date.toISOString() },
                     { label: labels.timezone || "Timezone", value: getBrowserTimezone() },
                     { label: labels.relative, value: getRelativeTime(date, locale, labels) },
                     { label: labels.units.secondsFull, value: formatNumber(seconds, locale) },
                     { label: labels.units.millisecondsFull, value: formatNumber(milliseconds, locale) },
                 ],
-                copyText: `${formatDate(date, locale)}\nISO: ${date.toISOString()}\nUnix: ${seconds}`,
+                copyText: `${labels.localDateTime}: ${formatDate(date, locale)}\n${labels.utcDateTime}: ${formatUtcDate(date, locale)}\nISO: ${date.toISOString()}\nUnix: ${seconds}`,
             };
         }
 
@@ -182,11 +191,12 @@ export default function TimestampConverterCore({ content }) {
                 { label: labels.units.secondsFull, value: formatNumber(seconds, locale) },
                 { label: labels.units.millisecondsFull, value: formatNumber(milliseconds, locale) },
                 { label: labels.localDateTime, value: formatDate(date, locale) },
+                { label: labels.utcDateTime, value: formatUtcDate(date, locale) },
                 { label: "ISO", value: date.toISOString() },
                 { label: labels.timezone || "Timezone", value: getBrowserTimezone() },
                 { label: labels.relative, value: getRelativeTime(date, locale, labels) },
             ],
-            copyText: `${seconds}`,
+            copyText: `${labels.units.secondsFull}: ${seconds}\n${labels.units.millisecondsFull}: ${milliseconds}\n${labels.localDateTime}: ${formatDate(date, locale)}\n${labels.utcDateTime}: ${formatUtcDate(date, locale)}\nISO: ${date.toISOString()}`,
         };
     }, [mode, timestamp, timestampUnit, dateTime, isHydrated, locale, labels]);
 
