@@ -1,8 +1,51 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import ToolLayout, { ResultBox } from "@/components/ToolLayout";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import {
+    oneDark,
+    oneLight,
+} from "react-syntax-highlighter/dist/esm/styles/prism";
+
+const highContrastLight = {
+    ...oneLight,
+    'code[class*="language-"]': {
+        ...oneLight['code[class*="language-"]'],
+        color: "#111827",
+        background: "transparent",
+    },
+    'pre[class*="language-"]': {
+        ...oneLight['pre[class*="language-"]'],
+        color: "#111827",
+        background: "transparent",
+    },
+    property: {
+        ...oneLight.property,
+        color: "#b91c1c",
+    },
+    string: {
+        ...oneLight.string,
+        color: "#166534",
+    },
+    number: {
+        ...oneLight.number,
+        color: "#b45309",
+    },
+    boolean: {
+        ...oneLight.boolean,
+        color: "#7c3aed",
+    },
+    null: {
+        ...oneLight.null,
+        color: "#6d28d9",
+    },
+    punctuation: {
+        ...oneLight.punctuation,
+        color: "#374151",
+    },
+};
 
 function formatJson(text) {
     try {
@@ -17,6 +60,25 @@ function formatJson(text) {
             error: err.message,
         };
     }
+}
+
+function getThemeSnapshot() {
+    if (typeof document === "undefined") return "light";
+    return document.documentElement.classList.contains("dark") ? "dark" : "light";
+}
+
+function getServerSnapshot() {
+    return "light";
+}
+
+function subscribeToTheme(callback) {
+    const observer = new MutationObserver(callback);
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
 }
 
 export default function JsonFormatterCore({ content }) {
@@ -35,6 +97,12 @@ export default function JsonFormatterCore({ content }) {
 
     const [input, setInput] = useState("");
     const [viewMode, setViewMode] = useState("pretty");
+    const theme = useSyncExternalStore(
+        subscribeToTheme,
+        getThemeSnapshot,
+        getServerSnapshot
+    );
+    const syntaxTheme = theme === "dark" ? oneDark : highContrastLight;
 
     const getMinified = (text) => {
         try {
@@ -94,7 +162,11 @@ export default function JsonFormatterCore({ content }) {
             </div>
 
             <div className="mb-2 text-xs text-zinc-500 dark:text-zinc-400">
-                {jsonSize && <>{labels.size}: {jsonSize}</>}
+                {jsonSize && (
+                    <>
+                        {labels.size}: {jsonSize}
+                    </>
+                )}
             </div>
 
             <div className="mb-4 flex gap-2 flex-wrap">
@@ -151,12 +223,30 @@ export default function JsonFormatterCore({ content }) {
             {displayedOutput && (
                 <>
                     <p className="mb-2 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
-                        {labels.format}: {viewMode === "pretty" ? labels.pretty : labels.minified}
+                        {labels.format}:{" "}
+                        {viewMode === "pretty"
+                            ? labels.pretty
+                            : labels.minified}
                     </p>
                     <ResultBox copyText={displayedOutput} lang={lang}>
-                        <pre className="max-w-full overflow-hidden whitespace-pre-wrap break-all rounded-lg bg-zinc-950 p-3 text-sm text-zinc-100">
+                        <SyntaxHighlighter
+                            language="json"
+                            style={syntaxTheme}
+                            wrapLines={true}
+                            lineProps={{
+                                style: { background: "transparent" },
+                            }}
+                            codeTagProps={{
+                                style: { background: "transparent" },
+                            }}
+                            customStyle={{
+                                margin: 0,
+                                background: "transparent",
+                                fontSize: "0.875rem",
+                            }}
+                        >
                             {displayedOutput}
-                        </pre>
+                        </SyntaxHighlighter>
                     </ResultBox>
                 </>
             )}
