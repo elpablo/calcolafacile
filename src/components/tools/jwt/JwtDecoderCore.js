@@ -201,8 +201,13 @@ export default function JwtDecoderCore({ content }) {
                 <ResultBox copyText={copyText} lang={lang}>
                     <div className="space-y-4">
                         {status && (
-                            <div className={`rounded-lg border p-3 text-sm ${getStatusClasses(status.type)}`}>
+                            <div
+                                className={`rounded-lg border p-3 text-sm ${getStatusClasses(status.type)}`}
+                            >
                                 <p className="font-semibold">{status.label}</p>
+                                <p className="text-xs opacity-70">
+                                    exp: {decoded.data.payload.exp}
+                                </p>
                                 <p className="mt-1">{status.description}</p>
                             </div>
                         )}
@@ -246,8 +251,7 @@ export default function JwtDecoderCore({ content }) {
                                 {labels.sections.signature}
                             </p>
                             <p className="break-all rounded-lg bg-white/70 p-3 font-mono text-sm text-zinc-700 dark:bg-zinc-900/60 dark:text-zinc-300">
-                                {decoded.data.signature ||
-                                    labels.noSignature}
+                                {decoded.data.signature || labels.noSignature}
                             </p>
                         </div>
                     </div>
