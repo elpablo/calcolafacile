@@ -6,6 +6,10 @@ export const metadata = {
         "Calcola IVA facilmente: aggiungi o scorpora IVA 22%, 10% e 4% in pochi secondi.",
     alternates: {
         canonical: "https://calcolafacile.org/it/calcolatore-iva",
+        languages: {
+            it: "https://calcolafacile.org/it/calcolatore-iva",
+            en: "https://calcolafacile.org/en/vat-calculation",
+        },
     },
 };
 

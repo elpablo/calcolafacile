@@ -6,6 +6,10 @@ export const metadata = {
         "Calcola percentuali online gratis: trova il X% di un numero, scopri che percentuale è un valore, applica aumenti, riduzioni e sconti.",
     alternates: {
         canonical: "https://calcolafacile.org/it/calcolo-percentuale",
+        languages: {
+            it: "https://calcolafacile.org/it/calcolo-percentuale",
+            en: "https://calcolafacile.org/en/percentage-calculator",
+        },
     },
 };
 

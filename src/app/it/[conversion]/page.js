@@ -4,13 +4,15 @@ import { conversions } from "@/config/conversions";
 
 // Genera tutte le pagine statiche delle conversioni definite in config
 export async function generateStaticParams() {
-    return conversions.map((conversion) => ({
-        conversion: conversion.slug,
-    }));
+    return conversions
+        .filter((conversion) => conversion.slug?.it)
+        .map((conversion) => ({
+            conversion: conversion.slug.it,
+        }));
 }
 
 function findConversion(slug) {
-    return conversions.find((conversion) => conversion.slug === slug);
+    return conversions.find((conversion) => conversion.slug?.it === slug);
 }
 
 // Metadata dinamico per ogni landing SEO
@@ -25,10 +27,14 @@ export async function generateMetadata({ params }) {
     }
 
     return {
-        title: `Converti ${config.fromLabel} in ${config.toLabel} online - Gratis`,
-        description: `Converti ${config.fromLabel} in ${config.toLabel} in modo semplice e veloce. Calcolo immediato e gratuito.`,
+        title: `Converti ${config.labels.it.from} in ${config.labels.it.to} online - Gratis`,
+        description: `Converti ${config.labels.it.from} in ${config.labels.it.to} in modo semplice e veloce. Calcolo immediato e gratuito.`,
         alternates: {
-            canonical: `https://calcolafacile.org/it/${config.slug}`,
+            canonical: `https://calcolafacile.org/it/${config.slug.it}`,
+            languages: {
+                it: `https://calcolafacile.org/it/${config.slug.it}`,
+                en: `https://calcolafacile.org/en/${config.slug.en}`,
+            },
         },
     };
 }

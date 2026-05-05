@@ -5,7 +5,7 @@ export default function sitemap() {
     const staticLastModified = new Date("2026-05-01");
     const conversionLastModified = new Date();
 
-    const staticRoutes = [
+    const italianStaticRoutes = [
         "",
         "/it",
         "/it/calcolatore-iva",
@@ -24,12 +24,43 @@ export default function sitemap() {
         "/it/uuid-generator",
     ];
 
-    const conversionRoutes = conversions.map(
-        (conversion) => `/it/${conversion.slug}`
-    );
+    const englishStaticRoutes = [
+        "/en",
+        "/en/tools",
+        "/en/vat-calculator",
+        "/en/percentage-calculator",
+        "/en/margin-calculation",
+        "/en/markup-calculation",
+        "/en/salary-calculator",
+        "/en/inverse-discount-calculation",
+        "/en/unit-converter",
+        "/en/jwt-decoder",
+        "/en/token-estimator",
+        "/en/json-formatter",
+        "/en/base64-tool",
+        "/en/timestamp-converter",
+        "/en/url-encoder-decoder",
+        "/en/uuid-generator",
+    ];
 
-    const routes = [...staticRoutes, ...conversionRoutes];
-    const conversionSet = new Set(conversionRoutes);
+    const italianConversionRoutes = conversions
+        .filter((conversion) => conversion.slug?.it)
+        .map((conversion) => `/it/${conversion.slug.it}`);
+
+    const englishConversionRoutes = conversions
+        .filter((conversion) => conversion.slug?.en)
+        .map((conversion) => `/en/${conversion.slug.en}`);
+
+    const routes = [
+        ...italianStaticRoutes,
+        ...englishStaticRoutes,
+        ...italianConversionRoutes,
+        ...englishConversionRoutes,
+    ];
+    const conversionSet = new Set([
+        ...italianConversionRoutes,
+        ...englishConversionRoutes,
+    ]);
 
     return routes.map((route) => ({
         url: `${baseUrl}${route}`,
@@ -37,6 +68,6 @@ export default function sitemap() {
             ? conversionLastModified
             : staticLastModified,
         changeFrequency: "weekly",
-        priority: route === "" || route === "/it" ? 1 : 0.8,
+        priority: route === "" || route === "/it" || route === "/en" ? 1 : 0.8,
     }));
 }

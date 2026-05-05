@@ -1,8 +1,20 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { usePathname } from "next/navigation";
 
 const THEME_KEY = "cf-theme";
+
+const labels = {
+    it: {
+        light: "Passa alla modalità chiara",
+        dark: "Passa alla modalità scura",
+    },
+    en: {
+        light: "Switch to light mode",
+        dark: "Switch to dark mode",
+    },
+};
 
 function getThemeSnapshot() {
     return document.documentElement.classList.contains("dark") ? "dark" : "light";
@@ -18,8 +30,12 @@ function subscribeToTheme(callback) {
     return () => observer.disconnect();
 }
 
-export default function ThemeToggle() {
+export default function ThemeToggle({ lang }) {
     const theme = useSyncExternalStore(subscribeToTheme, getThemeSnapshot, getServerSnapshot);
+
+    const pathname = usePathname();
+    const inferredLang = pathname?.startsWith("/en") ? "en" : "it";
+    const activeLang = lang || inferredLang;
 
     const applyTheme = (nextTheme) => {
         document.documentElement.classList.remove("light", "dark");
@@ -34,7 +50,8 @@ export default function ThemeToggle() {
         localStorage.setItem(THEME_KEY, nextTheme);
     };
 
-    const label = theme === "dark" ? "Passa alla modalità chiara" : "Passa alla modalità scura";
+    const localizedLabels = labels[activeLang] || labels.it;
+    const label = theme === "dark" ? localizedLabels.light : localizedLabels.dark;
 
     return (
         <button

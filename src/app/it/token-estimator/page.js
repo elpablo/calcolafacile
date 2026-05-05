@@ -7,6 +7,10 @@ export const metadata = {
         "Calcola i token del tuo testo e stima il costo per modelli AI come GPT e Claude. Tutto avviene nel browser.",
     alternates: {
         canonical: "https://calcolafacile.org/it/token-estimator",
+        languages: {
+            it: "https://calcolafacile.org/it/token-estimator",
+            en: "https://calcolafacile.org/en/token-estimator",
+        },
     },
 };
 

@@ -6,6 +6,10 @@ export const metadata = {
         "Calcola il prezzo originale partendo dal prezzo scontato e dalla percentuale di sconto.",
     alternates: {
         canonical: "https://calcolafacile.org/it/calcolo-sconto-inverso",
+        languages: {
+            it: "https://calcolafacile.org/it/calcolo-sconto-inverso",
+            en: "https://calcolafacile.org/en/inverse-discount-calculator",
+        },
     },
 };
 

@@ -6,6 +6,10 @@ export const metadata = {
         "Calcola facilmente il markup (ricarico) partendo dal costo. Scopri a quanto vendere per ottenere il ricarico desiderato.",
     alternates: {
         canonical: "https://calcolafacile.org/it/calcolo-markup",
+        languages: {
+            it: "https://calcolafacile.org/it/calcolo-markup",
+            en: "https://calcolafacile.org/en/markup-calculation",
+        },
     },
 };
 

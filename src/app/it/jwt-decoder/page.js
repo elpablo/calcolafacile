@@ -8,6 +8,10 @@ export const metadata = {
         "Decodifica JWT online direttamente nel browser. Visualizza header e payload di un JSON Web Token senza inviare dati a server esterni.",
     alternates: {
         canonical: "https://calcolafacile.org/it/jwt-decoder",
+        languages: {
+            it: "https://calcolafacile.org/it/jwt-decoder",
+            en: "https://calcolafacile.org/en/jwt-decoder",
+        },
     },
 };
 
