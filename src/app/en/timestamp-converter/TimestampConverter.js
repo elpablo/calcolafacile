@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import ToolLayout, { ResultBox } from "@/components/ToolLayout";
 
@@ -328,6 +329,24 @@ export default function TimestampConverter() {
                     </div>
                 </ResultBox>
             )}
+            <div className="mt-6 rounded-xl border border-zinc-200 bg-zinc-50 p-4 text-sm leading-6 text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900/60 dark:text-zinc-300">
+                If you are working with API payloads or encoded data, you may
+                also want to try our{" "}
+                <Link
+                    href="/en/json-tools"
+                    className="font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                >
+                    JSON tools
+                </Link>{" "}
+                or our{" "}
+                <Link
+                    href="/en/encoding-tools"
+                    className="font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                >
+                    encoding tools
+                </Link>
+                .
+            </div>
         </ToolLayout>
     );
 }
