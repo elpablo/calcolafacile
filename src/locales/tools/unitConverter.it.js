@@ -57,6 +57,10 @@ const unitConverterIt = {
         to: "A",
         swapUnits: "Inverti unità",
         result: "Risultato",
+        searchUnitPlaceholder: "Cerca unità...",
+        searchFromUnit: "Cerca unità di partenza",
+        searchToUnit: "Cerca unità di destinazione",
+        noUnitsFound: "Nessuna unità trovata",
         errors: {
             invalidNumber: "Inserisci un valore numerico valido.",
         },

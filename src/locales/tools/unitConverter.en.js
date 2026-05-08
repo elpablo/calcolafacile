@@ -49,6 +49,10 @@ const unitConverterEn = {
         to: "To",
         swapUnits: "Swap units",
         result: "Result",
+        searchUnitPlaceholder: "Search unit...",
+        searchFromUnit: "Search source unit",
+        searchToUnit: "Search target unit",
+        noUnitsFound: "No units found",
         errors: {
             invalidNumber: "Enter a valid numeric value.",
         },

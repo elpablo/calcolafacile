@@ -7,6 +7,9 @@ import { unitCategories } from "@/data/unitConverter/units";
 const selectClass =
     "h-12 w-full rounded-lg border border-zinc-300 bg-white px-3 text-base font-medium leading-none text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-blue-400";
 
+const searchInputClass =
+    "mb-2 h-10 w-full rounded-lg border border-zinc-300 bg-white px-3 text-sm font-medium text-zinc-900 shadow-sm placeholder:text-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-blue-400";
+
 const labelClass =
     "mb-1.5 block text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300";
 
@@ -16,6 +19,49 @@ function getCategoryLabel(categoryKey, labels) {
 
 function getUnitLabel(categoryKey, unitKey, labels) {
     return labels.units?.[categoryKey]?.[unitKey] || unitKey;
+}
+
+function getMatchingUnitKeys(categoryKey, unitKeys, labels, query) {
+    const normalizedQuery = query.trim().toLowerCase();
+
+    if (!normalizedQuery) {
+        return unitKeys;
+    }
+
+    return unitKeys
+        .map((unitKey) => {
+            const normalizedUnitKey = unitKey.toLowerCase();
+            const label = getUnitLabel(categoryKey, unitKey, labels).toLowerCase();
+
+            let score = null;
+
+            if (normalizedUnitKey === normalizedQuery) {
+                score = 0;
+            } else if (normalizedUnitKey.startsWith(normalizedQuery)) {
+                score = 1;
+            } else if (label.startsWith(normalizedQuery)) {
+                score = 2;
+            } else if (normalizedUnitKey.includes(normalizedQuery)) {
+                score = 3;
+            } else if (label.includes(normalizedQuery)) {
+                score = 4;
+            }
+
+            return { unitKey, score };
+        })
+        .filter((item) => item.score !== null)
+        .sort((a, b) => a.score - b.score)
+        .map((item) => item.unitKey);
+}
+
+function filterUnitKeys(categoryKey, unitKeys, labels, query, selectedUnit) {
+    const filteredKeys = getMatchingUnitKeys(categoryKey, unitKeys, labels, query);
+
+    if (selectedUnit && unitKeys.includes(selectedUnit) && !filteredKeys.includes(selectedUnit)) {
+        return [selectedUnit, ...filteredKeys];
+    }
+
+    return filteredKeys;
 }
 
 function convertTemperature(value, fromUnit, toUnit) {
@@ -99,8 +145,14 @@ export default function UnitConverterCore({
     const [toUnit, setToUnit] = useState(safeInitialTo);
     const [amount, setAmount] = useState(initialValue);
 
+    const [fromSearch, setFromSearch] = useState("");
+    const [toSearch, setToSearch] = useState("");
+
     const category = unitCategories[categoryKey];
     const unitKeys = Object.keys(category.units);
+
+    const filteredFromUnitKeys = filterUnitKeys(categoryKey, unitKeys, labels, fromSearch, fromUnit);
+    const filteredToUnitKeys = filterUnitKeys(categoryKey, unitKeys, labels, toSearch, toUnit);
 
     const numericAmount = parseFloat(amount);
     const isValid = !Number.isNaN(numericAmount);
@@ -115,11 +167,33 @@ export default function UnitConverterCore({
         setCategoryKey(nextCategoryKey);
         setFromUnit(nextUnits[0]);
         setToUnit(nextUnits[1] ?? nextUnits[0]);
+        setFromSearch("");
+        setToSearch("");
     };
 
     const swapUnits = () => {
         setFromUnit(toUnit);
         setToUnit(fromUnit);
+        setFromSearch("");
+        setToSearch("");
+    };
+
+    const handleFromSearchChange = (query) => {
+        setFromSearch(query);
+
+        const matches = getMatchingUnitKeys(categoryKey, unitKeys, labels, query);
+        if (matches.length > 0) {
+            setFromUnit(matches[0]);
+        }
+    };
+
+    const handleToSearchChange = (query) => {
+        setToSearch(query);
+
+        const matches = getMatchingUnitKeys(categoryKey, unitKeys, labels, query);
+        if (matches.length > 0) {
+            setToUnit(matches[0]);
+        }
     };
 
     return (
@@ -165,16 +239,27 @@ export default function UnitConverterCore({
                 <div className="grid gap-4 sm:grid-cols-[1fr_auto_1fr] sm:items-end">
                     <div>
                         <label className={labelClass}>{labels.from}</label>
+                        <input
+                            type="search"
+                            value={fromSearch}
+                            onChange={(e) => handleFromSearchChange(e.target.value)}
+                            className={searchInputClass}
+                            placeholder={labels.searchUnitPlaceholder}
+                            aria-label={labels.searchFromUnit}
+                        />
                         <select
                             value={fromUnit}
                             onChange={(e) => setFromUnit(e.target.value)}
                             className={selectClass}
                         >
-                            {unitKeys.map((unitKey) => (
+                            {filteredFromUnitKeys.map((unitKey) => (
                                 <option key={unitKey} value={unitKey}>
                                     {getUnitLabel(categoryKey, unitKey, labels)}
                                 </option>
                             ))}
+                            {filteredFromUnitKeys.length === 0 && (
+                                <option value={fromUnit}>{labels.noUnitsFound}</option>
+                            )}
                         </select>
                     </div>
 
@@ -190,16 +275,27 @@ export default function UnitConverterCore({
 
                     <div>
                         <label className={labelClass}>{labels.to}</label>
+                        <input
+                            type="search"
+                            value={toSearch}
+                            onChange={(e) => handleToSearchChange(e.target.value)}
+                            className={searchInputClass}
+                            placeholder={labels.searchUnitPlaceholder}
+                            aria-label={labels.searchToUnit}
+                        />
                         <select
                             value={toUnit}
                             onChange={(e) => setToUnit(e.target.value)}
                             className={selectClass}
                         >
-                            {unitKeys.map((unitKey) => (
+                            {filteredToUnitKeys.map((unitKey) => (
                                 <option key={unitKey} value={unitKey}>
                                     {getUnitLabel(categoryKey, unitKey, labels)}
                                 </option>
                             ))}
+                            {filteredToUnitKeys.length === 0 && (
+                                <option value={toUnit}>{labels.noUnitsFound}</option>
+                            )}
                         </select>
                     </div>
                 </div>
