@@ -4,7 +4,7 @@ const unitConverterIt = {
     title: "Convertitore unità di misura online",
     currentPath: "/it/convertitore-unita",
     description:
-        "Converti rapidamente lunghezza, massa, temperatura, volume, area, velocità e pressione. Scegli una categoria, seleziona le unità e ottieni subito il risultato direttamente nel browser.",
+        "Converti rapidamente lunghezza, massa, temperatura, volume, area, velocità, pressione, energia e portata. Scegli una categoria, seleziona le unità e ottieni subito il risultato direttamente nel browser.",
     examples: [
         {
             title: "Convertire centimetri in pollici",
@@ -17,16 +17,16 @@ const unitConverterIt = {
                 "Usa la categoria Massa per convertire once, libbre, grammi e chilogrammi quando lavori con ricette, pesi di spedizione o dati prodotto.",
         },
         {
-            title: "Convertire velocità e pressione",
+            title: "Convertire unità tecniche e Oil & Gas",
             description:
-                "Converti rapidamente km/h in mph, m/s in km/h, bar in psi e altre unità tecniche usate in veicoli, sensori e contesti ingegneristici.",
+                "Converti rapidamente bar in psi, bbl in metri cubi, BTU in kWh e portate come bbl/giorno, scf/giorno e MMscf/giorno.",
         },
     ],
     faq: (
         <>
             <h3 className="font-semibold">Quali unità posso convertire?</h3>
             <p>
-                Puoi convertire unità di lunghezza, massa, temperatura, volume, area, velocità e pressione. Altre categorie potranno essere aggiunte nel tempo.
+                Puoi convertire unità di lunghezza, massa, temperatura, volume, area, velocità, pressione, energia e portata. Altre categorie potranno essere aggiunte nel tempo.
             </p>
 
             <h3 className="mt-2 font-semibold">Posso convertire once in grammi?</h3>
@@ -60,6 +60,8 @@ const unitConverterIt = {
             area: "Area",
             speed: "Velocità",
             pressure: "Pressione",
+            energy: "Energia",
+            flow: "Portata",
         },
         units: {
             length: {
@@ -97,6 +99,11 @@ const unitConverterIt = {
                 pt: "Pinte USA (pt)",
                 qt: "Quarti USA (qt)",
                 gal: "Galloni USA",
+                m3: "Metri cubi (m³)",
+                bbl: "Barili di petrolio (bbl)",
+                scf: "Piedi cubi standard (scf)",
+                Mscf: "Migliaia di piedi cubi standard (Mscf)",
+                MMscf: "Milioni di piedi cubi standard (MMscf)",
             },
             area: {
                 mm2: "Millimetri quadrati (mm²)",
@@ -125,6 +132,26 @@ const unitConverterIt = {
                 psi: "Libbre per pollice quadrato (psi)",
                 mmHg: "Millimetri di mercurio (mmHg)",
                 Torr: "Torr",
+            },
+            energy: {
+                J: "Joule (J)",
+                kJ: "Kilojoule (kJ)",
+                MJ: "Megajoule (MJ)",
+                GJ: "Gigajoule (GJ)",
+                Wh: "Wattora (Wh)",
+                kWh: "Kilowattora (kWh)",
+                BTU: "British thermal unit (BTU)",
+                MMBtu: "Milioni di British thermal unit (MMBtu)",
+            },
+            flow: {
+                Lmin: "Litri al minuto (L/min)",
+                Ls: "Litri al secondo (L/s)",
+                m3h: "Metri cubi all'ora (m³/h)",
+                m3d: "Metri cubi al giorno (m³/giorno)",
+                bpd: "Barili al giorno (bbl/giorno)",
+                scfd: "Piedi cubi standard al giorno (scf/giorno)",
+                Mscfd: "Migliaia di piedi cubi standard al giorno (Mscf/giorno)",
+                MMscfd: "Milioni di piedi cubi standard al giorno (MMscf/giorno)",
             },
         },
     },

@@ -4,7 +4,7 @@ const unitConverterEn = {
     title: "Unit Converter Online",
     currentPath: "/en/unit-converter",
     description:
-        "Convert length, mass, temperature, volume, area, speed and pressure quickly. Choose a category, select units and get instant results directly in your browser.",
+        "Convert length, mass, temperature, volume, area, speed, pressure, energy and flow rate quickly. Choose a category, select units and get instant results directly in your browser.",
     examples: [
         {
             title: "Convert centimeters to inches",
@@ -17,16 +17,16 @@ const unitConverterEn = {
                 "Use the Mass category to convert ounces, pounds, grams and kilograms when working with recipes, shipping weights or product data.",
         },
         {
-            title: "Convert speed and pressure units",
+            title: "Convert technical and Oil & Gas units",
             description:
-                "Quickly convert km/h to mph, m/s to km/h, bar to psi and other technical units used in vehicles, sensors and engineering contexts.",
+                "Quickly convert bar to psi, bbl to cubic meters, BTU to kWh, and flow rates such as bbl/day, scf/day and MMscf/day.",
         },
     ],
     faq: (
         <>
             <h3 className="font-semibold">What units can I convert?</h3>
             <p>
-                You can convert length, mass, temperature, volume, area, speed and pressure. More categories may be added over time.
+                You can convert length, mass, temperature, volume, area, speed, pressure, energy and flow rate. More categories may be added over time.
             </p>
 
             <h3 className="mt-2 font-semibold">Can I convert ounces to grams?</h3>
@@ -60,6 +60,8 @@ const unitConverterEn = {
             area: "Area",
             speed: "Speed",
             pressure: "Pressure",
+            energy: "Energy",
+            flow: "Flow rate",
         },
         units: {
             length: {
@@ -97,6 +99,11 @@ const unitConverterEn = {
                 pt: "US Pints (pt)",
                 qt: "US Quarts (qt)",
                 gal: "US Gallons",
+                m3: "Cubic meters (m³)",
+                bbl: "Oil barrels (bbl)",
+                scf: "Standard cubic feet (scf)",
+                Mscf: "Thousand standard cubic feet (Mscf)",
+                MMscf: "Million standard cubic feet (MMscf)",
             },
             area: {
                 mm2: "Square millimeters (mm²)",
@@ -125,6 +132,26 @@ const unitConverterEn = {
                 psi: "Pounds per square inch (psi)",
                 mmHg: "Millimeters of mercury (mmHg)",
                 Torr: "Torr",
+            },
+            energy: {
+                J: "Joules (J)",
+                kJ: "Kilojoules (kJ)",
+                MJ: "Megajoules (MJ)",
+                GJ: "Gigajoules (GJ)",
+                Wh: "Watt-hours (Wh)",
+                kWh: "Kilowatt-hours (kWh)",
+                BTU: "British thermal units (BTU)",
+                MMBtu: "Million British thermal units (MMBtu)",
+            },
+            flow: {
+                Lmin: "Liters per minute (L/min)",
+                Ls: "Liters per second (L/s)",
+                m3h: "Cubic meters per hour (m³/h)",
+                m3d: "Cubic meters per day (m³/day)",
+                bpd: "Barrels per day (bbl/day)",
+                scfd: "Standard cubic feet per day (scf/day)",
+                Mscfd: "Thousand standard cubic feet per day (Mscf/day)",
+                MMscfd: "Million standard cubic feet per day (MMscf/day)",
             },
         },
     },
