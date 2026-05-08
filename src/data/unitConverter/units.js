@@ -1,0 +1,87 @@
+export const unitCategories = {
+    length: {
+        baseUnit: "m",
+        units: {
+            mm: { factor: 0.001 },
+            cm: { factor: 0.01 },
+            m: { factor: 1 },
+            km: { factor: 1000 },
+            in: { factor: 0.0254 },
+            ft: { factor: 0.3048 },
+            yd: { factor: 0.9144 },
+            mi: { factor: 1609.344 },
+            nmi: { factor: 1852 },
+        },
+    },
+    mass: {
+        baseUnit: "g",
+        units: {
+            mg: { factor: 0.001 },
+            g: { factor: 1 },
+            kg: { factor: 1000 },
+            t: { factor: 1000000 },
+            oz: { factor: 28.349523125 },
+            lb: { factor: 453.59237 },
+            st: { factor: 6350.29318 },
+        },
+    },
+    temperature: {
+        baseUnit: "C",
+        units: {
+            C: {},
+            F: {},
+            K: {},
+        },
+    },
+    volume: {
+        baseUnit: "L",
+        units: {
+            mL: { factor: 0.001 },
+            L: { factor: 1 },
+            tsp: { factor: 0.00492892159375 },
+            tbsp: { factor: 0.01478676478125 },
+            cup: { factor: 0.2365882365 },
+            floz: { factor: 0.0295735295625 },
+            pt: { factor: 0.473176473 },
+            qt: { factor: 0.946352946 },
+            gal: { factor: 3.785411784 },
+        },
+    },
+    area: {
+        baseUnit: "m2",
+        units: {
+            mm2: { factor: 0.000001 },
+            cm2: { factor: 0.0001 },
+            m2: { factor: 1 },
+            km2: { factor: 1000000 },
+            ha: { factor: 10000 },
+            in2: { factor: 0.00064516 },
+            ft2: { factor: 0.09290304 },
+            yd2: { factor: 0.83612736 },
+            acre: { factor: 4046.8564224 },
+        },
+    },
+    speed: {
+        baseUnit: "mps",
+        units: {
+            mps: { factor: 1 },
+            kmh: { factor: 1 / 3.6 },
+            mph: { factor: 0.44704 },
+            kt: { factor: 0.514444444 },
+            fps: { factor: 0.3048 },
+        },
+    },
+    pressure: {
+        baseUnit: "Pa",
+        units: {
+            Pa: { factor: 1 },
+            kPa: { factor: 1000 },
+            MPa: { factor: 1000000 },
+            bar: { factor: 100000 },
+            atm: { factor: 101325 },
+            psi: { factor: 6894.757293168 },
+            mmHg: { factor: 133.322387415 },
+            Torr: { factor: 133.322368421 },
+        },
+    },
+};
