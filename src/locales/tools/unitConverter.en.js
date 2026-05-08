@@ -100,7 +100,7 @@ const unitConverterEn = {
                 qt: "US Quarts (qt)",
                 gal: "US Gallons",
                 m3: "Cubic meters (m³)",
-                bbl: "Oil barrels (bbl)",
+                bbl: "Oil barrels - 42 US gallons (bbl)",
                 scf: "Standard cubic feet (scf)",
                 Mscf: "Thousand standard cubic feet (Mscf)",
                 MMscf: "Million standard cubic feet (MMscf)",

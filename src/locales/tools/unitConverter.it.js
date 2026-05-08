@@ -26,17 +26,25 @@ const unitConverterIt = {
         <>
             <h3 className="font-semibold">Quali unità posso convertire?</h3>
             <p>
-                Puoi convertire unità di lunghezza, massa, temperatura, volume, area, velocità, pressione, energia e portata. Altre categorie potranno essere aggiunte nel tempo.
+                Puoi convertire unità di lunghezza, massa, temperatura, volume,
+                area, velocità, pressione, energia e portata. Altre categorie
+                potranno essere aggiunte nel tempo.
             </p>
 
-            <h3 className="mt-2 font-semibold">Posso convertire once in grammi?</h3>
+            <h3 className="mt-2 font-semibold">
+                Posso convertire once in grammi?
+            </h3>
             <p>
-                Sì. Seleziona la categoria Massa, scegli once come unità di partenza e grammi come unità di destinazione.
+                Sì. Seleziona la categoria Massa, scegli once come unità di
+                partenza e grammi come unità di destinazione.
             </p>
 
-            <h3 className="mt-2 font-semibold">Posso convertire centimetri in pollici?</h3>
+            <h3 className="mt-2 font-semibold">
+                Posso convertire centimetri in pollici?
+            </h3>
             <p>
-                Sì. Seleziona la categoria Lunghezza, scegli centimetri come unità di partenza e pollici come unità di destinazione.
+                Sì. Seleziona la categoria Lunghezza, scegli centimetri come
+                unità di partenza e pollici come unità di destinazione.
             </p>
         </>
     ),
@@ -100,7 +108,7 @@ const unitConverterIt = {
                 qt: "Quarti USA (qt)",
                 gal: "Galloni USA",
                 m3: "Metri cubi (m³)",
-                bbl: "Barili di petrolio (bbl)",
+                bbl: "Barili petroliferi - 42 galloni USA (bbl)",
                 scf: "Piedi cubi standard (scf)",
                 Mscf: "Migliaia di piedi cubi standard (Mscf)",
                 MMscf: "Milioni di piedi cubi standard (MMscf)",
