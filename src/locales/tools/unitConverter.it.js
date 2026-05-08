@@ -61,6 +61,7 @@ const unitConverterIt = {
         searchFromUnit: "Cerca unità di partenza",
         searchToUnit: "Cerca unità di destinazione",
         noUnitsFound: "Nessuna unità trovata",
+        quickConversionsTitle: "Conversioni rapide",
         errors: {
             invalidNumber: "Inserisci un valore numerico valido.",
         },
@@ -106,7 +107,7 @@ const unitConverterIt = {
                 L: "Litri (L)",
                 tsp: "Cucchiaini USA (tsp)",
                 tbsp: "Cucchiai USA (tbsp)",
-                cup: "Cup USA",
+                cup: "Tazze USA",
                 floz: "Once fluide USA",
                 pt: "Pinte USA (pt)",
                 qt: "Quarti USA (qt)",

@@ -53,6 +53,7 @@ const unitConverterEn = {
         searchFromUnit: "Search source unit",
         searchToUnit: "Search target unit",
         noUnitsFound: "No units found",
+        quickConversionsTitle: "Quick conversions",
         errors: {
             invalidNumber: "Enter a valid numeric value.",
         },
