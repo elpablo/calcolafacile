@@ -29,16 +29,19 @@ const jsonFormatterEn = {
             title: "Format a JSON API response",
             description:
                 "Paste raw JSON returned by an API to make it readable, inspect nested objects and arrays, and copy the formatted output.",
+            href: "/en/json-formatter?example=minifiedApi",
         },
         {
             title: "Validate JSON before using it in code",
             description:
                 "Catch common JSON errors such as missing commas, invalid brackets, unclosed strings or malformed objects before using the data in your app.",
+            href: "/en/json-formatter?example=invalidJson",
         },
         {
             title: "Minify JSON for HTTP payloads and config files",
             description:
                 "Switch to Minified view when you need compact JSON for API requests, environment variables, configuration files or test fixtures.",
+            href: "/en/json-formatter?example=nestedConfig",
         },
     ],
     faq: (

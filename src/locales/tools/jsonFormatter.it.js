@@ -29,16 +29,19 @@ const jsonFormatterIt = {
             title: "Formatta una risposta API in JSON",
             description:
                 "Incolla JSON grezzo restituito da un'API per renderlo leggibile, ispezionare oggetti e array annidati e copiare l'output formattato.",
+            href: "/it/json-formatter?example=minifiedApi",
         },
         {
             title: "Valida JSON prima di usarlo nel codice",
             description:
                 "Rileva errori comuni nel JSON, come virgole mancanti, parentesi non valide, stringhe non chiuse o oggetti malformati prima di utilizzare i dati nella tua app.",
+            href: "/it/json-formatter?example=invalidJson",
         },
         {
             title: "Minimizza JSON per payload HTTP e file di configurazione",
             description:
                 "Passa alla visualizzazione Minified quando hai bisogno di JSON compatto per richieste API, variabili d'ambiente, file di configurazione o fixture di test.",
+            href: "/it/json-formatter?example=nestedConfig",
         },
     ],
     faq: (

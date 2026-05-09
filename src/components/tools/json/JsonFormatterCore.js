@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import ToolLayout, { ResultBox } from "@/components/ToolLayout";
 import JsonCodeBlock from "@/components/tools/json/JsonCodeBlock";
+import { jsonFormatterExamples } from "@/data/toolExamples/jsonFormatterExamples";
 
 function formatJson(text) {
     try {
@@ -34,8 +36,27 @@ export default function JsonFormatterCore({ content }) {
         relatedLinks,
     } = content;
 
-    const [input, setInput] = useState("");
-    const [viewMode, setViewMode] = useState("pretty");
+    const searchParams = useSearchParams();
+
+    const [lastSearchParams, setLastSearchParams] = useState(searchParams);
+    const [input, setInput] = useState(() => {
+        const key = searchParams.get("example");
+        return key ? (jsonFormatterExamples[key]?.input ?? "") : "";
+    });
+    const [viewMode, setViewMode] = useState(() => {
+        const key = searchParams.get("example");
+        return key ? (jsonFormatterExamples[key]?.viewMode ?? "pretty") : "pretty";
+    });
+
+    if (lastSearchParams !== searchParams) {
+        setLastSearchParams(searchParams);
+        const exampleKey = searchParams.get("example");
+        const example = exampleKey ? jsonFormatterExamples[exampleKey] : null;
+        if (example) {
+            setInput(example.input);
+            setViewMode(example.viewMode ?? "pretty");
+        }
+    }
 
     const getMinified = (text) => {
         try {
@@ -104,13 +125,19 @@ export default function JsonFormatterCore({ content }) {
 
             <div className="mb-4 flex gap-2 flex-wrap">
                 <button
-                    onClick={() => setInput(sampleJson)}
+                    onClick={() => {
+                        setInput(sampleJson);
+                        setViewMode("pretty");
+                    }}
                     className="rounded-lg border px-3 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
                 >
                     {labels.useSample}
                 </button>
                 <button
-                    onClick={() => setInput("")}
+                    onClick={() => {
+                        setInput("");
+                        setViewMode("pretty");
+                    }}
                     className="rounded-lg border px-3 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
                 >
                     {labels.clear}
