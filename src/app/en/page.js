@@ -96,8 +96,8 @@ const tools = [
 
 export default function Home() {
     return (
-        <main className="mx-auto max-w-5xl px-6 py-12">
-            <section className="mb-12 max-w-3xl">
+        <main className="mx-auto max-w-[1600px] px-6 py-12">
+            <section className="mb-12 max-w-4xl">
                 <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-blue-700 dark:text-blue-300">
                     CalcolaFacile
                 </p>
@@ -105,9 +105,10 @@ export default function Home() {
                     Free online calculators and developer tools
                 </h1>
                 <p className="text-lg leading-8 text-zinc-600 dark:text-zinc-300">
-                    Practical tools for percentages, VAT, margins, markup, salary estimates,
-                    unit conversions and developer workflows. Use JWT, JSON, Base64,
-                    timestamp, URL encoding, UUID and LLM token tools directly in your browser.
+                    Practical tools for percentages, VAT, margins, markup,
+                    salary estimates, unit conversions and developer workflows.
+                    Use JWT, JSON, Base64, timestamp, URL encoding, UUID and LLM
+                    token tools directly in your browser.
                 </p>
             </section>
 
@@ -116,7 +117,7 @@ export default function Home() {
                     Available tools
                 </h2>
 
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                     {tools.map((tool) => {
                         const isFeatured = tool.href === "/en/json-formatter";
 
@@ -124,10 +125,12 @@ export default function Home() {
                             <Link
                                 key={tool.href}
                                 href={tool.href}
-                                className={`min-h-30 rounded-xl border p-5 shadow-sm transition ${{
-                                    true: "border-blue-300 bg-blue-50 dark:border-blue-500 dark:bg-zinc-800",
-                                    false: "border-zinc-200 bg-white hover:border-blue-300 hover:bg-blue-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-blue-500 dark:hover:bg-zinc-800"
-                                }[isFeatured]}`}
+                                className={`min-h-32 rounded-xl border p-5 shadow-sm transition ${
+                                    {
+                                        true: "border-blue-300 bg-blue-50 dark:border-blue-500 dark:bg-zinc-800",
+                                        false: "border-zinc-200 bg-white hover:border-blue-300 hover:bg-blue-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-blue-500 dark:hover:bg-zinc-800",
+                                    }[isFeatured]
+                                }`}
                             >
                                 <div className="mb-2">
                                     <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
@@ -152,13 +155,15 @@ export default function Home() {
                 <h2 className="mb-3 text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
                     Why use CalcolaFacile?
                 </h2>
-                <p className="max-w-3xl leading-7 text-zinc-600 dark:text-zinc-300">
-                    CalcolaFacile collects small, fast online tools for everyday calculations,
-                    business pricing and developer work. You can calculate percentages, VAT,
-                    margins, discounts, salary estimates and unit conversions, or use browser-based
-                    utilities for JWT, JSON, Base64, timestamps, URL encoding, UUID generation and
-                    LLM token estimation. Each page includes simple explanations, practical examples
-                    and instant results directly in the browser.
+                <p className="max-w-4xl leading-7 text-zinc-600 dark:text-zinc-300">
+                    CalcolaFacile collects small, fast online tools for everyday
+                    calculations, business pricing and developer work. You can
+                    calculate percentages, VAT, margins, discounts, salary
+                    estimates and unit conversions, or use browser-based
+                    utilities for JWT, JSON, Base64, timestamps, URL encoding,
+                    UUID generation and LLM token estimation. Each page includes
+                    simple explanations, practical examples and instant results
+                    directly in the browser.
                 </p>
             </section>
         </main>

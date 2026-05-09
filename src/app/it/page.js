@@ -93,8 +93,8 @@ const tools = [
 
 export default function Home() {
     return (
-        <main className="mx-auto max-w-5xl px-6 py-12">
-            <section className="mb-12 max-w-3xl">
+        <main className="mx-auto max-w-[1600px] px-6 py-12">
+            <section className="mb-12 max-w-4xl">
                 <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-blue-700 dark:text-blue-300">
                     CalcolaFacile
                 </p>
@@ -104,7 +104,8 @@ export default function Home() {
                 <p className="text-lg leading-8 text-zinc-600 dark:text-zinc-300">
                     Strumenti pratici per calcolare IVA, percentuali, margine,
                     markup, stipendio netto, conversioni di unità e utility per
-                    sviluppatori, API e AI senza registrazione e senza complicazioni.
+                    sviluppatori, API e AI senza registrazione e senza
+                    complicazioni.
                 </p>
             </section>
 
@@ -113,18 +114,21 @@ export default function Home() {
                     Strumenti disponibili
                 </h2>
 
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                     {tools.map((tool) => {
-                        const isFeatured = tool.href === "/it/convertitore-unita";
+                        const isFeatured =
+                            tool.href === "/it/convertitore-unita";
 
                         return (
                             <Link
                                 key={tool.href}
                                 href={tool.href}
-                                className={`min-h-30 rounded-xl border p-5 shadow-sm transition ${{
-                                    true: "border-blue-300 bg-blue-50 dark:border-blue-500 dark:bg-zinc-800",
-                                    false: "border-zinc-200 bg-white hover:border-blue-300 hover:bg-blue-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-blue-500 dark:hover:bg-zinc-800"
-                                }[isFeatured]}`}
+                                className={`min-h-32 rounded-xl border p-5 shadow-sm transition ${
+                                    {
+                                        true: "border-blue-300 bg-blue-50 dark:border-blue-500 dark:bg-zinc-800",
+                                        false: "border-zinc-200 bg-white hover:border-blue-300 hover:bg-blue-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-blue-500 dark:hover:bg-zinc-800",
+                                    }[isFeatured]
+                                }`}
                             >
                                 <div className="mb-2">
                                     <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
@@ -149,14 +153,14 @@ export default function Home() {
                 <h2 className="mb-3 text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
                     Perché usare CalcolaFacile?
                 </h2>
-                <p className="max-w-3xl leading-7 text-zinc-600 dark:text-zinc-300">
+                <p className="max-w-4xl leading-7 text-zinc-600 dark:text-zinc-300">
                     CalcolaFacile raccoglie piccoli strumenti online pensati per
-                    risolvere calcoli quotidiani in modo rapido: calcoli fiscali,
-                    percentuali, margini, sconti, stipendio netto, conversioni
-                    di unità di misura e piccole utility per sviluppatori, API e AI,
-                    come JWT, JSON, Base64, timestamp, URL encoding e UUID.
-                    Ogni pagina offre spiegazioni semplici, esempi e risultati
-                    immediati direttamente nel browser.
+                    risolvere calcoli quotidiani in modo rapido: calcoli
+                    fiscali, percentuali, margini, sconti, stipendio netto,
+                    conversioni di unità di misura e piccole utility per
+                    sviluppatori, API e AI, come JWT, JSON, Base64, timestamp,
+                    URL encoding e UUID. Ogni pagina offre spiegazioni semplici,
+                    esempi e risultati immediati direttamente nel browser.
                 </p>
             </section>
         </main>
