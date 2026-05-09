@@ -430,7 +430,7 @@ export default function ToolLayout({
         .filter((tool) => tool.href && (!currentPath || tool.href !== currentPath));
 
     return (
-        <main className="mx-auto max-w-6xl p-6">
+        <main className="mx-auto max-w-[1600px] p-6">
             <div className="mb-4">
                 <Link
                     href={lang === "it" ? "/it" : "/en"}
@@ -445,7 +445,7 @@ export default function ToolLayout({
             <h1 className="mb-4 text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
                 {title}
             </h1>
-            <div className="grid gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(300px,0.7fr)] lg:items-start">
+            <div className="grid gap-8 lg:grid-cols-[minmax(0,1.25fr)_minmax(360px,0.75fr)] lg:items-start xl:gap-10">
                 <div className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
                     {children}
 
@@ -482,7 +482,7 @@ export default function ToolLayout({
                     <h2 className="mb-4 text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
                         {t.related}
                     </h2>
-                    <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                         {visibleRelatedTools.map((tool) => (
                             <Link
                                 key={tool.href}
