@@ -163,6 +163,24 @@ export default function Home() {
                     esempi e risultati immediati direttamente nel browser.
                 </p>
             </section>
+
+            <footer className="mt-10 border-t border-zinc-200 pt-6 text-sm text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
+                <div className="flex flex-wrap gap-x-4 gap-y-2">
+                    <Link href="/it/privacy" className="hover:text-blue-600 dark:hover:text-blue-400">
+                        Privacy Policy
+                    </Link>
+                    <Link href="/it/cookie-policy" className="hover:text-blue-600 dark:hover:text-blue-400">
+                        Cookie Policy
+                    </Link>
+                    <Link href="/it/terms" className="hover:text-blue-600 dark:hover:text-blue-400">
+                        Termini di utilizzo
+                    </Link>
+                </div>
+
+                <p className="mt-4 text-xs text-zinc-400 dark:text-zinc-500">
+                    © {new Date().getFullYear()} NERALAB Srl · Strumenti online veloci e privacy-friendly.
+                </p>
+            </footer>
         </main>
     );
 }
