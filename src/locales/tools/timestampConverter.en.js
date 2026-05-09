@@ -29,16 +29,19 @@ const timestampConverterEn = {
             title: "Convert JWT exp, iat and nbf values",
             description:
                 "Copy timestamp claims from a JWT payload and convert them into readable local dates, relative time and ISO format.",
+            href: "/en/timestamp-converter?example=jwtExpiration",
         },
         {
             title: "Read Unix timestamps from logs and APIs",
             description:
                 "When a server log or API response contains epoch time, quickly convert it to a readable date in your local timezone.",
+            href: "/en/timestamp-converter?example=apiLogTimestamp",
         },
         {
             title: "Convert a date to Unix timestamp",
             description:
                 "Enter a date in MM/DD/YYYY HH:mm format to get Unix timestamp values in both seconds and milliseconds.",
+            href: "/en/timestamp-converter?example=dateToTimestamp",
         },
     ],
     faq: (

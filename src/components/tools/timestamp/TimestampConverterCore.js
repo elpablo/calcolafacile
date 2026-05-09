@@ -1,7 +1,9 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useMemo, useState, useSyncExternalStore } from "react";
 import ToolLayout, { ResultBox } from "@/components/ToolLayout";
+import { timestampConverterExamples } from "@/data/toolExamples/timestampConverterExamples";
 
 const labelClass =
     "mb-1.5 block text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300";
@@ -128,10 +130,29 @@ export default function TimestampConverterCore({ content }) {
         sample,
     } = content;
 
+    const searchParams = useSearchParams();
+
     const [mode, setMode] = useState("timestampToDate");
     const [timestamp, setTimestamp] = useState(sample.timestamp);
     const [timestampUnit, setTimestampUnit] = useState(sample.unit);
     const [dateTime, setDateTime] = useState(sample.dateTime);
+
+    const [lastSearchParams, setLastSearchParams] = useState(searchParams);
+
+    if (lastSearchParams !== searchParams) {
+        setLastSearchParams(searchParams);
+
+        const exampleKey = searchParams.get("example");
+        const example = exampleKey ? timestampConverterExamples[exampleKey] : null;
+
+        if (example) {
+            setMode(example.mode || "timestampToDate");
+            setTimestamp(example.timestamp);
+            setTimestampUnit(example.unit || "seconds");
+            setDateTime(example.dateTime);
+        }
+    }
+
     const isHydrated = useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot);
 
     const result = useMemo(() => {

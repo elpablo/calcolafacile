@@ -1,5 +1,6 @@
 
 
+import { Suspense } from "react";
 import TimestampConverter from "./TimestampConverter";
 
 export const metadata = {
@@ -16,5 +17,9 @@ export const metadata = {
 };
 
 export default function TimestampConverterPage() {
-    return <TimestampConverter />;
+    return (
+        <Suspense fallback={null}>
+            <TimestampConverter />
+        </Suspense>
+    );
 }
