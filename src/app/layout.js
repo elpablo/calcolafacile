@@ -3,6 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -66,6 +67,7 @@ export default function RootLayout({ children }) {
               </div>
               {children}
               <Analytics />
+              <SpeedInsights />
           </body>
       </html>
   );
