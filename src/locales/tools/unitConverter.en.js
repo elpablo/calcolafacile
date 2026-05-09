@@ -10,11 +10,13 @@ const unitConverterEn = {
             title: "Convert centimeters to inches",
             description:
                 "Select Length, choose centimeters as the input unit and inches as the output unit to convert measurements for screens, objects or product dimensions.",
+            href: "/en/cm-to-inches",
         },
         {
             title: "Convert ounces to grams",
             description:
                 "Use the Mass category to convert ounces, pounds, grams and kilograms when working with recipes, shipping weights or product data.",
+            href: "/en/oz-to-g",
         },
         {
             title: "Convert technical and Oil & Gas units",
@@ -26,17 +28,25 @@ const unitConverterEn = {
         <>
             <h3 className="font-semibold">What units can I convert?</h3>
             <p>
-                You can convert length, mass, temperature, volume, area, speed, pressure, energy and flow rate. More categories may be added over time.
+                You can convert length, mass, temperature, volume, area, speed,
+                pressure, energy and flow rate. More categories may be added
+                over time.
             </p>
 
-            <h3 className="mt-2 font-semibold">Can I convert ounces to grams?</h3>
+            <h3 className="mt-2 font-semibold">
+                Can I convert ounces to grams?
+            </h3>
             <p>
-                Yes. Select the Mass category, choose ounces as the input unit and grams as the output unit.
+                Yes. Select the Mass category, choose ounces as the input unit
+                and grams as the output unit.
             </p>
 
-            <h3 className="mt-2 font-semibold">Can I convert centimeters to inches?</h3>
+            <h3 className="mt-2 font-semibold">
+                Can I convert centimeters to inches?
+            </h3>
             <p>
-                Yes. Select the Length category, choose centimeters as the input unit and inches as the output unit.
+                Yes. Select the Length category, choose centimeters as the input
+                unit and inches as the output unit.
             </p>
         </>
     ),

@@ -455,4 +455,42 @@ export const conversions = [
         },
         category: "area",
     },
+    {
+        slug: {
+            it: "oz-a-g",
+            en: "oz-to-g",
+        },
+        from: "oz",
+        to: "g",
+        labels: {
+            it: {
+                from: "once",
+                to: "grammi",
+            },
+            en: {
+                from: "ounces",
+                to: "grams",
+            },
+        },
+        category: "mass",
+    },
+    {
+        slug: {
+            it: "g-a-oz",
+            en: "g-to-oz",
+        },
+        from: "g",
+        to: "oz",
+        labels: {
+            it: {
+                from: "grammi",
+                to: "once",
+            },
+            en: {
+                from: "grams",
+                to: "ounces",
+            },
+        },
+        category: "mass",
+    },
 ];

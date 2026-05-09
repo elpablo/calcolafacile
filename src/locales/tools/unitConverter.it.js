@@ -10,11 +10,13 @@ const unitConverterIt = {
             title: "Convertire centimetri in pollici",
             description:
                 "Seleziona Lunghezza, scegli centimetri come unità di partenza e pollici come unità di destinazione per convertire misure di schermi, oggetti o dimensioni prodotto.",
+            href: "/it/cm-a-pollici",
         },
         {
             title: "Convertire once in grammi",
             description:
                 "Usa la categoria Massa per convertire once, libbre, grammi e chilogrammi quando lavori con ricette, pesi di spedizione o dati prodotto.",
+            href: "/it/oz-a-g",
         },
         {
             title: "Convertire unità tecniche e Oil & Gas",
