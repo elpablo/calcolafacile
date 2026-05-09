@@ -400,7 +400,7 @@ export default function ToolLayout({
         .filter((tool) => tool.href && (!currentPath || tool.href !== currentPath));
 
     return (
-        <main className="mx-auto max-w-3xl p-6">
+        <main className="mx-auto max-w-6xl p-6">
             <div className="mb-4">
                 <Link
                     href={lang === "it" ? "/it" : "/en"}
@@ -415,34 +415,40 @@ export default function ToolLayout({
             <h1 className="mb-4 text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
                 {title}
             </h1>
+            <div className="grid gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(300px,0.7fr)] lg:items-start">
+                <div className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
+                    {children}
 
-            <div className="mb-8 rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
-                {children}
-                <ContextualToolLinks tools={contextualTools} lang={lang} />
+                    <ContextualToolLinks tools={contextualTools} lang={lang} />
+                </div>
+
+                <div className="space-y-8">
+                    {description && (
+                        <section className="text-zinc-700 dark:text-zinc-300">
+                            <h2 className="mb-3 text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
+                                {t.howItWorks}
+                            </h2>
+
+                            <p>{description}</p>
+                        </section>
+                    )}
+
+                    <PracticalExamples examples={examples} lang={lang} />
+
+                    {faq && (
+                        <section className="text-zinc-700 dark:text-zinc-300">
+                            <h2 className="mb-3 text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
+                                {t.faq}
+                            </h2>
+
+                            {faq}
+                        </section>
+                    )}
+                </div>
             </div>
 
-            {description && (
-                <section className="mb-8 text-zinc-700 dark:text-zinc-300">
-                    <h2 className="mb-3 text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
-                        {t.howItWorks}
-                    </h2>
-                    <p>{description}</p>
-                </section>
-            )}
-
-            <PracticalExamples examples={examples} lang={lang} />
-
-            {faq && (
-                <section className="text-zinc-700 dark:text-zinc-300">
-                    <h2 className="mb-3 text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
-                        {t.faq}
-                    </h2>
-                    {faq}
-                </section>
-            )}
-
             {visibleRelatedTools?.length > 0 && (
-                <section className="mt-8 border-t border-zinc-200 pt-6 dark:border-zinc-700">
+                <section className="mt-10 border-t border-zinc-200 pt-6 dark:border-zinc-700">
                     <h2 className="mb-4 text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
                         {t.related}
                     </h2>
