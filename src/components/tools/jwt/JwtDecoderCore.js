@@ -1,7 +1,9 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import ToolLayout, { ResultBox } from "@/components/ToolLayout";
+import { jwtDecoderExamples } from "@/data/toolExamples/jwtDecoderExamples";
 
 function base64UrlDecode(value) {
     const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
@@ -121,7 +123,22 @@ export default function JwtDecoderCore({ content }) {
         sampleToken,
     } = content;
 
-    const [token, setToken] = useState("");
+    const searchParams = useSearchParams();
+
+    const [lastSearchParams, setLastSearchParams] = useState(searchParams);
+    const [token, setToken] = useState(() => {
+        const key = searchParams.get("example");
+        return key ? (jwtDecoderExamples[key]?.token ?? "") : "";
+    });
+
+    if (lastSearchParams !== searchParams) {
+        setLastSearchParams(searchParams);
+        const exampleKey = searchParams.get("example");
+        const example = exampleKey ? jwtDecoderExamples[exampleKey] : null;
+        if (example) {
+            setToken(example.token);
+        }
+    }
 
     const decoded = useMemo(() => {
         if (!token.trim()) {

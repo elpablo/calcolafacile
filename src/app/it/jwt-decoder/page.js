@@ -1,5 +1,6 @@
 
 
+import { Suspense } from "react";
 import JwtDecoder from "./JwtDecoder";
 
 export const metadata = {
@@ -16,5 +17,9 @@ export const metadata = {
 };
 
 export default function JwtDecoderPage() {
-    return <JwtDecoder />;
+    return (
+        <Suspense fallback={null}>
+            <JwtDecoder />
+        </Suspense>
+    );
 }

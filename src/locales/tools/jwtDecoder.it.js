@@ -28,16 +28,19 @@ const jwtDecoderIt = {
             title: "Decodifica un JWT restituito da una API di login",
             description:
                 "Incolla l'access token o il refresh token restituito da un endpoint di autenticazione per ispezionare claim come sub, name, email, ruoli e permessi.",
+            href: "/it/jwt-decoder?example=validToken",
         },
         {
             title: "Controlla la scadenza di un JWT",
             description:
                 "Usa i campi exp, iat e nbf per capire quando un token è stato emesso, quando diventa valido e quando scade.",
+            href: "/it/jwt-decoder?example=expiredToken",
         },
         {
             title: "Ispeziona il payload prima del debug o dei test",
             description:
                 "Copia header e payload decodificati quando devi fare debug di autenticazione API, problemi di autorizzazione, flussi OAuth o fixture di test.",
+            href: "/it/jwt-decoder?example=customClaimsToken",
         },
     ],
     faq: (

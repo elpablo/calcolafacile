@@ -30,16 +30,19 @@ const jwtDecoderEn = {
             title: "Decode a JWT returned by a login API",
             description:
                 "Paste the access token or refresh token returned by an authentication endpoint to inspect claims such as sub, name, email, roles and permissions.",
+            href: "/en/jwt-decoder?example=validToken",
         },
         {
             title: "Check JWT expiration time",
             description:
                 "Use the exp, iat and nbf fields to understand when a token was issued, when it becomes valid and when it expires.",
+            href: "/en/jwt-decoder?example=expiredToken",
         },
         {
             title: "Inspect JWT payload before debugging or testing",
             description:
                 "Copy the decoded header and payload when debugging API authentication, authorization issues, OAuth flows or test fixtures.",
+            href: "/en/jwt-decoder?example=customClaimsToken",
         },
     ],
     faq: (
