@@ -1,8 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ToolLayout, { ResultBox } from "@/components/ToolLayout";
 import { unitCategories } from "@/data/unitConverter/units";
+import { loadLocalState, saveLocalState } from "@/lib/browserStorage";
+const STORAGE_KEY = "calcolafacile:unit-converter";
 
 const selectClass =
     "h-12 w-full rounded-lg border border-zinc-300 bg-white px-3 text-base font-medium leading-none text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-blue-400";
@@ -221,10 +223,47 @@ export default function UnitConverterCore({
         ? initialTo
         : getSecondUnit(safeInitialCategory);
 
-    const [categoryKey, setCategoryKey] = useState(safeInitialCategory);
-    const [fromUnit, setFromUnit] = useState(safeInitialFrom);
-    const [toUnit, setToUnit] = useState(safeInitialTo);
-    const [amount, setAmount] = useState(initialValue);
+    const [converterState, setConverterState] = useState({
+        categoryKey: safeInitialCategory,
+        fromUnit: safeInitialFrom,
+        toUnit: safeInitialTo,
+        amount: initialValue,
+    });
+
+    useEffect(() => {
+        const storedState = loadLocalState(STORAGE_KEY, {});
+
+        const storedCategory = unitCategories[storedState?.categoryKey]
+            ? storedState.categoryKey
+            : safeInitialCategory;
+
+        const fallbackFromUnit = unitCategories[storedCategory]?.units?.[safeInitialFrom]
+            ? safeInitialFrom
+            : getFirstUnit(storedCategory);
+
+        const fallbackToUnit = unitCategories[storedCategory]?.units?.[safeInitialTo]
+            ? safeInitialTo
+            : getSecondUnit(storedCategory);
+
+        const storedFromUnit = unitCategories[storedCategory]?.units?.[storedState?.fromUnit]
+            ? storedState.fromUnit
+            : fallbackFromUnit;
+
+        const storedToUnit = unitCategories[storedCategory]?.units?.[storedState?.toUnit]
+            ? storedState.toUnit
+            : fallbackToUnit;
+
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setConverterState({
+            categoryKey: storedCategory,
+            fromUnit: storedFromUnit,
+            toUnit: storedToUnit,
+            amount: storedState?.amount ?? initialValue,
+        });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const { categoryKey, fromUnit, toUnit, amount } = converterState;
 
     const [fromSearch, setFromSearch] = useState("");
     const [toSearch, setToSearch] = useState("");
@@ -243,26 +282,37 @@ export default function UnitConverterCore({
         [numericAmount, categoryKey, fromUnit, toUnit]
     );
 
+    useEffect(() => {
+        saveLocalState(STORAGE_KEY, {
+            categoryKey,
+            fromUnit,
+            toUnit,
+            amount,
+        });
+    }, [categoryKey, fromUnit, toUnit, amount]);
+
     const quickTargets = getQuickConversionTargets(categoryKey, fromUnit, toUnit);
 
     const handleCategoryChange = (nextCategoryKey) => {
         const nextUnits = Object.keys(unitCategories[nextCategoryKey].units);
-        setCategoryKey(nextCategoryKey);
-        setFromUnit(nextUnits[0]);
-        setToUnit(nextUnits[1] ?? nextUnits[0]);
+        setConverterState((prev) => ({
+            ...prev,
+            categoryKey: nextCategoryKey,
+            fromUnit: nextUnits[0],
+            toUnit: nextUnits[1] ?? nextUnits[0],
+        }));
         setFromSearch("");
         setToSearch("");
     };
 
     const swapUnits = () => {
-        setFromUnit(toUnit);
-        setToUnit(fromUnit);
+        setConverterState((prev) => ({ ...prev, fromUnit: prev.toUnit, toUnit: prev.fromUnit }));
         setFromSearch("");
         setToSearch("");
     };
 
     const applyQuickConversion = (targetUnit) => {
-        setToUnit(targetUnit);
+        setConverterState((prev) => ({ ...prev, toUnit: targetUnit }));
         setToSearch("");
     };
 
@@ -271,7 +321,7 @@ export default function UnitConverterCore({
 
         const matches = getMatchingUnitKeys(categoryKey, unitKeys, labels, query);
         if (matches.length > 0) {
-            setFromUnit(matches[0]);
+            setConverterState((prev) => ({ ...prev, fromUnit: matches[0] }));
         }
     };
 
@@ -280,7 +330,7 @@ export default function UnitConverterCore({
 
         const matches = getMatchingUnitKeys(categoryKey, unitKeys, labels, query);
         if (matches.length > 0) {
-            setToUnit(matches[0]);
+            setConverterState((prev) => ({ ...prev, toUnit: matches[0] }));
         }
     };
 
@@ -314,7 +364,7 @@ export default function UnitConverterCore({
                     type="number"
                     step="0.01"
                     value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
+                    onChange={(e) => setConverterState((prev) => ({ ...prev, amount: e.target.value }))}
                     className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-3 text-base font-medium text-zinc-900 shadow-sm placeholder:text-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-blue-400"
                     placeholder={labels.valuePlaceholder}
                 />
@@ -337,7 +387,7 @@ export default function UnitConverterCore({
                         />
                         <select
                             value={fromUnit}
-                            onChange={(e) => setFromUnit(e.target.value)}
+                            onChange={(e) => setConverterState((prev) => ({ ...prev, fromUnit: e.target.value }))}
                             className={selectClass}
                         >
                             {filteredFromUnitKeys.map((unitKey) => (
@@ -373,7 +423,7 @@ export default function UnitConverterCore({
                         />
                         <select
                             value={toUnit}
-                            onChange={(e) => setToUnit(e.target.value)}
+                            onChange={(e) => setConverterState((prev) => ({ ...prev, toUnit: e.target.value }))}
                             className={selectClass}
                         >
                             {filteredToUnitKeys.map((unitKey) => (
