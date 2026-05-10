@@ -2,10 +2,47 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import ToolLayout, { ResultBox } from "@/components/ToolLayout";
 import JsonCodeBlock from "@/components/tools/json/JsonCodeBlock";
 import { jsonFormatterExamples } from "@/data/toolExamples/jsonFormatterExamples";
+import { loadLocalState, saveLocalState } from "@/lib/browserStorage";
+
+const STORAGE_KEY = "calcolafacile:json-formatter";
+const DEFAULT_FORMATTER_STATE = {
+    input: "",
+    viewMode: "pretty",
+};
+
+function subscribeToHydration() {
+    return () => {};
+}
+
+function getInitialFormatterState(currentExampleKey, shouldLoadSavedState) {
+    const example = currentExampleKey
+        ? jsonFormatterExamples[currentExampleKey]
+        : null;
+
+    if (example) {
+        return {
+            input: example.input,
+            viewMode: example.viewMode ?? "pretty",
+        };
+    }
+
+    if (!shouldLoadSavedState) {
+        return DEFAULT_FORMATTER_STATE;
+    }
+
+    const storedState = loadLocalState(STORAGE_KEY, {});
+
+    return {
+        input: typeof storedState?.input === "string" ? storedState.input : "",
+        viewMode: ["pretty", "minified"].includes(storedState?.viewMode)
+            ? storedState.viewMode
+            : "pretty",
+    };
+}
 
 function formatJson(text) {
     try {
@@ -23,6 +60,29 @@ function formatJson(text) {
 }
 
 export default function JsonFormatterCore({ content }) {
+    const searchParams = useSearchParams();
+    const currentExampleKey = searchParams.get("example");
+    const hasHydrated = useSyncExternalStore(
+        subscribeToHydration,
+        () => true,
+        () => false,
+    );
+
+    return (
+        <JsonFormatterCoreContent
+            key={`${currentExampleKey ?? "saved-state"}:${hasHydrated ? "hydrated" : "ssr"}`}
+            content={content}
+            currentExampleKey={currentExampleKey}
+            shouldLoadSavedState={hasHydrated}
+        />
+    );
+}
+
+function JsonFormatterCoreContent({
+    content,
+    currentExampleKey,
+    shouldLoadSavedState,
+}) {
     const {
         lang,
         title,
@@ -36,27 +96,48 @@ export default function JsonFormatterCore({ content }) {
         relatedLinks,
     } = content;
 
-    const searchParams = useSearchParams();
-
-    const [lastSearchParams, setLastSearchParams] = useState(searchParams);
-    const [input, setInput] = useState(() => {
-        const key = searchParams.get("example");
-        return key ? (jsonFormatterExamples[key]?.input ?? "") : "";
+    const [formatterState, setFormatterState] = useState(() => {
+        return getInitialFormatterState(
+            currentExampleKey,
+            shouldLoadSavedState,
+        );
     });
-    const [viewMode, setViewMode] = useState(() => {
-        const key = searchParams.get("example");
-        return key ? (jsonFormatterExamples[key]?.viewMode ?? "pretty") : "pretty";
-    });
+    const { input, viewMode } = formatterState;
 
-    if (lastSearchParams !== searchParams) {
-        setLastSearchParams(searchParams);
-        const exampleKey = searchParams.get("example");
-        const example = exampleKey ? jsonFormatterExamples[exampleKey] : null;
-        if (example) {
-            setInput(example.input);
-            setViewMode(example.viewMode ?? "pretty");
+    useEffect(() => {
+        if (!shouldLoadSavedState) {
+            return;
         }
-    }
+
+        if (currentExampleKey) {
+            return;
+        }
+
+        saveLocalState(STORAGE_KEY, {
+            input,
+            viewMode,
+        });
+    }, [currentExampleKey, input, shouldLoadSavedState, viewMode]);
+
+    const setInput = (nextInput) => {
+        setFormatterState((currentState) => ({
+            ...currentState,
+            input:
+                typeof nextInput === "function"
+                    ? nextInput(currentState.input)
+                    : nextInput,
+        }));
+    };
+
+    const setViewMode = (nextViewMode) => {
+        setFormatterState((currentState) => ({
+            ...currentState,
+            viewMode:
+                typeof nextViewMode === "function"
+                    ? nextViewMode(currentState.viewMode)
+                    : nextViewMode,
+        }));
+    };
 
     const getMinified = (text) => {
         try {
