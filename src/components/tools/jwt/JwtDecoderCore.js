@@ -1,9 +1,37 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import ToolLayout, { ResultBox } from "@/components/ToolLayout";
 import { jwtDecoderExamples } from "@/data/toolExamples/jwtDecoderExamples";
+import { loadLocalState, saveLocalState } from "@/lib/browserStorage";
+
+const STORAGE_KEY = "calcolafacile:jwt-decoder";
+const DEFAULT_TOKEN = "";
+
+function subscribeToHydration() {
+    return () => {};
+}
+
+function getInitialToken(currentExampleKey, shouldLoadSavedState) {
+    const example = currentExampleKey
+        ? jwtDecoderExamples[currentExampleKey]
+        : null;
+
+    if (example) {
+        return example.token;
+    }
+
+    if (!shouldLoadSavedState) {
+        return DEFAULT_TOKEN;
+    }
+
+    const storedState = loadLocalState(STORAGE_KEY, {});
+
+    return typeof storedState?.token === "string"
+        ? storedState.token
+        : DEFAULT_TOKEN;
+}
 
 function base64UrlDecode(value) {
     const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
@@ -110,6 +138,29 @@ function getStatusClasses(type) {
 }
 
 export default function JwtDecoderCore({ content }) {
+    const searchParams = useSearchParams();
+    const currentExampleKey = searchParams.get("example");
+    const hasHydrated = useSyncExternalStore(
+        subscribeToHydration,
+        () => true,
+        () => false,
+    );
+
+    return (
+        <JwtDecoderCoreContent
+            key={`${currentExampleKey ?? "saved-state"}:${hasHydrated ? "hydrated" : "ssr"}`}
+            content={content}
+            currentExampleKey={currentExampleKey}
+            shouldLoadSavedState={hasHydrated}
+        />
+    );
+}
+
+function JwtDecoderCoreContent({
+    content,
+    currentExampleKey,
+    shouldLoadSavedState,
+}) {
     const {
         lang,
         locale,
@@ -123,22 +174,23 @@ export default function JwtDecoderCore({ content }) {
         sampleToken,
     } = content;
 
-    const searchParams = useSearchParams();
-
-    const [lastSearchParams, setLastSearchParams] = useState(searchParams);
     const [token, setToken] = useState(() => {
-        const key = searchParams.get("example");
-        return key ? (jwtDecoderExamples[key]?.token ?? "") : "";
+        return getInitialToken(currentExampleKey, shouldLoadSavedState);
     });
 
-    if (lastSearchParams !== searchParams) {
-        setLastSearchParams(searchParams);
-        const exampleKey = searchParams.get("example");
-        const example = exampleKey ? jwtDecoderExamples[exampleKey] : null;
-        if (example) {
-            setToken(example.token);
+    useEffect(() => {
+        if (!shouldLoadSavedState) {
+            return;
         }
-    }
+
+        if (currentExampleKey) {
+            return;
+        }
+
+        saveLocalState(STORAGE_KEY, {
+            token,
+        });
+    }, [currentExampleKey, shouldLoadSavedState, token]);
 
     const decoded = useMemo(() => {
         if (!token.trim()) {
