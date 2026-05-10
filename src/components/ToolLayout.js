@@ -227,6 +227,20 @@ const defaultRelatedTools = [
             en: "Generate UUID v4 identifiers for APIs, databases and tests.",
         },
     },
+    {
+        href: {
+            it: "/it/verifica-ip-pubblico",
+            en: "/en/public-ip-checker",
+        },
+        title: {
+            it: "Verifica IP pubblico",
+            en: "Public IP Checker",
+        },
+        description: {
+            it: "Controlla IP pubblico, geolocalizzazione approssimativa e informazioni VPN.",
+            en: "Check your public IP, approximate geolocation and VPN information.",
+        },
+    },
 ];
 
 function localizeTool(tool, lang) {

@@ -89,6 +89,12 @@ const tools = [
         description:
             "Genera UUID v4 per API, database, test e sviluppo software.",
     },
+    {
+        href: "/it/verifica-ip-pubblico",
+        title: "Verifica IP pubblico",
+        description:
+            "Controlla IP pubblico, geolocalizzazione approssimativa e informazioni VPN.",
+    },
 ];
 
 export default function Home() {

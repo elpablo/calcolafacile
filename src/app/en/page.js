@@ -92,6 +92,12 @@ const tools = [
         description:
             "Generate UUID v4 identifiers for APIs, databases, tests and software development.",
     },
+    {
+        href: "/en/public-ip-checker",
+        title: "Public IP Checker",
+        description:
+            "Check your public IP, approximate geolocation and VPN information.",
+    },
 ];
 
 export default function Home() {
