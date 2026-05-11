@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { trackToolUsage } from "@/lib/toolUsage";
 
 const i18n = {
     it: {
@@ -439,6 +440,19 @@ export default function ToolLayout({
     lang = "it",
 }) {
     const t = i18n[lang];
+    useEffect(() => {
+        if (!currentPath || !title) {
+            return;
+        }
+
+        trackToolUsage({
+            path: currentPath,
+            title,
+            description,
+            lang,
+        });
+    }, [currentPath, title, description, lang]);
+    
     const visibleRelatedTools = relatedTools
         .map((tool) => localizeTool(tool, lang))
         .filter((tool) => tool.href && (!currentPath || tool.href !== currentPath));

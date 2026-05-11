@@ -1,4 +1,5 @@
 import Link from "next/link";
+import RecentToolsSection from "@/components/RecentToolsSection";
 
 export const metadata = {
     title: "Calcolatori online semplici, gratuiti e veloci",
@@ -115,7 +116,9 @@ export default function Home() {
                 </p>
             </section>
 
-            <section>
+            <RecentToolsSection lang="it" limit={6} />
+
+            <section className="rounded-2xl border border-zinc-200 bg-zinc-50/60 p-5 dark:border-zinc-700 dark:bg-zinc-950/30">
                 <h2 className="mb-6 text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
                     Strumenti disponibili
                 </h2>
@@ -129,15 +132,15 @@ export default function Home() {
                             <Link
                                 key={tool.href}
                                 href={tool.href}
-                                className={`min-h-32 rounded-xl border p-5 shadow-sm transition ${
+                                className={`group min-h-32 rounded-xl border p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
                                     {
-                                        true: "border-blue-300 bg-blue-50 dark:border-blue-500 dark:bg-zinc-800",
+                                        true: "border-blue-300 bg-blue-50 hover:border-blue-400 dark:border-blue-500 dark:bg-zinc-800 dark:hover:border-blue-400",
                                         false: "border-zinc-200 bg-white hover:border-blue-300 hover:bg-blue-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-blue-500 dark:hover:bg-zinc-800",
                                     }[isFeatured]
                                 }`}
                             >
                                 <div className="mb-2">
-                                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                                    <h3 className="text-lg font-semibold text-zinc-900 transition group-hover:text-blue-700 dark:text-zinc-100 dark:group-hover:text-blue-300">
                                         {tool.title}
                                     </h3>
                                     {isFeatured && (
