@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import ToolLayout, { ResultBox } from "@/components/ToolLayout";
 import { unitCategories } from "@/data/unitConverter/units";
 import { loadLocalState, saveLocalState } from "@/lib/browserStorage";
@@ -197,12 +198,126 @@ function getSecondUnit(categoryKey) {
     return Object.keys(unitCategories[categoryKey].units)[1] ?? getFirstUnit(categoryKey);
 }
 
+function normalizePath(path) {
+    if (!path) {
+        return "";
+    }
+
+    return path.endsWith("/") && path.length > 1 ? path.slice(0, -1) : path;
+}
+
+function subscribeToHydration() {
+    return () => {};
+}
+
+function getInitialConverterState(isDynamicConversionPage, initialCategory, initialFrom, initialTo, initialValue, shouldLoadSavedState) {
+    const safeCategory = unitCategories[initialCategory] ? initialCategory : "length";
+    const safeFrom = unitCategories[safeCategory].units[initialFrom]
+        ? initialFrom
+        : getFirstUnit(safeCategory);
+    const safeTo = unitCategories[safeCategory].units[initialTo]
+        ? initialTo
+        : getSecondUnit(safeCategory);
+
+    if (isDynamicConversionPage) {
+        return {
+            categoryKey: safeCategory,
+            fromUnit: safeFrom,
+            toUnit: safeTo,
+            amount: initialValue,
+        };
+    }
+
+    // SSR phase of the main page: render empty amount so there is no visible
+    // default result before localStorage is read after hydration.
+    if (!shouldLoadSavedState) {
+        return {
+            categoryKey: safeCategory,
+            fromUnit: safeFrom,
+            toUnit: safeTo,
+            amount: "",
+        };
+    }
+
+    const storedState = loadLocalState(STORAGE_KEY, {});
+
+    const storedCategory = unitCategories[storedState?.categoryKey]
+        ? storedState.categoryKey
+        : safeCategory;
+
+    const fallbackFromUnit = unitCategories[storedCategory]?.units?.[safeFrom]
+        ? safeFrom
+        : getFirstUnit(storedCategory);
+
+    const fallbackToUnit = unitCategories[storedCategory]?.units?.[safeTo]
+        ? safeTo
+        : getSecondUnit(storedCategory);
+
+    const storedFromUnit = unitCategories[storedCategory]?.units?.[storedState?.fromUnit]
+        ? storedState.fromUnit
+        : fallbackFromUnit;
+
+    const storedToUnit = unitCategories[storedCategory]?.units?.[storedState?.toUnit]
+        ? storedState.toUnit
+        : fallbackToUnit;
+
+    return {
+        categoryKey: storedCategory,
+        fromUnit: storedFromUnit,
+        toUnit: storedToUnit,
+        amount: storedState?.amount ?? initialValue,
+    };
+}
+
+// Outer shell — determines hydration and dynamic page context, delegates rendering
 export default function UnitConverterCore({
     content,
     initialCategory = "length",
     initialFrom = "cm",
     initialTo = "in",
     initialValue = 1,
+}) {
+    const pathname = usePathname();
+    const { currentPath } = content;
+
+    const isDynamicConversionPage = Boolean(
+        normalizePath(currentPath) &&
+        normalizePath(pathname) !== normalizePath(currentPath),
+    );
+
+    const hasHydrated = useSyncExternalStore(
+        subscribeToHydration,
+        () => true,
+        () => false,
+    );
+
+    const key = isDynamicConversionPage
+        ? `dynamic:${initialCategory}:${initialFrom}:${initialTo}:${initialValue}`
+        : `main:${hasHydrated ? "hydrated" : "ssr"}`;
+
+    return (
+        <UnitConverterCoreContent
+            key={key}
+            content={content}
+            initialCategory={initialCategory}
+            initialFrom={initialFrom}
+            initialTo={initialTo}
+            initialValue={initialValue}
+            isDynamicConversionPage={isDynamicConversionPage}
+            shouldLoadSavedState={hasHydrated && !isDynamicConversionPage}
+        />
+    );
+}
+
+// Inner content — initialises state once synchronously, never reads localStorage after mount
+function UnitConverterCoreContent({
+    content,
+    initialCategory,
+    initialFrom,
+    initialTo,
+    initialValue,
+    isDynamicConversionPage,
+    shouldLoadSavedState,
 }) {
     const {
         lang,
@@ -215,53 +330,9 @@ export default function UnitConverterCore({
         labels,
     } = content;
 
-    const safeInitialCategory = unitCategories[initialCategory] ? initialCategory : "length";
-    const safeInitialFrom = unitCategories[safeInitialCategory].units[initialFrom]
-        ? initialFrom
-        : getFirstUnit(safeInitialCategory);
-    const safeInitialTo = unitCategories[safeInitialCategory].units[initialTo]
-        ? initialTo
-        : getSecondUnit(safeInitialCategory);
-
-    const [converterState, setConverterState] = useState({
-        categoryKey: safeInitialCategory,
-        fromUnit: safeInitialFrom,
-        toUnit: safeInitialTo,
-        amount: initialValue,
-    });
-
-    useEffect(() => {
-        const storedState = loadLocalState(STORAGE_KEY, {});
-
-        const storedCategory = unitCategories[storedState?.categoryKey]
-            ? storedState.categoryKey
-            : safeInitialCategory;
-
-        const fallbackFromUnit = unitCategories[storedCategory]?.units?.[safeInitialFrom]
-            ? safeInitialFrom
-            : getFirstUnit(storedCategory);
-
-        const fallbackToUnit = unitCategories[storedCategory]?.units?.[safeInitialTo]
-            ? safeInitialTo
-            : getSecondUnit(storedCategory);
-
-        const storedFromUnit = unitCategories[storedCategory]?.units?.[storedState?.fromUnit]
-            ? storedState.fromUnit
-            : fallbackFromUnit;
-
-        const storedToUnit = unitCategories[storedCategory]?.units?.[storedState?.toUnit]
-            ? storedState.toUnit
-            : fallbackToUnit;
-
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setConverterState({
-            categoryKey: storedCategory,
-            fromUnit: storedFromUnit,
-            toUnit: storedToUnit,
-            amount: storedState?.amount ?? initialValue,
-        });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const [converterState, setConverterState] = useState(() =>
+        getInitialConverterState(isDynamicConversionPage, initialCategory, initialFrom, initialTo, initialValue, shouldLoadSavedState)
+    );
 
     const { categoryKey, fromUnit, toUnit, amount } = converterState;
 
@@ -283,13 +354,17 @@ export default function UnitConverterCore({
     );
 
     useEffect(() => {
+        if (!shouldLoadSavedState) {
+            return;
+        }
+
         saveLocalState(STORAGE_KEY, {
             categoryKey,
             fromUnit,
             toUnit,
             amount,
         });
-    }, [categoryKey, fromUnit, toUnit, amount]);
+    }, [shouldLoadSavedState, categoryKey, fromUnit, toUnit, amount]);
 
     const quickTargets = getQuickConversionTargets(categoryKey, fromUnit, toUnit);
 
