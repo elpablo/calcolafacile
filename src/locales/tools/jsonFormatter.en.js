@@ -79,6 +79,11 @@ const jsonFormatterEn = {
         minified: "Minified",
         prettyHint: "Formatted for readability",
         minifiedHint: "Minified for compact payloads",
+        dropHint: "Drag and drop a .json file here, or paste JSON manually.",
+        dropSingleFileError: "Please drop one JSON file at a time.",
+        dropInvalidFileError: "Please drop a .json or plain text JSON file.",
+        dropFileTooLargeError: "The selected file is too large. Please use a file smaller than 2 MB.",
+        dropReadError: "Unable to read the selected file. Please try again or paste the JSON manually.",
     },
     relatedLinks: {
         beforeFirstLink:

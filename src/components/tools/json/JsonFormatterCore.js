@@ -9,6 +9,7 @@ import { jsonFormatterExamples } from "@/data/toolExamples/jsonFormatterExamples
 import { loadLocalState, saveLocalState } from "@/lib/browserStorage";
 
 const STORAGE_KEY = "calcolafacile:json-formatter";
+const MAX_DROPPED_FILE_SIZE = 2 * 1024 * 1024;
 const DEFAULT_FORMATTER_STATE = {
     input: "",
     viewMode: "pretty",
@@ -102,6 +103,7 @@ function JsonFormatterCoreContent({
             shouldLoadSavedState,
         );
     });
+    const [dropError, setDropError] = useState(null);
     const { input, viewMode } = formatterState;
 
     useEffect(() => {
@@ -137,6 +139,62 @@ function JsonFormatterCoreContent({
                     ? nextViewMode(currentState.viewMode)
                     : nextViewMode,
         }));
+    };
+
+    const isAcceptedJsonFile = (file) => {
+        if (!file) {
+            return false;
+        }
+
+        const fileName = file.name?.toLowerCase() || "";
+        const fileType = file.type || "";
+
+        return (
+            fileName.endsWith(".json") ||
+            fileType === "application/json" ||
+            fileType === "text/plain"
+        );
+    };
+
+    const handleDroppedFiles = async (files) => {
+        setDropError(null);
+
+        const fileList = Array.from(files || []);
+
+        if (fileList.length !== 1) {
+            setDropError(labels.dropSingleFileError);
+            return;
+        }
+
+        const file = fileList[0];
+
+        if (!isAcceptedJsonFile(file)) {
+            setDropError(labels.dropInvalidFileError);
+            return;
+        }
+
+        if (file.size > MAX_DROPPED_FILE_SIZE) {
+            setDropError(labels.dropFileTooLargeError);
+            return;
+        }
+
+        try {
+            const text = await file.text();
+            setInput(text);
+            setViewMode("pretty");
+        } catch {
+            setDropError(labels.dropReadError);
+        }
+    };
+
+    const handleDragOver = (event) => {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "copy";
+    };
+
+    const handleDrop = (event) => {
+        event.preventDefault();
+        handleDroppedFiles(event.dataTransfer.files);
     };
 
     const getMinified = (text) => {
@@ -191,9 +249,19 @@ function JsonFormatterCoreContent({
                 <textarea
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
+                    onDragOver={handleDragOver}
+                    onDrop={handleDrop}
                     className="min-h-48 w-full rounded-lg border border-zinc-300 bg-white px-3 py-3 font-mono text-sm text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
                     placeholder={labels.placeholder}
                 />
+                <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
+                    {labels.dropHint}
+                </p>
+                {dropError && (
+                    <p className="mt-2 rounded-lg border border-red-200 bg-red-50 p-2 text-xs text-red-700 dark:border-red-900/60 dark:bg-red-950/30 dark:text-red-200">
+                        {dropError}
+                    </p>
+                )}
             </div>
 
             <div className="mb-2 text-xs text-zinc-500 dark:text-zinc-400">
@@ -270,7 +338,9 @@ function JsonFormatterCoreContent({
                             : labels.minified}
                     </p>
                     <ResultBox copyText={displayedOutput} lang={lang}>
-                        <JsonCodeBlock value={displayedOutput} />
+                        <div className="max-h-[min(70vh,520px)] overflow-auto rounded-lg">
+                            <JsonCodeBlock value={displayedOutput} />
+                        </div>
                     </ResultBox>
                 </>
             )}

@@ -81,6 +81,11 @@ const jsonFormatterIt = {
         minified: "Compatto",
         prettyHint: "Formattato per la leggibilità",
         minifiedHint: "Minimizzato per payload compatti",
+        dropHint: "Trascina qui un file .json oppure incolla manualmente il JSON.",
+        dropSingleFileError: "Trascina un solo file JSON alla volta.",
+        dropInvalidFileError: "Trascina un file .json o un file di testo contenente JSON.",
+        dropFileTooLargeError: "Il file selezionato è troppo grande. Usa un file inferiore a 2 MB.",
+        dropReadError: "Impossibile leggere il file selezionato. Riprova oppure incolla manualmente il JSON.",
     },
     relatedLinks: null,
 };
