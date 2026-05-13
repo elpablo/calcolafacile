@@ -66,12 +66,55 @@ const jwtDecoderEn = {
     sampleToken:
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gU21pdGgiLCJpYXQiOjE3MTQ1NjAwMDAsImV4cCI6NDEwMjQ0NDgwMH0.signature",
     labels: {
+        modes: {
+            decode: "Decode JWT",
+            encode: "Encode JWT",
+        },
         inputLabel: "JWT token",
         placeholder: "Paste your JWT here...",
         helperText:
             "Decoding runs locally in your browser. Avoid pasting real production tokens unless you fully trust the context.",
         useSample: "Use sample",
         clear: "Clear",
+        encoder: {
+            payloadLabel: "Payload JSON",
+            payloadPlaceholder: '{\n  "sub": "user_123",\n  "role": "admin"\n}',
+            secretLabel: "Secret",
+            secretPlaceholder: "Enter an HS256 secret for testing",
+            secretHelper:
+                "The secret is used only in your browser and is not saved.",
+            expirationLabel: "Expiration",
+            customExpirationLabel: "Custom expiration in seconds",
+            expirationOptions: [
+                { value: "15m", label: "15 minutes" },
+                { value: "30m", label: "30 minutes" },
+                { value: "1h", label: "1 hour" },
+                { value: "1d", label: "1 day" },
+                { value: "7d", label: "7 days" },
+                { value: "custom", label: "Custom" },
+            ],
+            includeIssuedAt: "Include iat claim",
+            includeExpiration: "Include exp claim",
+            generate: "Generate JWT",
+            generating: "Generating...",
+            generatedTokenLabel: "Generated JWT",
+            generatedTokenHelper:
+                "The generated token has also been loaded in the Decode tab so you can inspect its header, payload and expiration.",
+            inspectGeneratedToken: "Inspect generated token",
+            safetyTitle: "For testing and development only",
+            safetyText:
+                "JWT generation runs locally in your browser using HS256. Do not use production secrets or real authentication tokens in this tool.",
+            errors: {
+                missingSecret: "Enter a secret before generating the JWT.",
+                invalidExpiration:
+                    "Enter a valid custom expiration greater than zero seconds.",
+                invalidPayload: "The payload must be valid JSON.",
+                payloadMustBeObject:
+                    "The payload must be a JSON object, not an array or primitive value.",
+                generationFailed:
+                    "Unable to generate the JWT. Please check the payload and secret.",
+            },
+        },
         noSignature: "No signature present",
         tokenEstimatorHref: "/en/token-estimator",
         errors: {
