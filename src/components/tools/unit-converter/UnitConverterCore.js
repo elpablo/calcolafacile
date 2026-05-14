@@ -278,15 +278,11 @@ export default function UnitConverterCore({
     initialValue = 1,
 }) {
     const pathname = usePathname();
-    const {
-        currentPath,
-        isDynamicConversionPage: forcedDynamicConversionPage,
-    } = content;
+    const { currentPath } = content;
 
     const isDynamicConversionPage = Boolean(
-        forcedDynamicConversionPage ||
-        (normalizePath(currentPath) &&
-            normalizePath(pathname) !== normalizePath(currentPath)),
+        normalizePath(currentPath) &&
+        normalizePath(pathname) !== normalizePath(currentPath),
     );
 
     const hasHydrated = useSyncExternalStore(

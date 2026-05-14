@@ -27,12 +27,8 @@ export async function generateMetadata({ params }) {
     }
 
     return {
-        title:
-            config.seo?.en?.title ||
-            `Convert ${config.labels.en.from} to ${config.labels.en.to} online`,
-        description:
-            config.seo?.en?.description ||
-            `Convert ${config.labels.en.from} to ${config.labels.en.to} quickly and easily. Free online unit converter.`,
+        title: `Convert ${config.labels.en.from} to ${config.labels.en.to} online`,
+        description: `Convert ${config.labels.en.from} to ${config.labels.en.to} quickly and easily. Free online unit converter.`,
         alternates: {
             canonical: `https://calcolafacile.org/en/${config.slug.en}`,
             languages: {
@@ -52,22 +48,12 @@ export default async function ConversionPage({ params }) {
         return notFound();
     }
 
-    const fallbackTitle = `Convert ${config.labels.en.from} to ${config.labels.en.to} online`;
-    const fallbackDescription = `Convert ${config.labels.en.from} to ${config.labels.en.to} quickly and easily. Enter a value and get the result instantly.`;
-
     return (
         <UnitConverter
             initialCategory={config.category}
             initialFrom={config.from}
             initialTo={config.to}
             initialValue={1}
-            contentOverride={{
-                title: config.seo?.en?.title || fallbackTitle,
-                description: config.seo?.en?.content || fallbackDescription,
-                examples: config.seo?.en?.examples,
-                currentPath: `/en/${config.slug.en}`,
-                isDynamicConversionPage: true,
-            }}
         />
     );
 }
