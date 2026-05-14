@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# CalcolaFacile
 
-## Getting Started
+Bilingual (Italian / English) website hosting fast, free, browser-based
+calculators and developer utilities such as VAT, percentage, margin, salary,
+unit conversion, JWT decoding, JSON formatting, Base64, timestamp conversion,
+URL encoding, UUID generation, public-IP checking and LLM token estimation.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router, React 19, JavaScript — see `AGENTS.md`).
+- **Tailwind v4** via `@tailwindcss/postcss`.
+- **Vercel**: Analytics, Speed Insights, geolocation helpers.
+- **Playwright** for end-to-end tests; **Vitest** for unit tests.
+
+## Local development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev          # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Useful scripts
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+npm run lint         # ESLint
+npm run build        # Production build
+npm test             # Vitest unit tests
+npm run test:e2e     # Playwright end-to-end tests
+npm run analyze      # Bundle analyzer
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project orientation
 
-## Learn More
+- `AGENTS.md` — required reading for AI agents and humans alike; Next.js 16
+  has breaking changes from prior versions (notably `middleware` → `proxy`).
+- `PROJECT_REVIEW.md` — full quality / improvement report.
+- `.github/skills/tool-migration/SKILL.md` — playbook for migrating a
+  legacy tool to the Core component + locales architecture.
+- `src/config/tools.js` — single source of truth for the tool catalog
+  (homepage grid, related tools, sitemap).
+- `src/config/conversions.js` — catalog of all unit-conversion landing
+  pages.
+- `proxy.js` — request preprocessor that exposes `x-pathname` to the root
+  layout so it can set `<html lang>` correctly.
 
-To learn more about Next.js, take a look at the following resources:
+## License & ownership
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+© NERALAB Srl. All rights reserved.

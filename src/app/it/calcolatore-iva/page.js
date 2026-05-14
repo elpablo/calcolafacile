@@ -8,7 +8,7 @@ export const metadata = {
         canonical: "https://calcolafacile.org/it/calcolatore-iva",
         languages: {
             it: "https://calcolafacile.org/it/calcolatore-iva",
-            en: "https://calcolafacile.org/en/vat-calculation",
+            en: "https://calcolafacile.org/en/vat-calculator",
         },
     },
 };

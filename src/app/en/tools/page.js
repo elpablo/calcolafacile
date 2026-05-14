@@ -10,7 +10,6 @@ export const metadata = {
         canonical: "https://calcolafacile.org/en/tools",
         languages: {
             en: "https://calcolafacile.org/en/tools",
-            it: "https://calcolafacile.org/it",
         },
     },
 };

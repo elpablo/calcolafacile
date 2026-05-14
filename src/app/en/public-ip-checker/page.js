@@ -7,7 +7,7 @@ export const metadata = {
      alternates: {
         canonical: "https://calcolafacile.org/en/public-ip-checker",
         languages: {
-            it: "https://calcolafacile.org/it/public-ip-checker",
+            it: "https://calcolafacile.org/it/verifica-ip-pubblico",
             en: "https://calcolafacile.org/en/public-ip-checker",
         },
     },

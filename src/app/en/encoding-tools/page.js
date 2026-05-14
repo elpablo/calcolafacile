@@ -8,7 +8,6 @@ export const metadata = {
         canonical: "https://calcolafacile.org/en/encoding-tools",
         languages: {
             en: "https://calcolafacile.org/en/encoding-tools",
-            it: "https://calcolafacile.org/it",
         },
     },
 };

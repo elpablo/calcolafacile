@@ -1,5 +1,15 @@
 "use client";
 
+/**
+ * @file "Recently used" tools strip shown on the IT and EN homepages.
+ *
+ * Reads the recent-tools list from localStorage via {@link getRecentTools}.
+ * Because the list lives on the client, the component renders nothing during
+ * SSR and on a fresh browser context. Subsequent visits to the home page
+ * refresh the list when the tab gains focus, becomes visible, or is restored
+ * from the BFCache (`pageshow`), and also when another tab updates storage.
+ */
+
 import Link from "next/link";
 import { useEffect, useReducer } from "react";
 import { getRecentTools } from "@/lib/toolUsage";

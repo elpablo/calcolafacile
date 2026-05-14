@@ -1,8 +1,26 @@
 "use client";
 
+/**
+ * @file Shared page chrome for every tool page.
+ *
+ * Exports:
+ *   - `ToolLayout` (default): the full tool page (back link, title, content,
+ *     description, examples, FAQ, contextual links, related tools).
+ *   - `ToolInput`: opinionated number/text input used by simple calculators.
+ *   - `ResultBox`: result card with copy-to-clipboard button.
+ *
+ * The component is locale-aware via the `lang` prop (`"it"` or `"en"`):
+ * all chrome labels are sourced from the local {@link i18n} map.
+ *
+ * The `relatedTools` registry below is the cross-tool navigation grid shown
+ * at the bottom of every page; entries are localised on the fly through
+ * {@link localizeTool} based on the active `lang`.
+ */
+
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { trackToolUsage } from "@/lib/toolUsage";
+import { tools as toolRegistry } from "@/config/tools";
 
 const i18n = {
     it: {
@@ -31,223 +49,33 @@ const i18n = {
     },
 };
 
-const defaultRelatedTools = [
-    {
-        href: {
-            it: "/it/calcolatore-iva",
-            en: "/en/vat-calculator",
-        },
-        title: {
-            it: "Calcolatore IVA",
-            en: "VAT Calculator",
-        },
-        description: {
-            it: "Aggiungi o scorpora IVA al 22%, 10% e 4%.",
-            en: "Add or remove VAT at 22%, 10% and 4%.",
-        },
+/**
+ * Default cross-tool navigation entries shown at the bottom of every tool
+ * page. Derived from the central registry in `src/config/tools.js` so this
+ * file stays in sync with the homepage tools grid and the sitemap.
+ *
+ * Entries keep the legacy `{ href: {it, en}, title: {it, en}, description }`
+ * shape — `localizeTool` below collapses them down to the active locale.
+ */
+const defaultRelatedTools = toolRegistry.map((tool) => ({
+    href: {
+        it: tool.hasIt ? `/it/${tool.slug.it}` : undefined,
+        en: tool.hasEn ? `/en/${tool.slug.en}` : undefined,
     },
-    {
-        href: {
-            it: "/it/calcolo-percentuale",
-            en: "/en/percentage-calculator",
-        },
-        title: {
-            it: "Calcolo percentuale",
-            en: "Percentage Calculator",
-        },
-        description: {
-            it: "Calcola percentuali, sconti, aumenti e riduzioni.",
-            en: "Calculate percentages, discounts, increases and decreases.",
-        },
-    },
-    {
-        href: {
-            it: "/it/calcolo-margine",
-            en: "/en/margin-calculation",
-        },
-        title: {
-            it: "Calcolo margine",
-            en: "Margin Calculator",
-        },
-        description: {
-            it: "Calcola margine e profitto dal prezzo di vendita.",
-            en: "Calculate profit and margin from cost and selling price.",
-        },
-    },
-    {
-        href: {
-            it: "/it/calcolo-markup",
-            en: "/en/markup-calculation",
-        },
-        title: {
-            it: "Calcolo markup",
-            en: "Markup Calculator",
-        },
-        description: {
-            it: "Calcola il ricarico percentuale rispetto al costo.",
-            en: "Calculate percentage markup from product cost.",
-        },
-    },
-    {
-        href: {
-            it: "/it/calcolo-stipendio-netto",
-            en: "/en/salary-calculator",
-        },
-        title: {
-            it: "Calcolo stipendio netto",
-            en: "Net Salary Calculator",
-        },
-        description: {
-            it: "Stima lo stipendio netto partendo dalla RAL lorda.",
-            en: "Estimate monthly take-home pay from gross annual income.",
-        },
-    },
-    {
-        href: {
-            it: "/it/calcolo-sconto-inverso",
-            en: "/en/inverse-discount-calculation",
-        },
-        title: {
-            it: "Calcolo sconto inverso",
-            en: "Inverse Discount Calculator",
-        },
-        description: {
-            it: "Trova il prezzo originale partendo da prezzo scontato e sconto.",
-            en: "Find the original price from a discounted price and discount percentage.",
-        },
-    },
-    {
-        href: {
-            it: "/it/convertitore-unita",
-            en: "/en/unit-converter",
-        },
-        title: {
-            it: "Convertitore unità di misura",
-            en: "Unit Converter",
-        },
-        description: {
-            it: "Converti lunghezza, peso, temperatura e volume in modo rapido.",
-            en: "Convert length, mass, temperature, volume and more.",
-        },
-    },
-    {
-        href: {
-            it: "/it/jwt-decoder",
-            en: "/en/jwt-decoder",
-        },
-        title: {
-            it: "JWT Decoder",
-            en: "JWT Decoder",
-        },
-        description: {
-            it: "Decodifica header e payload di un JSON Web Token nel browser.",
-            en: "Decode the header and payload of a JSON Web Token in your browser.",
-        },
-    },
-    {
-        href: {
-            it: "/it/token-estimator",
-            en: "/en/token-estimator",
-        },
-        title: {
-            it: "Stima token LLM",
-            en: "LLM Token Estimator",
-        },
-        description: {
-            it: "Stima token e costo indicativo per testi usati con modelli AI.",
-            en: "Estimate token usage and approximate cost for AI model prompts.",
-        },
-    },
-    {
-        href: {
-            it: "/it/json-formatter",
-            en: "/en/json-formatter",
-        },
-        title: {
-            it: "JSON Formatter",
-            en: "JSON Formatter",
-        },
-        description: {
-            it: "Formatta e valida JSON direttamente nel browser.",
-            en: "Format, validate and minify JSON directly in your browser.",
-        },
-    },
-    {
-        href: {
-            it: "/it/base64-tool",
-            en: "/en/base64-tool",
-        },
-        title: {
-            it: "Base64 Encode/Decode",
-            en: "Base64 Encoder/Decoder",
-        },
-        description: {
-            it: "Codifica e decodifica Base64 direttamente nel browser.",
-            en: "Encode and decode Base64 directly in your browser.",
-        },
-    },
-    {
-        href: {
-            it: "/it/timestamp-converter",
-            en: "/en/timestamp-converter",
-        },
-        title: {
-            it: "Timestamp Converter",
-            en: "Unix Timestamp Converter",
-        },
-        description: {
-            it: "Converti Unix timestamp in date leggibili e viceversa.",
-            en: "Convert Unix timestamps to readable dates and back.",
-        },
-    },
-    {
-        href: {
-            it: "/it/url-encoder-decoder",
-            en: "/en/url-encoder-decoder",
-        },
-        title: {
-            it: "URL Encoder/Decoder",
-            en: "URL Encoder/Decoder",
-        },
-        description: {
-            it: "Codifica e decodifica URL per query string, API e redirect.",
-            en: "Encode and decode URLs for query strings, APIs and redirects.",
-        },
-    },
-    {
-        href: {
-            it: "/it/uuid-generator",
-            en: "/en/uuid-generator",
-        },
-        title: {
-            it: "UUID Generator",
-            en: "UUID Generator",
-        },
-        description: {
-            it: "Genera UUID v4 per API, database, test e sviluppo software.",
-            en: "Generate UUID v4 identifiers for APIs, databases and tests.",
-        },
-    },
-    {
-        href: {
-            it: "/it/verifica-ip-pubblico",
-            en: "/en/public-ip-checker",
-        },
-        title: {
-            it: "Verifica IP pubblico",
-            en: "Public IP Checker",
-        },
-        description: {
-            it: "Controlla IP pubblico, geolocalizzazione approssimativa e informazioni VPN.",
-            en: "Check your public IP, approximate geolocation and VPN information.",
-        },
-    },
-];
+    title: tool.title,
+    description: tool.description,
+}));
 
 function localizeTool(tool, lang) {
     return {
-        href: typeof tool.href === "string" ? tool.href : tool.href?.[lang] || tool.href?.it,
-        title: typeof tool.title === "string" ? tool.title : tool.title?.[lang] || tool.title?.it,
+        href:
+            typeof tool.href === "string"
+                ? tool.href
+                : tool.href?.[lang] || tool.href?.it,
+        title:
+            typeof tool.title === "string"
+                ? tool.title
+                : tool.title?.[lang] || tool.title?.it,
         description:
             typeof tool.description === "string"
                 ? tool.description
@@ -255,6 +83,22 @@ function localizeTool(tool, lang) {
     };
 }
 
+/**
+ * Number/text input with optional `prefix` (e.g. `$`, `€`) and/or `suffix`
+ * (e.g. `€`, `%`) decorators, plus optional help text.
+ *
+ * @param {{
+ *   label: string,
+ *   value: string | number,
+ *   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+ *   type?: string,
+ *   step?: string,
+ *   placeholder?: string,
+ *   prefix?: string,
+ *   suffix?: string,
+ *   helpText?: string,
+ * }} props
+ */
 export function ToolInput({
     label,
     value,
@@ -262,6 +106,7 @@ export function ToolInput({
     type = "number",
     step = "0.01",
     placeholder,
+    prefix,
     suffix,
     helpText,
 }) {
@@ -276,9 +121,14 @@ export function ToolInput({
                     step={step}
                     value={value}
                     onChange={onChange}
-                    className={`w-full rounded-lg border border-zinc-300 bg-white px-3 py-3 text-base font-medium text-zinc-900 shadow-sm placeholder:text-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-blue-400 ${suffix ? "pr-10" : ""}`}
+                    className={`w-full rounded-lg border border-zinc-300 bg-white px-3 py-3 text-base font-medium text-zinc-900 shadow-sm placeholder:text-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-blue-400 ${prefix ? "pl-10" : ""} ${suffix ? "pr-10" : ""}`}
                     placeholder={placeholder}
                 />
+                {prefix && (
+                    <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm font-medium text-zinc-400 dark:text-zinc-500">
+                        {prefix}
+                    </span>
+                )}
                 {suffix && (
                     <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm font-medium text-zinc-400 dark:text-zinc-500">
                         {suffix}
@@ -294,6 +144,19 @@ export function ToolInput({
     );
 }
 
+/**
+ * Result card with a copy-to-clipboard button.
+ *
+ * When `copyText` is omitted the button copies the rendered text content of
+ * the box (via `innerText`), which is convenient for simple result displays.
+ *
+ * @param {{
+ *   children: React.ReactNode,
+ *   copyText?: string,
+ *   label?: string,
+ *   lang?: "it" | "en",
+ * }} props
+ */
 export function ResultBox({ children, copyText, label, lang = "it" }) {
     const t = i18n[lang];
     const contentRef = useRef(null);
@@ -428,6 +291,25 @@ function PracticalExamples({ examples, lang = "it" }) {
     );
 }
 
+/**
+ * Standard layout for tool pages.
+ *
+ * Side effects: on mount, records the visit via {@link trackToolUsage} so the
+ * tool appears in the "Recently used" section on the homepage. The effect
+ * re-runs if `currentPath`, `title`, `description` or `lang` change.
+ *
+ * @param {{
+ *   title: string,
+ *   children: React.ReactNode,
+ *   description?: React.ReactNode,
+ *   examples?: Array<{ title: string, description: string, href?: string }>,
+ *   faq?: React.ReactNode,
+ *   currentPath?: string,
+ *   contextualTools?: Array<{ href: string, title: string, description?: string }>,
+ *   relatedTools?: Array<object>,
+ *   lang?: "it" | "en",
+ * }} props
+ */
 export default function ToolLayout({
     title,
     children,

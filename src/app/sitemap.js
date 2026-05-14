@@ -1,46 +1,34 @@
 import { conversions } from "@/config/conversions";
+import { getToolPaths } from "@/config/tools";
 
+/**
+ * Generates `/sitemap.xml` at build time.
+ *
+ * Combines three sets of URLs:
+ *   1. Static Italian routes (homepage + every IT tool, derived from
+ *      `src/config/tools.js`).
+ *   2. Static English routes (homepage + every EN tool + hub pages,
+ *      derived from `src/config/tools.js` plus a few EN-only hubs).
+ *   3. Dynamic unit-conversion landing pages, materialised from
+ *      {@link conversions} (one entry per locale/slug pair).
+ *
+ * Conversion URLs get `lastModified = now` so search engines re-crawl them
+ * whenever the site is rebuilt; the rest use a fixed timestamp to avoid
+ * artificial freshness signals.
+ */
 export default function sitemap() {
     const baseUrl = "https://calcolafacile.org";
     const staticLastModified = new Date("2026-05-01");
     const conversionLastModified = new Date();
 
-    const italianStaticRoutes = [
-        "",
-        "/it",
-        "/it/calcolatore-iva",
-        "/it/calcolo-percentuale",
-        "/it/calcolo-margine",
-        "/it/calcolo-markup",
-        "/it/calcolo-stipendio-netto",
-        "/it/calcolo-sconto-inverso",
-        "/it/convertitore-unita",
-        "/it/jwt-decoder",
-        "/it/token-estimator",
-        "/it/json-formatter",
-        "/it/base64-tool",
-        "/it/timestamp-converter",
-        "/it/url-encoder-decoder",
-        "/it/uuid-generator",
-    ];
+    const italianStaticRoutes = ["", "/it", ...getToolPaths("it")];
 
     const englishStaticRoutes = [
         "/en",
         "/en/tools",
-        "/en/vat-calculator",
-        "/en/percentage-calculator",
-        "/en/margin-calculation",
-        "/en/markup-calculation",
-        "/en/salary-calculator",
-        "/en/inverse-discount-calculation",
-        "/en/unit-converter",
-        "/en/jwt-decoder",
-        "/en/token-estimator",
-        "/en/json-formatter",
-        "/en/base64-tool",
-        "/en/timestamp-converter",
-        "/en/url-encoder-decoder",
-        "/en/uuid-generator",
+        "/en/encoding-tools",
+        "/en/json-tools",
+        ...getToolPaths("en"),
     ];
 
     const italianConversionRoutes = conversions

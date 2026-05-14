@@ -1,9 +1,22 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { headers } from "next/headers";
 import "./globals.css";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+
+/**
+ * Derives the active locale from the pathname injected by `proxy.js`
+ * (`x-pathname` request header). Defaults to Italian since the root `/`
+ * route redirects Italian-speaking users to `/it` and the marketing
+ * primary language is Italian.
+ */
+function resolveLang(pathname) {
+    if (typeof pathname !== "string") return "it";
+    if (pathname.startsWith("/en")) return "en";
+    return "it";
+}
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,10 +39,12 @@ export const metadata = {
     manifest: "/manifest.json",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const headerList = await headers();
+  const lang = resolveLang(headerList.get("x-pathname"));
   return (
       <html
-          lang="it"
+          lang={lang}
           suppressHydrationWarning
           className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       >

@@ -1,5 +1,7 @@
 import Link from "next/link";
 import RecentToolsSection from "@/components/RecentToolsSection";
+import SiteFooter from "@/components/SiteFooter";
+import { getToolsInOrder } from "@/config/tools";
 
 export const metadata = {
     title: "Free Online Calculators and Developer Tools",
@@ -14,92 +16,25 @@ export const metadata = {
     },
 };
 
-const tools = [
-    {
-        href: "/en/vat-calculator",
-        title: "VAT Calculator",
-        description: "Add or remove VAT at 22%, 10% and 4%.",
-    },
-    {
-        href: "/en/json-formatter",
-        title: "JSON Formatter",
-        description:
-            "Format, validate, minify and copy JSON directly in your browser.",
-    },
-    {
-        href: "/en/unit-converter",
-        title: "Unit Converter",
-        description:
-            "Convert length, weight, temperature, volume, area, speed and pressure.",
-    },
-    {
-        href: "/en/percentage-calculator",
-        title: "Percentage Calculator",
-        description:
-            "Calculate percentages, discounts, increases and decreases.",
-    },
-    {
-        href: "/en/margin-calculation",
-        title: "Margin Calculator",
-        description: "Calculate profit and margin from cost and selling price.",
-    },
-    {
-        href: "/en/markup-calculation",
-        title: "Markup Calculator",
-        description: "Calculate percentage markup from product cost.",
-    },
-    {
-        href: "/en/salary-calculator",
-        title: "Net Salary Calculator",
-        description: "Estimate monthly take-home pay from gross annual income.",
-    },
-    {
-        href: "/en/inverse-discount-calculation",
-        title: "Inverse Discount Calculator",
-        description:
-            "Find the original price from a discounted price and discount percentage.",
-    },
-    {
-        href: "/en/jwt-decoder",
-        title: "JWT Decoder",
-        description:
-            "Decode the header and payload of a JSON Web Token directly in your browser.",
-    },
-    {
-        href: "/en/token-estimator",
-        title: "LLM Token Estimator",
-        description:
-            "Estimate token usage and approximate cost for text used with AI models.",
-    },
-    {
-        href: "/en/base64-tool",
-        title: "Base64 Encoder/Decoder",
-        description: "Encode and decode Base64 directly in your browser.",
-    },
-    {
-        href: "/en/timestamp-converter",
-        title: "Unix Timestamp Converter",
-        description: "Convert Unix timestamps to readable dates and back.",
-    },
-    {
-        href: "/en/url-encoder-decoder",
-        title: "URL Encoder/Decoder",
-        description:
-            "Encode and decode URLs for query strings, APIs and redirects.",
-    },
-    {
-        href: "/en/uuid-generator",
-        title: "UUID Generator",
-        description:
-            "Generate UUID v4 identifiers for APIs, databases, tests and software development.",
-    },
-    {
-        href: "/en/public-ip-checker",
-        title: "Public IP Checker",
-        description:
-            "Check your public IP, approximate geolocation and VPN information.",
-    },
+const toolOrder = [
+    "vat",
+    "json",
+    "unitConverter",
+    "percentage",
+    "margin",
+    "markup",
+    "salary",
+    "reverseDiscount",
+    "jwt",
+    "tokenEstimator",
+    "base64",
+    "timestamp",
+    "urlEncoder",
+    "uuid",
+    "publicIp",
 ];
+
+const tools = getToolsInOrder("en", toolOrder);
 
 export default function Home() {
     return (
@@ -128,7 +63,7 @@ export default function Home() {
 
                 <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                     {tools.map((tool) => {
-                        const isFeatured = tool.href === "/en/json-formatter";
+                        const isFeatured = tool.key === "json";
 
                         return (
                             <Link
@@ -176,23 +111,7 @@ export default function Home() {
                 </p>
             </section>
 
-            <footer className="mt-10 border-t border-zinc-200 pt-6 text-sm text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
-                <div className="flex flex-wrap gap-x-4 gap-y-2">
-                    <Link href="/en/privacy" className="hover:text-blue-600 dark:hover:text-blue-400">
-                        Privacy Policy
-                    </Link>
-                    <Link href="/en/cookie-policy" className="hover:text-blue-600 dark:hover:text-blue-400">
-                        Cookie Policy
-                    </Link>
-                    <Link href="/en/terms" className="hover:text-blue-600 dark:hover:text-blue-400">
-                        Terms of Service
-                    </Link>
-                </div>
-
-                <p className="mt-4 text-xs text-zinc-400 dark:text-zinc-500">
-                    © {new Date().getFullYear()} NERALAB Srl · Fast and privacy-friendly online tools.
-                </p>
-            </footer>
+            <SiteFooter lang="en" />
         </main>
     );
 }

@@ -1,3 +1,6 @@
+/**
+ * Generates `/robots.txt`. Allows everything and advertises the sitemap.
+ */
 export default function robots() {
     return {
         rules: {

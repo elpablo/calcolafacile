@@ -1,3 +1,26 @@
+/**
+ * @file Catalogue of unit-conversion landing pages.
+ *
+ * Each entry produces:
+ *   - one static page under `/it/[conversion]` (using `slug.it`),
+ *   - one static page under `/en/[conversion]` (using `slug.en`),
+ *   - one URL in the sitemap per locale,
+ *   - localised SEO title/description through the `labels` object.
+ *
+ * The `category`, `from` and `to` fields must match keys defined in
+ * `src/data/unitConverter/units.js`; otherwise the dynamic conversion page
+ * falls back to defaults at runtime.
+ *
+ * @typedef {Object} Conversion
+ * @property {{ it: string, en: string }} slug
+ * @property {string} from  - Source unit key (must exist in the category).
+ * @property {string} to    - Target unit key (must exist in the category).
+ * @property {{ it: { from: string, to: string },
+ *             en: { from: string, to: string } }} labels
+ * @property {string} category  - Key of the unit category (e.g. "length").
+ *
+ * @type {Conversion[]}
+ */
 export const conversions = [
     {
         slug: {

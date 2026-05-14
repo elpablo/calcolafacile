@@ -81,7 +81,12 @@ export default function PublicIpCheckerCore({ content }) {
         return () => {
             cancelled = true;
         };
-    }, [refreshKey, labels.errors.loadFailed]);
+        // `labels` is provided once via props and never changes for the
+        // lifetime of the page, so we intentionally exclude its nested fields
+        // from the deps to avoid spurious refetches when the locale object
+        // identity changes elsewhere.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [refreshKey]);
 
     const loadIpInfo = () => {
         setIsLoading(true);

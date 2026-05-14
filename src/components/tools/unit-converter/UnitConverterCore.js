@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import ToolLayout, { ResultBox } from "@/components/ToolLayout";
 import { unitCategories } from "@/data/unitConverter/units";
 import { loadLocalState, saveLocalState } from "@/lib/browserStorage";
+import { convertTemperature, convertValue } from "./conversion";
 const STORAGE_KEY = "calcolafacile:unit-converter";
 
 const selectClass =
@@ -146,42 +147,6 @@ function filterUnitKeys(categoryKey, unitKeys, labels, query, selectedUnit) {
     }
 
     return filteredKeys;
-}
-
-function convertTemperature(value, fromUnit, toUnit) {
-    let celsius;
-
-    if (fromUnit === "C") celsius = value;
-    if (fromUnit === "F") celsius = (value - 32) * (5 / 9);
-    if (fromUnit === "K") celsius = value - 273.15;
-
-    if (toUnit === "C") return celsius;
-    if (toUnit === "F") return celsius * (9 / 5) + 32;
-    if (toUnit === "K") return celsius + 273.15;
-
-    return value;
-}
-
-function convertValue(value, categoryKey, fromUnit, toUnit) {
-    const category = unitCategories[categoryKey];
-
-    if (!category || Number.isNaN(value)) {
-        return 0;
-    }
-
-    if (categoryKey === "temperature") {
-        return convertTemperature(value, fromUnit, toUnit);
-    }
-
-    const from = category.units[fromUnit];
-    const to = category.units[toUnit];
-
-    if (!from || !to) {
-        return 0;
-    }
-
-    const valueInBaseUnit = value * from.factor;
-    return valueInBaseUnit / to.factor;
 }
 
 function formatNumber(value, locale) {

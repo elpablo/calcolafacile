@@ -1,5 +1,18 @@
 "use client";
 
+/**
+ * @file Dark/light theme toggle, mounted globally in `app/layout.js`.
+ *
+ * The initial theme is applied by a blocking inline script in the document
+ * head (see `src/app/layout.js`) to avoid flash-of-unstyled-content. This
+ * component:
+ *   - subscribes to `<html class>` mutations via {@link useSyncExternalStore}
+ *     so its icon stays in sync with the document state,
+ *   - persists the user's choice under `localStorage["cf-theme"]`,
+ *   - infers the UI language from the current URL prefix (`/it` vs `/en`)
+ *     when no `lang` prop is provided.
+ */
+
 import { useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
 

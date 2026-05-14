@@ -1,4 +1,10 @@
-
+/**
+ * @file Layout primitives for legal pages (Privacy, Terms, Cookie Policy).
+ *
+ * `LegalPageLayout` renders the page header (brand line, title, last-updated
+ * date, intro paragraph) and a main article slot. `LegalSection` and
+ * `LegalList` are small helpers for consistent typography inside the article.
+ */
 
 export default function LegalPageLayout({ title, lastUpdated, intro, children }) {
     return (
