@@ -17,6 +17,56 @@ export const conversions = [
             },
         },
         category: "length",
+        seo: {
+            it: {
+                title: "Converti centimetri in pollici online",
+                description:
+                    "Converti centimetri in pollici rapidamente con questo convertitore gratuito online. Inserisci il valore in cm e ottieni subito il risultato in pollici.",
+                content:
+                    "Usa questo convertitore per trasformare centimetri in pollici in modo rapido e preciso. È utile per misure di schermi, TV, monitor, stampa 3D, arredamento, prodotti importati e schede tecniche internazionali.",
+                examples: [
+                    {
+                        title: "10 cm in pollici",
+                        description:
+                            "10 centimetri corrispondono a circa 3,937 pollici.",
+                    },
+                    {
+                        title: "30 cm in pollici",
+                        description:
+                            "30 centimetri corrispondono a circa 11,811 pollici.",
+                    },
+                    {
+                        title: "100 cm in pollici",
+                        description:
+                            "100 centimetri corrispondono a circa 39,370 pollici.",
+                    },
+                ],
+            },
+            en: {
+                title: "Convert centimeters to inches online",
+                description:
+                    "Convert centimeters to inches quickly with this free online converter. Enter a value in cm and get the result in inches instantly.",
+                content:
+                    "Use this converter to turn centimeters into inches quickly and accurately. It is useful for screen sizes, TVs, monitors, 3D printing, furniture, imported products and international technical specifications.",
+                examples: [
+                    {
+                        title: "10 cm to inches",
+                        description:
+                            "10 centimeters are equal to about 3.937 inches.",
+                    },
+                    {
+                        title: "30 cm to inches",
+                        description:
+                            "30 centimeters are equal to about 11.811 inches.",
+                    },
+                    {
+                        title: "100 cm to inches",
+                        description:
+                            "100 centimeters are equal to about 39.370 inches.",
+                    },
+                ],
+            },
+        },
     },
     {
         slug: {

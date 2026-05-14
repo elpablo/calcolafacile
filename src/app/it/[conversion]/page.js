@@ -27,8 +27,12 @@ export async function generateMetadata({ params }) {
     }
 
     return {
-        title: `Converti ${config.labels.it.from} in ${config.labels.it.to} online - Gratis`,
-        description: `Converti ${config.labels.it.from} in ${config.labels.it.to} in modo semplice e veloce. Calcolo immediato e gratuito.`,
+        title:
+            config.seo?.it?.title ||
+            `Converti ${config.labels.it.from} in ${config.labels.it.to} online - Gratis`,
+        description:
+            config.seo?.it?.description ||
+            `Converti ${config.labels.it.from} in ${config.labels.it.to} in modo semplice e veloce. Calcolo immediato e gratuito.`,
         alternates: {
             canonical: `https://calcolafacile.org/it/${config.slug.it}`,
             languages: {
@@ -48,12 +52,22 @@ export default async function ConversionPage({ params }) {
         return notFound();
     }
 
+    const fallbackTitle = `Converti ${config.labels.it.from} in ${config.labels.it.to} online`;
+    const fallbackDescription = `Converti ${config.labels.it.from} in ${config.labels.it.to} in modo semplice e veloce. Inserisci il valore da convertire e ottieni subito il risultato.`;
+
     return (
         <UnitConverter
             initialCategory={config.category}
             initialFrom={config.from}
             initialTo={config.to}
             initialValue={1}
+            contentOverride={{
+                title: config.seo?.it?.title || fallbackTitle,
+                description: config.seo?.it?.content || fallbackDescription,
+                examples: config.seo?.it?.examples,
+                currentPath: `/it/${config.slug.it}`,
+                isDynamicConversionPage: true,
+            }}
         />
     );
 }
