@@ -1,5 +1,11 @@
 image: mcr.microsoft.com/playwright:v1.54.2-noble
 
+workflow:
+  rules:
+    - if: '$CI_PROJECT_PATH == "neralab/calcolafacile"'
+      when: always
+    - when: never
+
 stages:
   - lint
   - unit_test
