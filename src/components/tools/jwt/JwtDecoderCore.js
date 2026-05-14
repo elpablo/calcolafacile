@@ -170,22 +170,36 @@ function formatJson(value) {
     return JSON.stringify(value, null, 2);
 }
 
-function formatUnixTimestamp(value, locale) {
-    if (typeof value !== "number") {
+function formatUnixTimestamp(value) {
+    const numericValue = Number(value);
+
+    if (!Number.isFinite(numericValue)) {
         return null;
     }
 
-    return new Date(value * 1000).toLocaleString(locale, {
-        dateStyle: "medium",
-        timeStyle: "medium",
-    });
+    return new Date(numericValue * 1000)
+        .toISOString()
+        .replace("T", " ")
+        .replace(".000Z", " UTC");
 }
 
-function getJwtTimes(payload, labels, locale) {
+function getJwtTimes(payload, labels) {
     return [
-        { key: "exp", label: labels.times.exp, value: formatUnixTimestamp(payload.exp, locale) },
-        { key: "iat", label: labels.times.iat, value: formatUnixTimestamp(payload.iat, locale) },
-        { key: "nbf", label: labels.times.nbf, value: formatUnixTimestamp(payload.nbf, locale) },
+        {
+            key: "exp",
+            label: labels.times.exp,
+            value: formatUnixTimestamp(payload.exp),
+        },
+        {
+            key: "iat",
+            label: labels.times.iat,
+            value: formatUnixTimestamp(payload.iat),
+        },
+        {
+            key: "nbf",
+            label: labels.times.nbf,
+            value: formatUnixTimestamp(payload.nbf),
+        },
     ].filter((item) => item.value);
 }
 
@@ -267,7 +281,6 @@ function JwtDecoderCoreContent({
 }) {
     const {
         lang,
-        locale,
         title,
         currentPath,
         contextualTools,
@@ -343,7 +356,7 @@ function JwtDecoderCoreContent({
         }
     }, [token, labels]);
 
-    const times = decoded.data ? getJwtTimes(decoded.data.payload, labels, locale) : [];
+    const times = decoded.data ? getJwtTimes(decoded.data.payload, labels) : [];
     const status = decoded.data ? getTokenStatus(decoded.data.payload, labels) : null;
     const copyText = decoded.data
         ? `${labels.sections.header}:\n${formatJson(decoded.data.header)}\n\n${labels.sections.payload}:\n${formatJson(decoded.data.payload)}`
