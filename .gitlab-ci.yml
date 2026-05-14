@@ -1,9 +1,6 @@
-
-
 image: mcr.microsoft.com/playwright:v1.54.2-noble
 
 stages:
-  - install
   - lint
   - unit_test
   - build
@@ -23,11 +20,6 @@ variables:
 
 before_script:
   - npm ci
-
-install:
-  stage: install
-  script:
-    - npm ci
 
 lint:
   stage: lint
