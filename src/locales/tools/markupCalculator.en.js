@@ -1,6 +1,6 @@
 const markupCalculatorEn = {
     lang: "en",
-    locale: "en-US",
+    locale: "en-IE",
     currency: "USD",
     currencyAffix: { prefix: "$" },
     title: "Markup Calculator online",
@@ -29,23 +29,25 @@ const markupCalculatorEn = {
         <>
             <h3 className="font-semibold">How do you calculate markup?</h3>
             <p>
-                Markup is calculated by dividing profit by cost and multiplying the result by 100.
+                Markup is calculated by dividing profit by cost and multiplying
+                the result by 100.
             </p>
 
             <h3 className="font-semibold mt-2">
                 What is the difference between markup and margin?
             </h3>
             <p>
-                Markup measures the increase compared to cost, while margin measures profit
-                compared to the selling price.
+                Markup measures the increase compared to cost, while margin
+                measures profit compared to the selling price.
             </p>
 
             <h3 className="font-semibold mt-2">
                 How do I calculate selling price from a target markup?
             </h3>
             <p>
-                Multiply the cost by 1 plus the target markup expressed as a decimal. For example,
-                with a cost of $60 and a 50% markup, the selling price is $90.
+                Multiply the cost by 1 plus the target markup expressed as a
+                decimal. For example, with a cost of $60 and a 50% markup, the
+                selling price is $90.
             </p>
         </>
     ),
@@ -62,14 +64,16 @@ const markupCalculatorEn = {
         costLabel: "Cost",
         costPlaceholder: "Ex. 60",
         costHelp: "Enter the product cost",
-        priceLabel: "Selling price",
+        priceLabel: "Selling price ($)",
         pricePlaceholder: "Ex. 100",
         targetMarkupLabel: "Target markup",
         targetMarkupPlaceholder: "Ex. 50",
         profitLabel: "Profit",
-        markupLabel: "Markup",
-        invalidFromPrice: "Enter a cost greater than 0 and a valid selling price (≥ 0).",
-        invalidTargetMarkup: "Enter a cost greater than 0 and a valid target markup (≥ 0%).",
+        markupLabel: "Markup (%)",
+        invalidFromPrice:
+            "Enter a cost greater than 0 and a valid selling price (≥ 0).",
+        invalidTargetMarkup:
+            "Enter a cost greater than 0 and a valid target markup (≥ 0%).",
         detailFromPrice: ({ cost, price, markup }) =>
             `With a cost of ${cost} and a selling price of ${price}, the markup is ${markup}%.`,
         detailTargetMarkup: ({ cost, markup, price }) =>

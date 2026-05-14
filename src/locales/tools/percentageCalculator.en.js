@@ -1,6 +1,6 @@
 const percentageCalculatorEn = {
     lang: "en",
-    locale: "en-US",
+    locale: "en-IE",
     currency: "USD",
     currencyAffix: { prefix: "$" },
     title: "Percentage Calculator online",
@@ -27,7 +27,9 @@ const percentageCalculatorEn = {
     ],
     faq: (
         <>
-            <h3 className="font-semibold">How do you calculate 20% of a number?</h3>
+            <h3 className="font-semibold">
+                How do you calculate 20% of a number?
+            </h3>
             <p>Multiply the number by 20 and divide the result by 100.</p>
 
             <h3 className="font-semibold mt-2">
@@ -35,10 +37,13 @@ const percentageCalculatorEn = {
             </h3>
             <p>Divide the part by the total and multiply the result by 100.</p>
 
-            <h3 className="font-semibold mt-2">How do you calculate a percentage discount?</h3>
+            <h3 className="font-semibold mt-2">
+                How do you calculate a percentage discount?
+            </h3>
             <p>
-                Multiply the original price by the discount percentage and divide by 100. Then
-                subtract the discount from the original price.
+                Multiply the original price by the discount percentage and
+                divide by 100. Then subtract the discount from the original
+                price.
             </p>
         </>
     ),
@@ -65,7 +70,7 @@ const percentageCalculatorEn = {
         percentOf: {
             valueLabel: "Starting number",
             valuePlaceholder: "Ex. 100",
-            percentLabel: "Percentage",
+            percentLabel: "Percentage (%)",
             percentPlaceholder: "Ex. 22",
             resultTitle: "Result",
             detail: ({ percentage, value, result }) =>
@@ -77,12 +82,13 @@ const percentageCalculatorEn = {
             totalLabel: "Total",
             totalPlaceholder: "Ex. 200",
             resultTitle: "Percentage",
-            detail: ({ part, total, result }) => `${part} is ${result}% of ${total}`,
+            detail: ({ part, total, result }) =>
+                `${part} is ${result}% of ${total}`,
         },
         change: {
             baseLabel: "Starting number",
             basePlaceholder: "Ex. 100",
-            percentLabel: "Change",
+            percentLabel: "Change (%)",
             percentPlaceholder: "Ex. 10",
             typeLabel: "Change type",
             increase: "Increase",
@@ -91,14 +97,15 @@ const percentageCalculatorEn = {
             resultTitleDecrease: "Reduced value",
             invalidTitle: "Invalid value",
             invalidDetail: "The decrease cannot be greater than 100%.",
-            detail: ({ base, sign, percent, result }) => `${base} ${sign} ${percent}% = ${result}`,
+            detail: ({ base, sign, percent, result }) =>
+                `${base} ${sign} ${percent}% = ${result}`,
         },
         discount: {
-            priceLabel: "Original price",
+            priceLabel: "Original price ($)",
             pricePlaceholder: "Ex. 120",
-            discountLabel: "Discount",
+            discountLabel: "Discount (%)",
             discountPlaceholder: "Ex. 30",
-            resultTitle: "Discounted price",
+            resultTitle: "Discounted price ($)",
             invalidTitle: "Invalid discount",
             invalidDetail: "The discount cannot be greater than 100%.",
             detail: ({ savings, price }) => `Savings: ${savings} on ${price}`,

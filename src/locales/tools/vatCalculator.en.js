@@ -1,6 +1,6 @@
 const vatCalculatorEn = {
     lang: "en",
-    locale: "en-US",
+    locale: "en-IE",
     currency: "USD",
     currencyAffix: { prefix: "$" },
     title: "VAT Calculator online (add or remove VAT)",
@@ -28,10 +28,15 @@ const vatCalculatorEn = {
     faq: (
         <>
             <h3 className="font-semibold">How do you calculate VAT?</h3>
-            <p>Multiply the net amount by the VAT rate and add it to the total.</p>
+            <p>
+                Multiply the net amount by the VAT rate and add it to the total.
+            </p>
 
             <h3 className="font-semibold mt-2">How do you remove VAT?</h3>
-            <p>Divide the gross amount by 1 plus the VAT rate (e.g. 1.22 for 22%).</p>
+            <p>
+                Divide the gross amount by 1 plus the VAT rate (e.g. 1.22 for
+                22%).
+            </p>
         </>
     ),
     sample: {
@@ -40,7 +45,7 @@ const vatCalculatorEn = {
         mode: "add",
     },
     labels: {
-        amountLabel: "Amount",
+        amountLabel: "Amount ($)",
         amountPlaceholder: "Ex. 100",
         amountHelp: "Enter the amount to calculate VAT",
         rateLabel: "VAT rate",

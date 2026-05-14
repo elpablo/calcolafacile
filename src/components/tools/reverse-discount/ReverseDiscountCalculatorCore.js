@@ -107,8 +107,6 @@ function ReverseDiscountCalculatorCoreContent({ content, shouldLoadSavedState })
                 label={labels.discountedPriceLabel}
                 value={discountedPrice}
                 onChange={(e) => setDiscountedPrice(e.target.value)}
-                prefix={currencyAffix?.prefix}
-                suffix={currencyAffix?.suffix}
                 placeholder={labels.discountedPricePlaceholder}
                 helpText={labels.discountedPriceHelp}
             />
@@ -117,7 +115,6 @@ function ReverseDiscountCalculatorCoreContent({ content, shouldLoadSavedState })
                 label={labels.discountLabel}
                 value={discount}
                 onChange={(e) => setDiscount(e.target.value)}
-                suffix="%"
                 placeholder={labels.discountPlaceholder}
             />
 

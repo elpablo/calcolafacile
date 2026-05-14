@@ -148,29 +148,24 @@ function MarginCalculatorCoreContent({ content, shouldLoadSavedState }) {
                 label={labels.costLabel}
                 value={cost}
                 onChange={(e) => setCost(e.target.value)}
-                prefix={currencyAffix?.prefix}
-                suffix={currencyAffix?.suffix}
                 placeholder={labels.costPlaceholder}
                 helpText={labels.costHelp}
             />
 
             {mode === "fromPrice" && (
                 <ToolInput
-                    label={labels.priceLabel}
+                        label={labels.priceLabel}
                     value={sellingPrice}
                     onChange={(e) => setSellingPrice(e.target.value)}
-                    prefix={currencyAffix?.prefix}
-                    suffix={currencyAffix?.suffix}
                     placeholder={labels.pricePlaceholder}
                 />
             )}
 
             {mode === "targetMargin" && (
                 <ToolInput
-                    label={labels.targetMarginLabel}
+                        label={labels.targetMarginLabel}
                     value={targetMargin}
                     onChange={(e) => setTargetMargin(e.target.value)}
-                    suffix="%"
                     placeholder={labels.targetMarginPlaceholder}
                 />
             )}

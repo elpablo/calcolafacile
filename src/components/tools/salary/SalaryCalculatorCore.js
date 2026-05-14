@@ -95,8 +95,6 @@ function SalaryCalculatorCoreContent({ content, shouldLoadSavedState }) {
                 label={labels.grossLabel}
                 value={grossAnnualIncome}
                 onChange={(e) => setGrossAnnualIncome(e.target.value)}
-                prefix={currencyAffix?.prefix}
-                suffix={currencyAffix?.suffix}
                 placeholder={labels.grossPlaceholder}
                 helpText={labels.grossHelp}
             />

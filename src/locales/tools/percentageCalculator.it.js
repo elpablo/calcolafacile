@@ -68,7 +68,7 @@ const percentageCalculatorIt = {
         percentOf: {
             valueLabel: "Numero di partenza",
             valuePlaceholder: "Es. 100",
-            percentLabel: "Percentuale",
+            percentLabel: "Percentuale (%)",
             percentPlaceholder: "Es. 22",
             resultTitle: "Risultato",
             detail: ({ percentage, value, result }) => `${percentage}% di ${value} = ${result}`,
@@ -84,7 +84,7 @@ const percentageCalculatorIt = {
         change: {
             baseLabel: "Numero di partenza",
             basePlaceholder: "Es. 100",
-            percentLabel: "Variazione",
+            percentLabel: "Variazione (%)",
             percentPlaceholder: "Es. 10",
             typeLabel: "Tipo variazione",
             increase: "Aumento",
@@ -96,11 +96,11 @@ const percentageCalculatorIt = {
             detail: ({ base, sign, percent, result }) => `${base} ${sign} ${percent}% = ${result}`,
         },
         discount: {
-            priceLabel: "Prezzo iniziale",
+            priceLabel: "Prezzo iniziale (€)",
             pricePlaceholder: "Es. 120",
-            discountLabel: "Sconto",
+            discountLabel: "Sconto (%)",
             discountPlaceholder: "Es. 30",
-            resultTitle: "Prezzo scontato",
+            resultTitle: "Prezzo scontato (€)",
             invalidTitle: "Sconto non valido",
             invalidDetail: "Lo sconto non può essere superiore al 100%.",
             detail: ({ savings, price }) => `Sconto: ${savings} su ${price}`,

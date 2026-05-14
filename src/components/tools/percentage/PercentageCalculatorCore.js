@@ -265,7 +265,6 @@ function PercentageCalculatorCoreContent({ content, shouldLoadSavedState }) {
                         label={labels.percentOf.percentLabel}
                         value={percentage}
                         onChange={(e) => setPercentage(e.target.value)}
-                        suffix="%"
                         placeholder={labels.percentOf.percentPlaceholder}
                     />
                 </>
@@ -300,7 +299,6 @@ function PercentageCalculatorCoreContent({ content, shouldLoadSavedState }) {
                         label={labels.change.percentLabel}
                         value={changePercent}
                         onChange={(e) => setChangePercent(e.target.value)}
-                        suffix="%"
                         placeholder={labels.change.percentPlaceholder}
                     />
                     <div className="mb-4">
@@ -323,15 +321,12 @@ function PercentageCalculatorCoreContent({ content, shouldLoadSavedState }) {
                         label={labels.discount.priceLabel}
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
-                        prefix={currencyAffix?.prefix}
-                        suffix={currencyAffix?.suffix}
                         placeholder={labels.discount.pricePlaceholder}
                     />
                     <ToolInput
                         label={labels.discount.discountLabel}
                         value={discount}
                         onChange={(e) => setDiscount(e.target.value)}
-                        suffix="%"
                         placeholder={labels.discount.discountPlaceholder}
                     />
                 </>

@@ -44,10 +44,10 @@ const reverseDiscountCalculatorIt = {
         discount: "30",
     },
     labels: {
-        discountedPriceLabel: "Prezzo scontato",
+        discountedPriceLabel: "Prezzo scontato (€)",
         discountedPricePlaceholder: "Es. 70",
         discountedPriceHelp: "Inserisci il prezzo finale dopo lo sconto",
-        discountLabel: "Sconto applicato",
+        discountLabel: "Sconto applicato (%)",
         discountPlaceholder: "Es. 30",
         originalPriceLabel: "Prezzo originale",
         savingsLabel: "Risparmio",

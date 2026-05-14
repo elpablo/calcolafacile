@@ -1,6 +1,6 @@
 const reverseDiscountCalculatorEn = {
     lang: "en",
-    locale: "en-US",
+    locale: "en-IE",
     currency: "USD",
     currencyAffix: { prefix: "$" },
     title: "Inverse Discount Calculator online",
@@ -30,14 +30,17 @@ const reverseDiscountCalculatorEn = {
             <h3 className="font-semibold">
                 How do you calculate the original price from a discount?
             </h3>
-            <p>Divide the discounted price by 1 minus the discount percentage divided by 100.</p>
+            <p>
+                Divide the discounted price by 1 minus the discount percentage
+                divided by 100.
+            </p>
 
             <h3 className="mt-2 font-semibold">
                 What is an inverse discount calculation useful for?
             </h3>
             <p>
-                It helps you find the starting price when you know the final price and the discount
-                that was applied.
+                It helps you find the starting price when you know the final
+                price and the discount that was applied.
             </p>
         </>
     ),
@@ -46,14 +49,15 @@ const reverseDiscountCalculatorEn = {
         discount: "30",
     },
     labels: {
-        discountedPriceLabel: "Discounted price",
+        discountedPriceLabel: "Discounted price ($)",
         discountedPricePlaceholder: "Ex. 70",
         discountedPriceHelp: "Enter the final price after the discount",
-        discountLabel: "Applied discount",
+        discountLabel: "Applied discount (%)",
         discountPlaceholder: "Ex. 30",
         originalPriceLabel: "Original price",
         savingsLabel: "Savings",
-        invalid: "Enter a valid discounted price and a discount between 0% and 99.99%.",
+        invalid:
+            "Enter a valid discounted price and a discount between 0% and 99.99%.",
         detail: ({ discountedPrice, discount, originalPrice }) =>
             `With a discounted price of ${discountedPrice} and a discount of ${discount}%, the original price was ${originalPrice}.`,
     },

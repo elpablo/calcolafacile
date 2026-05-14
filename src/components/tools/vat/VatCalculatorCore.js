@@ -109,8 +109,6 @@ function VatCalculatorCoreContent({ content, shouldLoadSavedState }) {
                 label={labels.amountLabel}
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                prefix={currencyAffix?.prefix}
-                suffix={currencyAffix?.suffix}
                 placeholder={labels.amountPlaceholder}
                 helpText={labels.amountHelp}
             />

@@ -1,6 +1,6 @@
 const salaryCalculatorEn = {
     lang: "en",
-    locale: "en-US",
+    locale: "en-IE",
     currency: "USD",
     currencyAffix: { prefix: "$" },
     title: "Net Salary Calculator from Gross Income",
@@ -27,16 +27,19 @@ const salaryCalculatorEn = {
     ],
     faq: (
         <>
-            <h3 className="font-semibold">How is net salary estimated from gross income?</h3>
+            <h3 className="font-semibold">
+                How is net salary estimated from gross income?
+            </h3>
             <p>
-                Net salary depends on taxes, deductions and local rules. This tool uses a
-                simplified average estimate to provide a quick result.
+                Net salary depends on taxes, deductions and local rules. This
+                tool uses a simplified average estimate to provide a quick
+                result.
             </p>
 
             <h3 className="font-semibold mt-2">Is the result exact?</h3>
             <p>
-                No. It is only an estimate. Actual take-home pay depends on location, tax rules,
-                benefits, deductions and employment type.
+                No. It is only an estimate. Actual take-home pay depends on
+                location, tax rules, benefits, deductions and employment type.
             </p>
         </>
     ),
@@ -44,7 +47,7 @@ const salaryCalculatorEn = {
         grossAnnualIncome: "60000",
     },
     labels: {
-        grossLabel: "Gross annual income",
+        grossLabel: "Gross annual income ($)",
         grossPlaceholder: "Ex. 60000",
         grossHelp: "Enter your gross annual income",
         monthlyLabel: "Estimated monthly net salary",

@@ -44,7 +44,7 @@ const salaryCalculatorIt = {
         grossAnnualIncome: "30000",
     },
     labels: {
-        grossLabel: "RAL (lordo annuo)",
+        grossLabel: "RAL lordo annuo (€)",
         grossPlaceholder: "Es. 30000",
         grossHelp: "Inserisci la retribuzione annua lorda",
         monthlyLabel: "Netto mensile stimato",
