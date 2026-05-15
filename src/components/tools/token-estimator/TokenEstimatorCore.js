@@ -8,20 +8,65 @@ import { loadLocalState, saveLocalState } from "@/lib/browserStorage";
 const STORAGE_KEY = "calcolafacile:token-estimator";
 
 const MODELS = {
-    "gpt-4o-mini": {
-        label: "GPT-4o mini",
-        inputPricePerMillion: 0.15,
-        outputPricePerMillion: 0.6,
+    "gpt-5.5": {
+        label: "GPT-5.5",
+        inputPricePerMillion: 5,
+        outputPricePerMillion: 30,
+    },
+    "gpt-5.4": {
+        label: "GPT-5.4",
+        inputPricePerMillion: 2.5,
+        outputPricePerMillion: 15,
+    },
+    "gpt-5.4-mini": {
+        label: "GPT-5.4 Mini",
+        inputPricePerMillion: 0.25,
+        outputPricePerMillion: 2,
+    },
+    "gpt-4.1": {
+        label: "GPT-4.1",
+        inputPricePerMillion: 2,
+        outputPricePerMillion: 8,
     },
     "gpt-4o": {
         label: "GPT-4o",
-        inputPricePerMillion: 5,
-        outputPricePerMillion: 15,
+        inputPricePerMillion: 2.5,
+        outputPricePerMillion: 10,
     },
-    "claude-3-5-sonnet": {
-        label: "Claude 3.5 Sonnet",
+    "gpt-4o-mini": {
+        label: "GPT-4o Mini",
+        inputPricePerMillion: 0.15,
+        outputPricePerMillion: 0.6,
+    },
+    "claude-opus-4.7": {
+        label: "Claude Opus 4.7",
+        inputPricePerMillion: 5,
+        outputPricePerMillion: 25,
+    },
+    "claude-opus-4.6": {
+        label: "Claude Opus 4.6",
+        inputPricePerMillion: 5,
+        outputPricePerMillion: 25,
+    },
+    "claude-sonnet-4.6": {
+        label: "Claude Sonnet 4.6",
         inputPricePerMillion: 3,
         outputPricePerMillion: 15,
+    },
+    "claude-sonnet-4": {
+        label: "Claude Sonnet 4",
+        inputPricePerMillion: 3,
+        outputPricePerMillion: 15,
+    },
+    "claude-haiku-4.5": {
+        label: "Claude Haiku 4.5",
+        inputPricePerMillion: 1,
+        outputPricePerMillion: 5,
+    },
+    "gemini-2.5-pro": {
+        label: "Gemini 2.5 Pro",
+        inputPricePerMillion: 1.25,
+        outputPricePerMillion: 10,
     },
 };
 
