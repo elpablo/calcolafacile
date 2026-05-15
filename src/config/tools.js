@@ -134,6 +134,17 @@ export const tools = [
         hasEn: true,
     },
     {
+        key: "aiCostCalculator",
+        slug: { it: "calcolatore-costi-ai", en: "ai-cost-calculator" },
+        title: { it: "Calcolatore costi AI", en: "AI Cost Calculator" },
+        description: {
+            it: "Stima i costi API dei modelli AI in base a token e richieste giornaliere.",
+            en: "Estimate AI model API costs from tokens and daily request volume.",
+        },
+        hasIt: true,
+        hasEn: true,
+    },
+    {
         key: "json",
         slug: { it: "json-formatter", en: "json-formatter" },
         title: { it: "JSON Formatter", en: "JSON Formatter" },

@@ -27,6 +27,7 @@ const toolOrder = [
     "reverseDiscount",
     "jwt",
     "tokenEstimator",
+    "aiCostCalculator",
     "base64",
     "timestamp",
     "urlEncoder",
