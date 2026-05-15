@@ -4,71 +4,21 @@ import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { useSearchParams } from "next/navigation";
 import ToolLayout, { ResultBox } from "@/components/ToolLayout";
 import { loadLocalState, saveLocalState } from "@/lib/browserStorage";
+import { getFlatModels } from "@/config/aiModels";
 
 const STORAGE_KEY = "calcolafacile:token-estimator";
-
-const MODELS = {
-    "gpt-5.5": {
-        label: "GPT-5.5",
-        inputPricePerMillion: 5,
-        outputPricePerMillion: 30,
-    },
-    "gpt-5.4": {
-        label: "GPT-5.4",
-        inputPricePerMillion: 2.5,
-        outputPricePerMillion: 15,
-    },
-    "gpt-5.4-mini": {
-        label: "GPT-5.4 Mini",
-        inputPricePerMillion: 0.25,
-        outputPricePerMillion: 2,
-    },
-    "gpt-4.1": {
-        label: "GPT-4.1",
-        inputPricePerMillion: 2,
-        outputPricePerMillion: 8,
-    },
-    "gpt-4o": {
-        label: "GPT-4o",
-        inputPricePerMillion: 2.5,
-        outputPricePerMillion: 10,
-    },
-    "gpt-4o-mini": {
-        label: "GPT-4o Mini",
-        inputPricePerMillion: 0.15,
-        outputPricePerMillion: 0.6,
-    },
-    "claude-opus-4.7": {
-        label: "Claude Opus 4.7",
-        inputPricePerMillion: 5,
-        outputPricePerMillion: 25,
-    },
-    "claude-opus-4.6": {
-        label: "Claude Opus 4.6",
-        inputPricePerMillion: 5,
-        outputPricePerMillion: 25,
-    },
-    "claude-sonnet-4.6": {
-        label: "Claude Sonnet 4.6",
-        inputPricePerMillion: 3,
-        outputPricePerMillion: 15,
-    },
-    "claude-sonnet-4": {
-        label: "Claude Sonnet 4",
-        inputPricePerMillion: 3,
-        outputPricePerMillion: 15,
-    },
-    "claude-haiku-4.5": {
-        label: "Claude Haiku 4.5",
-        inputPricePerMillion: 1,
-        outputPricePerMillion: 5,
-    },
-    "gemini-2.5-pro": {
-        label: "Gemini 2.5 Pro",
-        inputPricePerMillion: 1.25,
-        outputPricePerMillion: 10,
-    },
-};
+const MODEL_OPTIONS = getFlatModels();
+const MODELS = Object.fromEntries(
+    MODEL_OPTIONS.map((model) => [
+        model.modelKey,
+        {
+            label: model.label,
+            providerLabel: model.providerLabel,
+            inputPricePerMillion: model.inputCostPerMillion,
+            outputPricePerMillion: model.outputCostPerMillion,
+        },
+    ]),
+);
 
 const selectClass =
     "h-12 w-full rounded-lg border border-zinc-300 bg-white px-3 text-base font-medium leading-none text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-blue-400";
@@ -244,7 +194,7 @@ function TokenEstimatorCoreContent({ content, shouldLoadSavedState }) {
                     >
                         {Object.entries(MODELS).map(([key, model]) => (
                             <option key={key} value={key}>
-                                {model.label}
+                                {model.providerLabel} · {model.label}
                             </option>
                         ))}
                     </select>
@@ -321,7 +271,7 @@ function TokenEstimatorCoreContent({ content, shouldLoadSavedState }) {
 
                 <div className="mt-4 rounded-lg border border-blue-200 bg-white/70 p-3 dark:border-blue-900/60 dark:bg-zinc-900/60">
                     <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300">
-                        {labels.costTitle} - {selectedModel.label}
+                        {labels.costTitle} - {selectedModel.providerLabel} · {selectedModel.label}
                     </p>
                     <div className="space-y-1 text-sm text-zinc-700 dark:text-zinc-300">
                         <p>

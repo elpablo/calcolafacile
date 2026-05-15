@@ -1,6 +1,8 @@
 
 
 const aiCostCalculatorEn = {
+    lang: "en",
+    currentPath: "/en/ai-cost-calculator",
     locale: "en-US",
     metadata: {
         title: "AI Cost Calculator",
@@ -73,7 +75,7 @@ const aiCostCalculatorEn = {
             </p>
         </>
     ),
-    relatedTools: [
+    contextualTools: [
         {
             href: "/en/token-estimator",
             title: "Token Estimator",

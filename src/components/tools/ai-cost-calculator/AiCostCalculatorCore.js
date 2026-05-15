@@ -1,94 +1,56 @@
 "use client";
 
-import { useMemo, useState, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 
 import ToolLayout, {
     ResultBox,
     ToolInput,
 } from "@/components/ToolLayout";
 
-const MODEL_CATALOG = {
-    openai: {
-        label: "OpenAI",
-        models: {
-            "gpt-5.5": {
-                label: "GPT-5.5",
-                inputCostPerMillion: 5,
-                outputCostPerMillion: 30,
-            },
-            "gpt-5.4": {
-                label: "GPT-5.4",
-                inputCostPerMillion: 2.5,
-                outputCostPerMillion: 15,
-            },
-            "gpt-5.4-mini": {
-                label: "GPT-5.4 Mini",
-                inputCostPerMillion: 0.25,
-                outputCostPerMillion: 2,
-            },
-            "gpt-4.1": {
-                label: "GPT-4.1",
-                inputCostPerMillion: 2,
-                outputCostPerMillion: 8,
-            },
-            "gpt-4o": {
-                label: "GPT-4o",
-                inputCostPerMillion: 2.5,
-                outputCostPerMillion: 10,
-            },
-            "gpt-4o-mini": {
-                label: "GPT-4o Mini",
-                inputCostPerMillion: 0.15,
-                outputCostPerMillion: 0.6,
-            },
-        },
-    },
-    anthropic: {
-        label: "Anthropic",
-        models: {
-            "claude-opus-4.7": {
-                label: "Claude Opus 4.7",
-                inputCostPerMillion: 5,
-                outputCostPerMillion: 25,
-            },
-            "claude-opus-4.6": {
-                label: "Claude Opus 4.6",
-                inputCostPerMillion: 5,
-                outputCostPerMillion: 25,
-            },
-            "claude-sonnet-4.6": {
-                label: "Claude Sonnet 4.6",
-                inputCostPerMillion: 3,
-                outputCostPerMillion: 15,
-            },
-            "claude-haiku-4.5": {
-                label: "Claude Haiku 4.5",
-                inputCostPerMillion: 1,
-                outputCostPerMillion: 5,
-            },
-            "claude-sonnet-4": {
-                label: "Claude Sonnet 4",
-                inputCostPerMillion: 3,
-                outputCostPerMillion: 15,
-            },
-            "claude-opus-4": {
-                label: "Claude Opus 4",
-                inputCostPerMillion: 15,
-                outputCostPerMillion: 75,
-            },
-        },
-    },
-    google: {
-        label: "Google",
-        models: {
-            "gemini-2.5-pro": {
-                label: "Gemini 2.5 Pro",
-                inputCostPerMillion: 1.25,
-                outputCostPerMillion: 10,
-            },
-        },
-    },
-};
+import {
+    getFirstModelKey,
+    getFirstProviderKey,
+    getModel,
+    getProvider,
+    getProviderKeys,
+    getProviderModelKeys,
+} from "@/config/aiModels";
+
+import { loadLocalState, saveLocalState } from "@/lib/browserStorage";
+const STORAGE_KEY = "calcolafacile:ai-cost-calculator";
+
+function getInitialState(shouldLoadSavedState) {
+    const fallbackProviderKey = getFirstProviderKey();
+    const fallbackModelKey = getFirstModelKey(fallbackProviderKey);
+
+    if (!shouldLoadSavedState) {
+        return {
+            providerKey: fallbackProviderKey,
+            modelKey: fallbackModelKey,
+            inputTokens: "10000",
+            outputTokens: "5000",
+            requestsPerDay: "100",
+        };
+    }
+
+    const stored = loadLocalState(STORAGE_KEY, {});
+    const storedProviderKey = getProviderKeys().includes(stored?.providerKey)
+        ? stored.providerKey
+        : fallbackProviderKey;
+
+    const storedModelKeys = getProviderModelKeys(storedProviderKey);
+    const storedModelKey = storedModelKeys.includes(stored?.modelKey)
+        ? stored.modelKey
+        : getFirstModelKey(storedProviderKey);
+
+    return {
+        providerKey: storedProviderKey,
+        modelKey: storedModelKey,
+        inputTokens: typeof stored?.inputTokens === "string" ? stored.inputTokens : "10000",
+        outputTokens: typeof stored?.outputTokens === "string" ? stored.outputTokens : "5000",
+        requestsPerDay: typeof stored?.requestsPerDay === "string" ? stored.requestsPerDay : "100",
+    };
+}
 
 function formatCurrency(value, locale) {
     return new Intl.NumberFormat(locale, {
@@ -101,6 +63,14 @@ function formatCurrency(value, locale) {
 
 function calculateCost(tokens, costPerMillion) {
     return (tokens / 1_000_000) * costPerMillion;
+}
+
+function getInputValue(valueOrEvent) {
+    if (typeof valueOrEvent === "string") {
+        return valueOrEvent;
+    }
+
+    return valueOrEvent?.target?.value ?? "";
 }
 
 const selectClassName = "h-12 w-full appearance-none rounded-lg border border-zinc-300 bg-white px-3 pr-10 text-base font-medium leading-none text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-blue-400";
@@ -116,7 +86,7 @@ export default function AiCostCalculatorCore({ content }) {
         labels,
         examples,
         faq,
-        relatedTools,
+        contextualTools,
     } = content;
 
     const hydrated = useSyncExternalStore(
@@ -125,21 +95,35 @@ export default function AiCostCalculatorCore({ content }) {
         () => false,
     );
 
-    const providerKeys = Object.keys(MODEL_CATALOG);
+    const initialState = getInitialState(hydrated);
 
-    const [providerKey, setProviderKey] = useState(providerKeys[0]);
+    const providerKeys = getProviderKeys();
 
-    const providerModels = MODEL_CATALOG[providerKey].models;
+    const [providerKey, setProviderKey] = useState(initialState.providerKey);
+    const [modelKey, setModelKey] = useState(initialState.modelKey);
+    const [inputTokens, setInputTokens] = useState(initialState.inputTokens);
+    const [outputTokens, setOutputTokens] = useState(initialState.outputTokens);
+    const [requestsPerDay, setRequestsPerDay] = useState(initialState.requestsPerDay);
 
-    const [modelKey, setModelKey] = useState(
-        Object.keys(providerModels)[0],
-    );
+    const provider = getProvider(providerKey);
+    const providerModels = provider.models;
+    const providerModelKeys = getProviderModelKeys(providerKey);
 
-    const [inputTokens, setInputTokens] = useState("10000");
-    const [outputTokens, setOutputTokens] = useState("5000");
-    const [requestsPerDay, setRequestsPerDay] = useState("100");
+    const currentModel = getModel(providerKey, modelKey);
 
-    const currentModel = providerModels[modelKey];
+    useEffect(() => {
+        if (!hydrated) {
+            return;
+        }
+
+        saveLocalState(STORAGE_KEY, {
+            providerKey,
+            modelKey,
+            inputTokens,
+            outputTokens,
+            requestsPerDay,
+        });
+    }, [hydrated, providerKey, modelKey, inputTokens, outputTokens, requestsPerDay]);
 
     const calculations = useMemo(() => {
         const parsedInputTokens = Number(inputTokens) || 0;
@@ -183,7 +167,7 @@ export default function AiCostCalculatorCore({ content }) {
             description={metadata.description}
             intro={metadata.intro}
             faq={faq}
-            contextualTools={relatedTools}
+            contextualTools={contextualTools}
             examples={examples}
         >
             <div key={hydrated ? "hydrated" : "ssr"}>
@@ -198,16 +182,15 @@ export default function AiCostCalculatorCore({ content }) {
                                 value={providerKey}
                                 onChange={(event) => {
                                     const nextProvider = event.target.value;
-                                    const nextModels = MODEL_CATALOG[nextProvider].models;
 
                                     setProviderKey(nextProvider);
-                                    setModelKey(Object.keys(nextModels)[0]);
+                                    setModelKey(getFirstModelKey(nextProvider));
                                 }}
                                 className={selectClassName}
                             >
                                 {providerKeys.map((key) => (
                                     <option key={key} value={key}>
-                                        {MODEL_CATALOG[key].label}
+                                        {getProvider(key).label}
                                     </option>
                                 ))}
                             </select>
@@ -225,9 +208,9 @@ export default function AiCostCalculatorCore({ content }) {
                                 onChange={(event) => setModelKey(event.target.value)}
                                 className={selectClassName}
                             >
-                                {Object.entries(providerModels).map(([key, model]) => (
+                                {providerModelKeys.map((key) => (
                                     <option key={key} value={key}>
-                                        {model.label}
+                                        {providerModels[key].label}
                                     </option>
                                 ))}
                             </select>
@@ -239,7 +222,7 @@ export default function AiCostCalculatorCore({ content }) {
                     <ToolInput
                         label={labels.inputTokens}
                         value={inputTokens}
-                        onChange={setInputTokens}
+                        onChange={(valueOrEvent) => setInputTokens(getInputValue(valueOrEvent))}
                         type="number"
                         min="0"
                         placeholder="10000"
@@ -248,7 +231,7 @@ export default function AiCostCalculatorCore({ content }) {
                     <ToolInput
                         label={labels.outputTokens}
                         value={outputTokens}
-                        onChange={setOutputTokens}
+                        onChange={(valueOrEvent) => setOutputTokens(getInputValue(valueOrEvent))}
                         type="number"
                         min="0"
                         placeholder="5000"
@@ -257,7 +240,7 @@ export default function AiCostCalculatorCore({ content }) {
                     <ToolInput
                         label={labels.requestsPerDay}
                         value={requestsPerDay}
-                        onChange={setRequestsPerDay}
+                        onChange={(valueOrEvent) => setRequestsPerDay(getInputValue(valueOrEvent))}
                         type="number"
                         min="0"
                         placeholder="100"
