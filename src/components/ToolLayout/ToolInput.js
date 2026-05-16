@@ -12,27 +12,40 @@
  *   label: string,
  *   value: string | number,
  *   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+ *   id?: string,
+ *   name?: string,
  *   type?: string,
  *   inputMode?: string,
  *   step?: string,
+ *   min?: string | number,
+ *   max?: string | number,
  *   placeholder?: string,
  *   prefix?: string,
  *   suffix?: string,
  *   helpText?: string,
+ *   testId?: string,
  * }} props
  */
 export function ToolInput({
     label,
     value,
     onChange,
+    id,
+    name,
     type = "text",
     inputMode = "decimal",
     step,
+    min,
+    max,
     placeholder,
     prefix,
     suffix,
     helpText,
+    testId,
 }) {
+    const inputId = id ?? name ?? label.toLowerCase().replace(/\s+/g, "-");
+    const helpTextId = helpText ? `${inputId}-help` : undefined;
+
     // Use inline style for padding so Safari's UA stylesheet cannot override it.
     const paddingStyle = {
         paddingLeft: prefix ? "2.5rem" : "0.75rem",
@@ -41,7 +54,10 @@ export function ToolInput({
 
     return (
         <div className="mb-4">
-            <label className="mb-1.5 block text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300">
+            <label
+                htmlFor={inputId}
+                className="mb-1.5 block text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300"
+            >
                 {label}
             </label>
             <div className="relative">
@@ -54,9 +70,16 @@ export function ToolInput({
                     </span>
                 )}
                 <input
+                    id={inputId}
+                    name={name ?? inputId}
+                    aria-label={label}
+                    aria-describedby={helpTextId}
+                    data-testid={testId}
                     type={type}
                     inputMode={inputMode}
                     step={step}
+                    min={min}
+                    max={max}
                     value={value}
                     onChange={onChange}
                     style={paddingStyle}
@@ -73,7 +96,10 @@ export function ToolInput({
                 )}
             </div>
             {helpText && (
-                <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400">
+                <p
+                    id={helpTextId}
+                    className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400"
+                >
                     {helpText}
                 </p>
             )}

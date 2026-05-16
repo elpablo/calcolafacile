@@ -18,12 +18,22 @@ import i18n from "./i18n";
  *   copyText?: string,
  *   label?: string,
  *   lang?: "it" | "en",
+ *   testId?: string,
+ *   live?: "polite" | "assertive" | "off",
  * }} props
  */
-export function ResultBox({ children, copyText, label, lang = "it" }) {
+export function ResultBox({
+    children,
+    copyText,
+    label,
+    lang = "it",
+    testId,
+    live = "polite",
+}) {
     const t = i18n[lang];
     const contentRef = useRef(null);
     const [copied, setCopied] = useState(false);
+    const resultLabel = label || t.result;
 
     const handleCopy = async () => {
         try {
@@ -40,10 +50,15 @@ export function ResultBox({ children, copyText, label, lang = "it" }) {
     };
 
     return (
-        <div className="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-4 shadow-sm dark:border-blue-900/60 dark:bg-blue-950/40">
+        <section
+            data-testid={testId}
+            aria-label={resultLabel}
+            aria-live={live}
+            className="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-4 shadow-sm dark:border-blue-900/60 dark:bg-blue-950/40"
+        >
             <div className="mb-3 flex items-center justify-between gap-3">
                 <p className="text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300">
-                    {label || t.result}
+                    {resultLabel}
                 </p>
                 <button
                     type="button"
@@ -55,13 +70,18 @@ export function ResultBox({ children, copyText, label, lang = "it" }) {
                     }`}
                     aria-label={copied ? t.copied : t.copy}
                     title={copied ? t.copied : t.copy}
+                    data-testid={testId ? `${testId}-copy` : undefined}
                 >
                     {copied ? "✓" : "📋"}
                 </button>
             </div>
-            <div ref={contentRef} className="min-w-0 overflow-hidden">
+            <div
+                ref={contentRef}
+                data-testid={testId ? `${testId}-content` : undefined}
+                className="min-w-0 overflow-hidden"
+            >
                 {children}
             </div>
-        </div>
+        </section>
     );
 }

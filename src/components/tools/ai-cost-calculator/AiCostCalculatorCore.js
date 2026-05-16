@@ -17,6 +17,7 @@ import {
 } from "@/config/aiModels";
 
 import { loadLocalState, saveLocalState } from "@/lib/browserStorage";
+import { calculateAiCosts } from "@/lib/aiCostCalculator";
 const STORAGE_KEY = "calcolafacile:ai-cost-calculator";
 
 function getInitialState(shouldLoadSavedState) {
@@ -52,17 +53,13 @@ function getInitialState(shouldLoadSavedState) {
     };
 }
 
-function formatCurrency(value, locale) {
+function formatCurrency(value, locale, currency = "USD") {
     return new Intl.NumberFormat(locale, {
         style: "currency",
-        currency: "USD",
+        currency,
         minimumFractionDigits: value < 0.01 ? 4 : 2,
         maximumFractionDigits: value < 0.01 ? 4 : 2,
     }).format(value);
-}
-
-function calculateCost(tokens, costPerMillion) {
-    return (tokens / 1_000_000) * costPerMillion;
 }
 
 function getInputValue(valueOrEvent) {
@@ -77,9 +74,30 @@ const selectClassName = "h-12 w-full appearance-none rounded-lg border border-zi
 
 const selectWrapperClassName = "relative after:pointer-events-none after:absolute after:right-3 after:top-1/2 after:-translate-y-1/2 after:text-zinc-500 after:content-['▾'] dark:after:text-zinc-400";
 
+function subscribeToHydration() {
+    return () => {};
+}
+
 export default function AiCostCalculatorCore({ content }) {
+    const hasHydrated = useSyncExternalStore(
+        subscribeToHydration,
+        () => true,
+        () => false,
+    );
+
+    return (
+        <AiCostCalculatorCoreContent
+            key={hasHydrated ? "hydrated" : "ssr"}
+            content={content}
+            shouldLoadSavedState={hasHydrated}
+        />
+    );
+}
+
+function AiCostCalculatorCoreContent({ content, shouldLoadSavedState }) {
     const {
         locale,
+        currency = "USD",
         lang,
         currentPath,
         metadata,
@@ -89,13 +107,7 @@ export default function AiCostCalculatorCore({ content }) {
         contextualTools,
     } = content;
 
-    const hydrated = useSyncExternalStore(
-        () => () => {},
-        () => true,
-        () => false,
-    );
-
-    const initialState = getInitialState(hydrated);
+    const initialState = getInitialState(shouldLoadSavedState);
 
     const providerKeys = getProviderKeys();
 
@@ -112,7 +124,7 @@ export default function AiCostCalculatorCore({ content }) {
     const currentModel = getModel(providerKey, modelKey);
 
     useEffect(() => {
-        if (!hydrated) {
+        if (!shouldLoadSavedState) {
             return;
         }
 
@@ -123,41 +135,16 @@ export default function AiCostCalculatorCore({ content }) {
             outputTokens,
             requestsPerDay,
         });
-    }, [hydrated, providerKey, modelKey, inputTokens, outputTokens, requestsPerDay]);
+    }, [shouldLoadSavedState, providerKey, modelKey, inputTokens, outputTokens, requestsPerDay]);
 
     const calculations = useMemo(() => {
-        const parsedInputTokens = Number(inputTokens) || 0;
-        const parsedOutputTokens = Number(outputTokens) || 0;
-        const parsedRequestsPerDay = Number(requestsPerDay) || 0;
-
-        const inputCost = calculateCost(
-            parsedInputTokens,
-            currentModel.inputCostPerMillion,
-        );
-
-        const outputCost = calculateCost(
-            parsedOutputTokens,
-            currentModel.outputCostPerMillion,
-        );
-
-        const requestCost = inputCost + outputCost;
-        const dailyCost = requestCost * parsedRequestsPerDay;
-        const monthlyCost = dailyCost * 30;
-
-        return {
-            inputCost,
-            outputCost,
-            requestCost,
-            dailyCost,
-            monthlyCost,
-        };
-    }, [
-        currentModel.inputCostPerMillion,
-        currentModel.outputCostPerMillion,
-        inputTokens,
-        outputTokens,
-        requestsPerDay,
-    ]);
+        return calculateAiCosts({
+            inputTokens,
+            outputTokens,
+            requestsPerDay,
+            model: currentModel,
+        });
+    }, [currentModel, inputTokens, outputTokens, requestsPerDay]);
 
     return (
         <ToolLayout
@@ -170,15 +157,22 @@ export default function AiCostCalculatorCore({ content }) {
             contextualTools={contextualTools}
             examples={examples}
         >
-            <div key={hydrated ? "hydrated" : "ssr"}>
+            <div>
                 <div className="grid gap-4 sm:grid-cols-2">
                     <div>
-                        <label className="mb-1.5 block text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300">
+                        <label
+                            htmlFor="ai-cost-provider"
+                            className="mb-1.5 block text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300"
+                        >
                             {labels.provider}
                         </label>
 
                         <div className={selectWrapperClassName}>
                             <select
+                                id="ai-cost-provider"
+                                name="provider"
+                                aria-label={labels.provider}
+                                data-testid="ai-cost-provider"
                                 value={providerKey}
                                 onChange={(event) => {
                                     const nextProvider = event.target.value;
@@ -198,12 +192,19 @@ export default function AiCostCalculatorCore({ content }) {
                     </div>
 
                     <div>
-                        <label className="mb-1.5 block text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300">
+                        <label
+                            htmlFor="ai-cost-model"
+                            className="mb-1.5 block text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300"
+                        >
                             {labels.model}
                         </label>
 
                         <div className={selectWrapperClassName}>
                             <select
+                                id="ai-cost-model"
+                                name="model"
+                                aria-label={labels.model}
+                                data-testid="ai-cost-model"
                                 value={modelKey}
                                 onChange={(event) => setModelKey(event.target.value)}
                                 className={selectClassName}
@@ -220,6 +221,9 @@ export default function AiCostCalculatorCore({ content }) {
 
                 <div className="mt-5 grid gap-4 sm:grid-cols-3">
                     <ToolInput
+                        id="ai-cost-input-tokens"
+                        name="inputTokens"
+                        testId="ai-cost-input-tokens"
                         label={labels.inputTokens}
                         value={inputTokens}
                         onChange={(valueOrEvent) => setInputTokens(getInputValue(valueOrEvent))}
@@ -229,6 +233,9 @@ export default function AiCostCalculatorCore({ content }) {
                     />
 
                     <ToolInput
+                        id="ai-cost-output-tokens"
+                        name="outputTokens"
+                        testId="ai-cost-output-tokens"
                         label={labels.outputTokens}
                         value={outputTokens}
                         onChange={(valueOrEvent) => setOutputTokens(getInputValue(valueOrEvent))}
@@ -238,6 +245,9 @@ export default function AiCostCalculatorCore({ content }) {
                     />
 
                     <ToolInput
+                        id="ai-cost-requests-per-day"
+                        name="requestsPerDay"
+                        testId="ai-cost-requests-per-day"
                         label={labels.requestsPerDay}
                         value={requestsPerDay}
                         onChange={(valueOrEvent) => setRequestsPerDay(getInputValue(valueOrEvent))}
@@ -247,63 +257,68 @@ export default function AiCostCalculatorCore({ content }) {
                     />
                 </div>
 
-                <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+                <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                     <ResultBox
                         label={labels.results.inputCost}
+                        testId="ai-cost-input-cost"
                         copyText={calculations.inputCost.toFixed(6)}
                         lang={lang}
                     >
                         <p className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-2xl">
-                            {formatCurrency(calculations.inputCost, locale)}
+                            {formatCurrency(calculations.inputCost, locale, currency)}
                         </p>
                     </ResultBox>
 
                     <ResultBox
                         label={labels.results.outputCost}
+                        testId="ai-cost-output-cost"
                         copyText={calculations.outputCost.toFixed(6)}
                         lang={lang}
                     >
                         <p className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-2xl">
-                            {formatCurrency(calculations.outputCost, locale)}
+                            {formatCurrency(calculations.outputCost, locale, currency)}
                         </p>
                     </ResultBox>
 
                     <ResultBox
                         label={labels.results.requestCost}
+                        testId="ai-cost-request-cost"
                         copyText={calculations.requestCost.toFixed(6)}
                         lang={lang}
                     >
                         <p className="text-xl font-bold tracking-tight text-blue-700 dark:text-blue-300 sm:text-2xl">
-                            {formatCurrency(calculations.requestCost, locale)}
+                            {formatCurrency(calculations.requestCost, locale, currency)}
                         </p>
                     </ResultBox>
 
                     <ResultBox
                         label={labels.results.dailyCost}
+                        testId="ai-cost-daily-cost"
                         copyText={calculations.dailyCost.toFixed(6)}
                         lang={lang}
                     >
                         <p className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-2xl">
-                            {formatCurrency(calculations.dailyCost, locale)}
+                            {formatCurrency(calculations.dailyCost, locale, currency)}
                         </p>
                     </ResultBox>
 
                     <ResultBox
                         label={labels.results.monthlyCost}
+                        testId="ai-cost-monthly-cost"
                         copyText={calculations.monthlyCost.toFixed(6)}
                         lang={lang}
                     >
                         <p className="text-xl font-bold tracking-tight text-emerald-700 dark:text-emerald-300 sm:text-2xl">
-                            {formatCurrency(calculations.monthlyCost, locale)}
+                            {formatCurrency(calculations.monthlyCost, locale, currency)}
                         </p>
                     </ResultBox>
                 </div>
 
-                <div className="mt-6 rounded-xl border border-zinc-200 bg-zinc-50 p-4 text-sm leading-6 text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900/40 dark:text-zinc-300">
+                <div className="mt-6 rounded-xl border border-zinc-200 bg-zinc-50 p-4 text-sm leading-6 text-zinc-700 shadow-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300">
                     <p className="font-semibold text-zinc-900 dark:text-zinc-100">
                         {labels.pricingDisclaimerTitle}
                     </p>
-                    <p className="mt-2">
+                    <p className="mt-2 text-zinc-700 dark:text-zinc-300">
                         {labels.pricingDisclaimer}
                     </p>
                 </div>

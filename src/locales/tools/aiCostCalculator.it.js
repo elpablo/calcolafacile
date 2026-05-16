@@ -1,9 +1,8 @@
-
-
 const aiCostCalculatorIt = {
     lang: "it",
     currentPath: "/it/calcolatore-costi-ai",
     locale: "it-IT",
+    currency: "USD",
     metadata: {
         title: "Calcolatore costi AI",
         description:
