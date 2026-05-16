@@ -12,6 +12,8 @@ export const metadata = {
     },
 };
 
+const featuredToolKey = "publicIp";
+
 const toolOrder = [
     "vat",
     "unitConverter",
@@ -31,7 +33,10 @@ const toolOrder = [
     "publicIp",
 ];
 
-const tools = getToolsInOrder("it", toolOrder);
+const tools = getToolsInOrder("it", [
+    featuredToolKey,
+    ...toolOrder.filter((toolKey) => toolKey !== featuredToolKey),
+]);
 
 export default function Home() {
     return (
@@ -60,7 +65,7 @@ export default function Home() {
 
                 <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                     {tools.map((tool) => {
-                        const isFeatured = tool.key === "unitConverter";
+                        const isFeatured = tool.key === featuredToolKey;
 
                         return (
                             <Link

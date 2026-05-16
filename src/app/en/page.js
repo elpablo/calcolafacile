@@ -16,6 +16,8 @@ export const metadata = {
     },
 };
 
+const featuredToolKey = "tokenEstimator";
+
 const toolOrder = [
     "vat",
     "json",
@@ -35,7 +37,10 @@ const toolOrder = [
     "publicIp",
 ];
 
-const tools = getToolsInOrder("en", toolOrder);
+const tools = getToolsInOrder("en", [
+    featuredToolKey,
+    ...toolOrder.filter((toolKey) => toolKey !== featuredToolKey),
+]);
 
 export default function Home() {
     return (
@@ -64,7 +69,7 @@ export default function Home() {
 
                 <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                     {tools.map((tool) => {
-                        const isFeatured = tool.key === "json";
+                        const isFeatured = tool.key === featuredToolKey;
 
                         return (
                             <Link
