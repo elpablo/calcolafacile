@@ -48,7 +48,6 @@ function MarginCalculatorCoreContent({ content, shouldLoadSavedState }) {
         lang,
         locale,
         currency,
-        currencyAffix,
         title,
         currentPath,
         description,
