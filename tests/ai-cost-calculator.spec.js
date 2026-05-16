@@ -1,13 +1,18 @@
 import { expect, test } from "@playwright/test";
+import { expectPageReady } from "./helpers/toolTestHelpers";
 
 const STORAGE_KEY = "calcolafacile:ai-cost-calculator";
 
 async function openAiCostCalculator(page, lang = "en") {
-    await page.goto(lang === "it" ? "/it/calcolatore-costi-ai" : "/en/ai-cost-calculator");
-    await expect(getProviderSelect(page)).toBeVisible();
-    await page.waitForFunction((storageKey) => {
-        return window.localStorage.getItem(storageKey) !== null;
+    const path = lang === "it" ? "/it/calcolatore-costi-ai" : "/en/ai-cost-calculator";
+
+    await page.goto(path);
+    await expectPageReady(page, "ai-cost-provider", STORAGE_KEY);
+    await page.evaluate((storageKey) => {
+        window.localStorage.removeItem(storageKey);
     }, STORAGE_KEY);
+    await page.reload();
+    await expectPageReady(page, "ai-cost-provider", STORAGE_KEY);
 }
 
 function getProviderSelect(page) {
@@ -44,32 +49,7 @@ async function fillCostScenario(page, {
     await getRequestsPerDayInput(page).fill(requestsPerDay);
 }
 
-async function waitForPersistedScenario(page, expectedProviderKey) {
-    await page.waitForFunction(
-        ([storageKey, providerKey]) => {
-            const rawValue = window.localStorage.getItem(storageKey);
-
-            if (!rawValue) {
-                return false;
-            }
-
-            try {
-                const stored = JSON.parse(rawValue);
-                return stored?.providerKey === providerKey;
-            } catch {
-                return false;
-            }
-        },
-        [STORAGE_KEY, expectedProviderKey],
-    );
-}
-
 test.describe("AI Cost Calculator", () => {
-    test.beforeEach(async ({ page }) => {
-        await page.addInitScript(() => {
-            window.localStorage.removeItem(STORAGE_KEY);
-        });
-    });
 
     test("loads the English page and shows the default cost estimate", async ({ page }) => {
         await openAiCostCalculator(page, "en");
@@ -121,7 +101,23 @@ test.describe("AI Cost Calculator", () => {
             outputTokens: "6789",
             requestsPerDay: "42",
         });
-        await waitForPersistedScenario(page, "google");
+        await page.waitForFunction(
+            ([storageKey, providerKey]) => {
+                const rawValue = window.localStorage.getItem(storageKey);
+
+                if (!rawValue) {
+                    return false;
+                }
+
+                try {
+                    const stored = JSON.parse(rawValue);
+                    return stored?.providerKey === providerKey;
+                } catch {
+                    return false;
+                }
+            },
+            [STORAGE_KEY, "google"],
+        );
 
         await page.reload();
 
