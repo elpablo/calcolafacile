@@ -192,6 +192,18 @@ export const tools = [
         hasEn: true,
     },
     {
+        key: "iso8601Validator",
+        slug: { it: "validatore-iso8601", en: "iso8601-validator" },
+        title: { it: "Validatore ISO8601", en: "ISO8601 Validator" },
+        description: {
+            it: "Valida date e date/ora ISO8601, controlla offset di fuso e converti in UTC e timestamp Unix.",
+            en: "Validate ISO8601 dates and datetimes, inspect timezone offsets and convert to UTC and Unix timestamps.",
+        },
+        categories: ["dateTime", "developer"],
+        hasIt: true,
+        hasEn: true,
+    },
+    {
         key: "urlEncoder",
         slug: { it: "url-encoder-decoder", en: "url-encoder-decoder" },
         title: { it: "URL Encoder/Decoder", en: "URL Encoder/Decoder" },
