@@ -22,6 +22,7 @@
  * @property {{ it?: string, en?: string }} slug     URL slug per locale.
  * @property {{ it?: string, en?: string }} title
  * @property {{ it?: string, en?: string }} description
+ * @property {Array<"business" | "conversion" | "ai" | "developer" | "dateTime" | "network">} categories
  * @property {boolean} hasIt
  * @property {boolean} hasEn
  */
@@ -36,6 +37,7 @@ export const tools = [
             it: "Aggiungi o scorpora IVA al 22%, 10% e 4%.",
             en: "Add or remove VAT at 22%, 10% and 4%.",
         },
+        categories: ["business"],
         hasIt: true,
         hasEn: true,
     },
@@ -47,6 +49,7 @@ export const tools = [
             it: "cm → pollici, kg → lb, °C → °F, volume, area, velocità e pressione.",
             en: "Convert length, weight, temperature, volume, area, speed and pressure.",
         },
+        categories: ["conversion"],
         hasIt: true,
         hasEn: true,
     },
@@ -58,6 +61,7 @@ export const tools = [
             it: "Calcola percentuali, sconti, aumenti e riduzioni.",
             en: "Calculate percentages, discounts, increases and decreases.",
         },
+        categories: ["business"],
         hasIt: true,
         hasEn: true,
     },
@@ -69,6 +73,7 @@ export const tools = [
             it: "Calcola margine e profitto dal prezzo di vendita.",
             en: "Calculate profit and margin from cost and selling price.",
         },
+        categories: ["business"],
         hasIt: true,
         hasEn: true,
     },
@@ -80,6 +85,7 @@ export const tools = [
             it: "Calcola il ricarico percentuale rispetto al costo.",
             en: "Calculate percentage markup from product cost.",
         },
+        categories: ["business"],
         hasIt: true,
         hasEn: true,
     },
@@ -91,6 +97,7 @@ export const tools = [
             it: "Stima lo stipendio netto partendo dalla RAL lorda.",
             en: "Estimate monthly take-home pay from gross annual income.",
         },
+        categories: ["business"],
         hasIt: true,
         hasEn: true,
     },
@@ -108,6 +115,7 @@ export const tools = [
             it: "Trova il prezzo originale partendo da prezzo scontato e sconto.",
             en: "Find the original price from a discounted price and discount percentage.",
         },
+        categories: ["business"],
         hasIt: true,
         hasEn: true,
     },
@@ -119,6 +127,7 @@ export const tools = [
             it: "Decodifica header e payload di un JSON Web Token direttamente nel browser.",
             en: "Decode the header and payload of a JSON Web Token directly in your browser.",
         },
+        categories: ["developer", "network"],
         hasIt: true,
         hasEn: true,
     },
@@ -130,6 +139,7 @@ export const tools = [
             it: "Stima token e costo indicativo per testi usati con modelli AI.",
             en: "Estimate token usage and approximate cost for text used with AI models.",
         },
+        categories: ["ai", "developer"],
         hasIt: true,
         hasEn: true,
     },
@@ -141,6 +151,7 @@ export const tools = [
             it: "Stima i costi API dei modelli AI in base a token e richieste giornaliere.",
             en: "Estimate AI model API costs from tokens and daily request volume.",
         },
+        categories: ["ai", "business"],
         hasIt: true,
         hasEn: true,
     },
@@ -152,6 +163,7 @@ export const tools = [
             it: "Formatta, valida e copia JSON direttamente nel browser.",
             en: "Format, validate, minify and copy JSON directly in your browser.",
         },
+        categories: ["developer"],
         hasIt: true,
         hasEn: true,
     },
@@ -163,6 +175,7 @@ export const tools = [
             it: "Codifica e decodifica Base64 direttamente nel browser.",
             en: "Encode and decode Base64 directly in your browser.",
         },
+        categories: ["developer", "network"],
         hasIt: true,
         hasEn: true,
     },
@@ -174,6 +187,7 @@ export const tools = [
             it: "Converti Unix timestamp in date leggibili e viceversa.",
             en: "Convert Unix timestamps to readable dates and back.",
         },
+        categories: ["dateTime", "developer"],
         hasIt: true,
         hasEn: true,
     },
@@ -185,6 +199,7 @@ export const tools = [
             it: "Codifica e decodifica URL per query string, API e redirect.",
             en: "Encode and decode URLs for query strings, APIs and redirects.",
         },
+        categories: ["developer", "network"],
         hasIt: true,
         hasEn: true,
     },
@@ -196,6 +211,7 @@ export const tools = [
             it: "Genera UUID v4 per API, database, test e sviluppo software.",
             en: "Generate UUID v4 identifiers for APIs, databases, tests and software development.",
         },
+        categories: ["developer"],
         hasIt: true,
         hasEn: true,
     },
@@ -207,6 +223,7 @@ export const tools = [
             it: "Controlla IP pubblico, geolocalizzazione approssimativa e informazioni VPN.",
             en: "Check your public IP, approximate geolocation and VPN information.",
         },
+        categories: ["network"],
         hasIt: true,
         hasEn: true,
     },
@@ -247,6 +264,29 @@ export function getToolsInOrder(lang, orderedKeys) {
         .map((key) => toolsByKey[key])
         .filter((tool) => tool && (lang === "it" ? tool.hasIt : tool.hasEn))
         .map((tool) => localizeTool(tool, lang));
+}
+
+/**
+ * Return the tools available for a given locale and category.
+ *
+ * @param {"it" | "en"} lang
+ * @param {Tool["categories"][number]} category
+ */
+export function getToolsByCategory(lang, category) {
+    return tools
+        .filter((tool) => tool.categories.includes(category))
+        .filter((tool) => (lang === "it" ? tool.hasIt : tool.hasEn))
+        .map((tool) => localizeTool(tool, lang));
+}
+
+/**
+ * Return the number of tools available for a given locale and category.
+ *
+ * @param {"it" | "en"} lang
+ * @param {Tool["categories"][number]} category
+ */
+export function countToolsByCategory(lang, category) {
+    return getToolsByCategory(lang, category).length;
 }
 
 /** Slugs for every tool in a given locale (used by the sitemap). */

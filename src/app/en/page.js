@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CategoryCardGrid from "@/components/CategoryCardGrid";
 import RecentToolsSection from "@/components/RecentToolsSection";
 import SiteFooter from "@/components/SiteFooter";
 import { getToolsInOrder } from "@/config/tools";
@@ -37,10 +38,7 @@ const toolOrder = [
     "publicIp",
 ];
 
-const tools = getToolsInOrder("en", [
-    featuredToolKey,
-    ...toolOrder.filter((toolKey) => toolKey !== featuredToolKey),
-]);
+const [featuredTool] = getToolsInOrder("en", [featuredToolKey]);
 
 export default function Home() {
     return (
@@ -62,44 +60,32 @@ export default function Home() {
 
             <RecentToolsSection lang="en" limit={6} />
 
-            <section className="rounded-2xl border border-zinc-200 bg-zinc-50/60 p-5 dark:border-zinc-700 dark:bg-zinc-950/30">
-                <h2 className="mb-6 text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
-                    Available tools
-                </h2>
+            {featuredTool && (
+                <section className="rounded-2xl border border-blue-200 bg-blue-50/70 p-5 shadow-sm dark:border-blue-900/60 dark:bg-blue-950/30">
+                    <div className="mb-3 flex flex-wrap items-center gap-3">
+                        <span className="inline-flex rounded bg-blue-600 px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-white">
+                            Popular
+                        </span>
+                        <p className="text-sm font-semibold uppercase tracking-wide text-blue-700 dark:text-blue-300">
+                            Featured tool
+                        </p>
+                    </div>
 
-                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                    {tools.map((tool) => {
-                        const isFeatured = tool.key === featuredToolKey;
+                    <Link
+                        href={featuredTool.href}
+                        className="group block rounded-xl border border-blue-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-400 hover:shadow-md dark:border-blue-900/60 dark:bg-zinc-900 dark:hover:border-blue-500"
+                    >
+                        <h2 className="text-2xl font-bold tracking-tight text-zinc-900 transition group-hover:text-blue-700 dark:text-zinc-100 dark:group-hover:text-blue-300">
+                            {featuredTool.title}
+                        </h2>
+                        <p className="mt-3 max-w-3xl leading-7 text-zinc-600 dark:text-zinc-400">
+                            {featuredTool.description}
+                        </p>
+                    </Link>
+                </section>
+            )}
 
-                        return (
-                            <Link
-                                key={tool.href}
-                                href={tool.href}
-                                className={`group min-h-32 rounded-xl border p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
-                                    {
-                                        true: "border-blue-300 bg-blue-50 hover:border-blue-400 dark:border-blue-500 dark:bg-zinc-800 dark:hover:border-blue-400",
-                                        false: "border-zinc-200 bg-white hover:border-blue-300 hover:bg-blue-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-blue-500 dark:hover:bg-zinc-800",
-                                    }[isFeatured]
-                                }`}
-                            >
-                                <div className="mb-2">
-                                    <h3 className="text-lg font-semibold text-zinc-900 transition group-hover:text-blue-700 dark:text-zinc-100 dark:group-hover:text-blue-300">
-                                        {tool.title}
-                                    </h3>
-                                    {isFeatured && (
-                                        <span className="mt-2 inline-flex rounded bg-blue-600 px-2 py-0.5 text-xs font-semibold text-white">
-                                            Popular
-                                        </span>
-                                    )}
-                                </div>
-                                <p className="text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-                                    {tool.description}
-                                </p>
-                            </Link>
-                        );
-                    })}
-                </div>
-            </section>
+            <CategoryCardGrid lang="en" />
 
             <section className="mt-12 border-t border-zinc-200 pt-8 dark:border-zinc-700">
                 <h2 className="mb-3 text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
