@@ -120,6 +120,21 @@ export const tools = [
         hasEn: true,
     },
     {
+        key: "compoundInterest",
+        slug: { it: "interesse-composto", en: "compound-interest" },
+        title: {
+            it: "Interesse composto",
+            en: "Compound Interest Calculator",
+        },
+        description: {
+            it: "Simula la crescita di un investimento con rendimento medio annuo e versamenti mensili.",
+            en: "Simulate investment growth with average annual return and monthly contributions.",
+        },
+        categories: ["business"],
+        hasIt: true,
+        hasEn: true,
+    },
+    {
         key: "jwt",
         slug: { it: "jwt-decoder", en: "jwt-decoder" },
         title: { it: "JWT Decoder", en: "JWT Decoder" },

@@ -15,25 +15,6 @@ export const metadata = {
 
 const featuredToolKey = "publicIp";
 
-const toolOrder = [
-    "vat",
-    "unitConverter",
-    "percentage",
-    "margin",
-    "markup",
-    "salary",
-    "reverseDiscount",
-    "jwt",
-    "tokenEstimator",
-    "aiCostCalculator",
-    "json",
-    "base64",
-    "timestamp",
-    "urlEncoder",
-    "uuid",
-    "publicIp",
-];
-
 const [featuredTool] = getToolsInOrder("it", [featuredToolKey]);
 
 export default function Home() {

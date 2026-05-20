@@ -19,25 +19,6 @@ export const metadata = {
 
 const featuredToolKey = "tokenEstimator";
 
-const toolOrder = [
-    "vat",
-    "json",
-    "unitConverter",
-    "percentage",
-    "margin",
-    "markup",
-    "salary",
-    "reverseDiscount",
-    "jwt",
-    "tokenEstimator",
-    "aiCostCalculator",
-    "base64",
-    "timestamp",
-    "urlEncoder",
-    "uuid",
-    "publicIp",
-];
-
 const [featuredTool] = getToolsInOrder("en", [featuredToolKey]);
 
 export default function Home() {
