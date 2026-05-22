@@ -41,7 +41,7 @@ test.describe("Mortgage Calculator", () => {
 
         const resultBox = page.getByTestId("mortgage-result");
         await expect(resultBox).toContainText(/rata mensile/i);
-        await expect(resultBox).toContainText(/loan-to-value/i);
+        await expect(resultBox).toContainText(/rapporto ltv/i);
     });
 
     test("applies the 20-year mortgage preset", async ({ page }) => {

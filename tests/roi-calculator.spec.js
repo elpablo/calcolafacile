@@ -54,7 +54,7 @@ test.describe("ROI Calculator", () => {
     test("applies example presets", async ({ page }) => {
         await page.goto(itPath);
 
-        await page.getByRole("button", { name: /marketing campaign roi/i }).click();
+        await page.getByRole("button", { name: /roi campagna marketing/i }).click();
 
         await expect(page.getByLabel(/investimento iniziale/i)).toHaveValue("5000");
         await expect(page.getByLabel(/valore finale/i)).toHaveValue("9000");

@@ -58,7 +58,7 @@ test.describe("Crypto Profit Calculator", () => {
     test("applies example presets", async ({ page }) => {
         await page.goto(itPath);
 
-        await page.getByRole("button", { name: /ethereum with fees/i }).click();
+        await page.getByRole("button", { name: /ethereum con commissioni/i }).click();
 
         await expect(page.getByLabel(/simbolo crypto/i)).toHaveValue("ETH");
         await expect(page.getByLabel(/quantità/i)).toHaveValue("2");
