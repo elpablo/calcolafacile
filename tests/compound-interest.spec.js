@@ -1,17 +1,22 @@
 import { expect, test } from "@playwright/test";
+import {
+    clearLocalStorageKey,
+    expectPageReady,
+} from "./helpers/toolTestHelpers.js";
 
 const itPath = "/it/interesse-composto";
 const enPath = "/en/compound-interest";
+const storageKey = "calcolafacile:compound-interest";
+const resultTestId = "compound-interest-result";
 
 test.beforeEach(async ({ page }) => {
-    await page.addInitScript(() => {
-        window.localStorage.removeItem("calcolafacile:compound-interest");
-    });
+    await clearLocalStorageKey(page, storageKey);
 });
 
 test.describe("Compound Interest Calculator", () => {
     test("loads the Italian page and calculates the default scenario", async ({ page }) => {
         await page.goto(itPath);
+        await expectPageReady(page, resultTestId, storageKey);
 
         await expect(page.getByRole("heading", { name: /calcolatore interesse composto/i })).toBeVisible();
         await expect(page.getByLabel(/capitale iniziale/i)).toHaveValue("5000");
@@ -19,7 +24,7 @@ test.describe("Compound Interest Calculator", () => {
         await expect(page.getByLabel(/rendimento medio annuo/i)).toHaveValue("5");
         await expect(page.getByLabel(/^anni$/i)).toHaveValue("20");
 
-        const resultBox = page.getByTestId("compound-interest-result");
+        const resultBox = page.getByTestId(resultTestId);
         await expect(resultBox).toBeVisible();
         await expect(resultBox.getByText(/^capitale finale$/i)).toBeVisible();
         await expect(resultBox.getByText(/^interessi maturati$/i)).toBeVisible();
@@ -31,6 +36,7 @@ test.describe("Compound Interest Calculator", () => {
         await page.goto(
             `${itPath}?principal=10000&monthlyContribution=0&annualRate=4&years=15&compoundingFrequency=yearly`,
         );
+        await expectPageReady(page, resultTestId, storageKey);
 
         await expect(page.getByLabel(/capitale iniziale/i)).toHaveValue("10000");
         await expect(page.getByLabel(/versamento mensile/i)).toHaveValue("0");
@@ -41,8 +47,9 @@ test.describe("Compound Interest Calculator", () => {
 
     test("updates the result when changing inputs", async ({ page }) => {
         await page.goto(itPath);
+        await expectPageReady(page, resultTestId, storageKey);
 
-        const finalBalance = page.getByTestId("compound-interest-result");
+        const finalBalance = page.getByTestId(resultTestId);
         await expect(finalBalance).toContainText(/capitale finale/i);
 
         await page.getByLabel(/capitale iniziale/i).fill("10000");
@@ -50,19 +57,20 @@ test.describe("Compound Interest Calculator", () => {
         await page.getByLabel(/rendimento medio annuo/i).fill("7");
         await page.getByLabel(/^anni$/i).fill("15");
 
-        await expect(page.getByTestId("compound-interest-result")).toContainText(/totale investito/i);
-        await expect(page.getByTestId("compound-interest-result")).toContainText(/interessi maturati/i);
+        await expect(page.getByTestId(resultTestId)).toContainText(/totale investito/i);
+        await expect(page.getByTestId(resultTestId)).toContainText(/interessi maturati/i);
     });
 
     test("loads the English page with localized currency", async ({ page }) => {
         await page.goto(enPath);
+        await expectPageReady(page, resultTestId, storageKey);
 
         await expect(page.getByRole("heading", { name: /compound interest calculator/i })).toBeVisible();
         await expect(page.getByLabel(/initial capital/i)).toHaveValue("5000");
         await expect(page.getByLabel(/monthly contribution/i)).toHaveValue("200");
         await expect(page.getByLabel(/average annual return/i)).toHaveValue("5");
         await expect(page.getByLabel(/^years$/i)).toHaveValue("20");
-        await expect(page.getByTestId("compound-interest-result")).toContainText("$");
+        await expect(page.getByTestId(resultTestId)).toContainText("$");
         await expect(page.getByRole("img", { name: /growth curve/i })).toBeVisible();
     });
 });
