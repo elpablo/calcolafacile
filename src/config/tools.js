@@ -153,6 +153,24 @@ export const tools = [
         hasEn: true,
     },
     {
+        key: "roiCalculator",
+        slug: {
+            it: "calcolatore-roi",
+            en: "roi-calculator",
+        },
+        title: {
+            it: "Calcolatore ROI",
+            en: "ROI Calculator",
+        },
+        description: {
+            it: "Calcola ritorno sull’investimento, profitto netto e ROI annualizzato.",
+            en: "Calculate return on investment, net profit and annualized ROI.",
+        },
+        categories: ["business"],
+        hasIt: true,
+        hasEn: true,
+    },
+    {
         key: "jwt",
         slug: { it: "jwt-decoder", en: "jwt-decoder" },
         title: { it: "JWT Decoder", en: "JWT Decoder" },
