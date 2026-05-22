@@ -167,9 +167,17 @@ function RoiCalculatorCoreContent({ content, searchParams, shouldLoadSavedState 
         () =>
             roiCalculatorExamples.map((example) => ({
                 ...example,
+                title:
+                    example.title?.[lang] ?? example.title?.en ?? example.title,
+
+                description:
+                    example.description?.[lang] ??
+                    example.description?.en ??
+                    example.description,
+
                 href: buildExampleHref(currentPath, example),
             })),
-        [currentPath],
+        [currentPath, lang],
     );
 
     const setValue = (key, value) => {
