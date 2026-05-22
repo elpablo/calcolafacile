@@ -80,7 +80,9 @@ const compoundInterestIt = {
     ],
     faq: (
         <>
-            <h2>Che cos’è l’interesse composto?</h2>
+            <h3 className="font-semibold">
+                Che cos’è l’interesse composto?
+            </h3>
             <p>
                 L’interesse composto significa che gli interessi vengono calcolati non
                 solo sul capitale iniziale, ma anche sugli interessi accumulati nel
@@ -88,21 +90,27 @@ const compoundInterestIt = {
                 forte sul risultato finale.
             </p>
 
-            <h2>Posso includere versamenti mensili?</h2>
+            <h3 className="mt-4 font-semibold">
+                Posso includere versamenti mensili?
+            </h3>
             <p>
                 Sì. Inserisci un versamento mensile per stimare quanto un investimento
                 regolare può modificare il capitale finale rispetto a un investimento
                 una tantum.
             </p>
 
-            <h2>Il rendimento annuo è garantito?</h2>
+            <h3 className="mt-4 font-semibold">
+                Il rendimento annuo è garantito?
+            </h3>
             <p>
                 No. Il rendimento annuo è solo un’ipotesi usata per il calcolo. Gli
                 investimenti reali possono salire o scendere, e i risultati passati non
                 garantiscono quelli futuri.
             </p>
 
-            <h2>Questo calcolatore invia i miei dati da qualche parte?</h2>
+            <h3 className="mt-4 font-semibold">
+                Questo calcolatore invia i miei dati da qualche parte?
+            </h3>
             <p>
                 No. Il calcolo avviene nel browser. I valori possono essere salvati
                 localmente sul tuo dispositivo per ripristinare l’ultimo scenario, ma

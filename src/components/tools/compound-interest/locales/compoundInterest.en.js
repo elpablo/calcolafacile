@@ -80,27 +80,35 @@ const compoundInterestEn = {
     ],
     faq: (
         <>
-            <h2>What is compound interest?</h2>
+            <h3 className="font-semibold">
+                What is compound interest?
+            </h3>
             <p>
                 Compound interest means that interest is calculated not only on the
                 initial capital, but also on the interest accumulated over time. This
                 is why long time horizons can have a strong impact on the final result.
             </p>
 
-            <h2>Can I include monthly contributions?</h2>
+            <h3 className="mt-4 font-semibold">
+                Can I include monthly contributions?
+            </h3>
             <p>
                 Yes. Enter a monthly contribution to estimate how regular investing
                 may change the final balance compared with a one-time investment.
             </p>
 
-            <h2>Is the annual return guaranteed?</h2>
+            <h3 className="mt-4 font-semibold">
+                Is the annual return guaranteed?
+            </h3>
             <p>
                 No. The annual return is only an assumption used for the calculation.
                 Real investments can go up or down, and past performance does not
                 guarantee future results.
             </p>
 
-            <h2>Does this calculator send my data anywhere?</h2>
+            <h3 className="mt-4 font-semibold">
+                Does this calculator send my data anywhere?
+            </h3>
             <p>
                 No. The calculation runs in your browser. Values may be saved locally
                 on your device to restore the last scenario, but they are not sent to
