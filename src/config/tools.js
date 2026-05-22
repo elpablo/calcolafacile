@@ -171,6 +171,24 @@ export const tools = [
         hasEn: true,
     },
     {
+        key: "regexTester",
+        slug: {
+            it: "test-regex",
+            en: "regex-tester",
+        },
+        title: {
+            it: "Test Regex",
+            en: "Regex Tester",
+        },
+        description: {
+            it: "Testa espressioni regolari con match live, flags, gruppi e posizioni dettagliate.",
+            en: "Test regular expressions with live matches, flags, groups and detailed positions.",
+        },
+        categories: ["developer"],
+        hasIt: true,
+        hasEn: true,
+    },
+    {
         key: "jwt",
         slug: { it: "jwt-decoder", en: "jwt-decoder" },
         title: { it: "JWT Decoder", en: "JWT Decoder" },
