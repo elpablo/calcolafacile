@@ -135,6 +135,24 @@ export const tools = [
         hasEn: true,
     },
     {
+        key: "cryptoProfitCalculator",
+        slug: {
+            it: "calcolatore-profitto-crypto",
+            en: "crypto-profit-calculator",
+        },
+        title: {
+            it: "Calcolatore profitto crypto",
+            en: "Crypto Profit Calculator",
+        },
+        description: {
+            it: "Calcola profitto, perdita e ROI di Bitcoin, Ethereum e altre crypto.",
+            en: "Calculate crypto gains, losses and ROI for Bitcoin, Ethereum and other crypto assets.",
+        },
+        categories: ["business"],
+        hasIt: true,
+        hasEn: true,
+    },
+    {
         key: "jwt",
         slug: { it: "jwt-decoder", en: "jwt-decoder" },
         title: { it: "JWT Decoder", en: "JWT Decoder" },
