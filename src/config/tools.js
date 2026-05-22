@@ -297,6 +297,24 @@ export const tools = [
         hasEn: true,
     },
     {
+        key: "mortgageCalculator",
+        slug: {
+            it: "calcolatore-mutuo",
+            en: "mortgage-calculator",
+        },
+        title: {
+            it: "Calcolatore Mutuo",
+            en: "Mortgage Calculator",
+        },
+        description: {
+            it: "Calcola rata mensile, interessi totali e piano di ammortamento del mutuo.",
+            en: "Calculate mortgage monthly payments, total interest and yearly amortization schedule.",
+        },
+        categories: ["business"],
+        hasIt: true,
+        hasEn: true,
+    },
+    {
         key: "publicIp",
         slug: { it: "verifica-ip-pubblico", en: "public-ip-checker" },
         title: { it: "Verifica IP pubblico", en: "Public IP Checker" },
