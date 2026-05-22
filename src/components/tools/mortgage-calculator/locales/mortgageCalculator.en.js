@@ -76,32 +76,42 @@ const mortgageCalculatorEn = {
     ],
     faq: (
         <>
-            <h2>How is the monthly mortgage payment calculated?</h2>
+            <h3 className="font-semibold">
+                How is the monthly mortgage payment calculated?
+            </h3>
             <p>
                 The monthly payment is calculated using the standard amortizing loan
                 formula based on loan amount, annual interest rate and loan duration.
             </p>
 
-            <h2>Does this calculator include taxes and insurance?</h2>
+            <h3 className="mt-4 font-semibold">
+                Does this calculator include taxes and insurance?
+            </h3>
             <p>
                 No. This calculator focuses on principal and interest. Property taxes,
                 insurance, closing costs and lender fees are not included.
             </p>
 
-            <h2>What is loan-to-value?</h2>
+            <h3 className="mt-4 font-semibold">
+                What is loan-to-value?
+            </h3>
             <p>
                 Loan-to-value, or LTV, compares the mortgage amount with the property
                 price. A lower LTV usually means a larger down payment and lower lender
                 risk.
             </p>
 
-            <h2>What does the yearly amortization table show?</h2>
+            <h3 className="mt-4 font-semibold">
+                What does the yearly amortization table show?
+            </h3>
             <p>
                 The yearly table shows how much principal and interest are paid each
                 year and the remaining mortgage balance at the end of each year.
             </p>
 
-            <h2>Does this calculator send my data anywhere?</h2>
+            <h3 className="mt-4 font-semibold">
+                Does this calculator send my data anywhere?
+            </h3>
             <p>
                 No. The calculation runs in your browser. Values may be saved locally
                 on your device to restore the last scenario, but they are not sent to

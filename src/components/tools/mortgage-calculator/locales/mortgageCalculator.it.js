@@ -26,7 +26,7 @@ const mortgageCalculatorIt = {
         totalInterest: "Interessi totali",
         totalPaid: "Totale pagato",
         totalCost: "Costo totale incluso anticipo",
-        loanToValue: "Loan-to-value",
+        loanToValue: "Rapporto LTV",
         year: "Anno",
         principalPaid: "Capitale rimborsato",
         interestPaid: "Interessi pagati",
@@ -76,37 +76,50 @@ const mortgageCalculatorIt = {
     ],
     faq: (
         <>
-            <h2>Come viene calcolata la rata del mutuo?</h2>
+            <h3 className="font-semibold">
+                Come viene calcolata la rata del mutuo?
+            </h3>
             <p>
-                La rata mensile viene calcolata usando la formula standard dei mutui
-                ammortizzati in base all’importo finanziato, al tasso annuo e alla
-                durata del mutuo.
+                La rata mensile viene calcolata usando la formula standard dei
+                mutui ammortizzati in base all’importo finanziato, al tasso
+                annuo e alla durata del mutuo.
             </p>
 
-            <h2>Questo calcolatore include tasse e assicurazioni?</h2>
+            <h3 className="mt-4 font-semibold">
+                Questo calcolatore include tasse e assicurazioni?
+            </h3>
             <p>
                 No. Il calcolo considera solo capitale e interessi. Tasse,
                 assicurazioni, costi notarili e spese bancarie non sono inclusi.
             </p>
 
-            <h2>Che cos’è il loan-to-value?</h2>
+            <h3 className="mt-4 font-semibold">
+                Che cos’è il rapporto LTV?
+            </h3>
             <p>
-                Il loan-to-value, o LTV, confronta l’importo del mutuo con il prezzo
-                dell’immobile. Un LTV più basso indica generalmente un anticipo più
-                elevato e un rischio minore per la banca.
+                Il rapporto LTV, o Loan-to-Value, confronta l’importo del
+                mutuo con il prezzo dell’immobile. Un LTV più basso indica
+                generalmente un anticipo più elevato e un rischio minore per
+                la banca.
             </p>
 
-            <h2>Cosa mostra il piano di ammortamento annuale?</h2>
+            <h3 className="mt-4 font-semibold">
+                Cosa mostra il piano di ammortamento annuale?
+            </h3>
             <p>
-                La tabella annuale mostra quanto capitale e interessi vengono pagati
-                ogni anno e il capitale residuo alla fine di ciascun anno.
+                La tabella annuale mostra quanto capitale e interessi vengono
+                pagati ogni anno e il capitale residuo alla fine di ciascun
+                anno.
             </p>
 
-            <h2>I miei dati vengono inviati a un server?</h2>
+            <h3 className="mt-4 font-semibold">
+                I miei dati vengono inviati a un server?
+            </h3>
             <p>
-                No. I calcoli vengono eseguiti direttamente nel browser. I valori
-                possono essere salvati localmente sul dispositivo per ripristinare
-                l’ultima simulazione, ma non vengono inviati a server esterni.
+                No. I calcoli vengono eseguiti direttamente nel browser. I
+                valori possono essere salvati localmente sul dispositivo per
+                ripristinare l’ultima simulazione, ma non vengono inviati a
+                server esterni.
             </p>
         </>
     ),

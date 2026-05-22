@@ -85,33 +85,43 @@ const cryptoProfitCalculatorIt = {
     ],
     faq: (
         <>
-            <h2>Come si calcola il profitto crypto?</h2>
+            <h3 className="font-semibold">
+                Come si calcola il profitto crypto?
+            </h3>
             <p>
                 Il profitto crypto si calcola sottraendo il costo totale di acquisto
                 dal ricavo netto della vendita. Il calcolatore include anche eventuali
                 commissioni di acquisto e vendita.
             </p>
 
-            <h2>Che cos’è il ROI in un investimento crypto?</h2>
+            <h3 className="mt-4 font-semibold">
+                Che cos’è il ROI in un investimento crypto?
+            </h3>
             <p>
                 ROI significa ritorno sull’investimento. Indica profitto o perdita
                 come percentuale del capitale investito, includendo la commissione di
                 acquisto.
             </p>
 
-            <h2>Posso usarlo per Bitcoin ed Ethereum?</h2>
+            <h3 className="mt-4 font-semibold">
+                Posso usarlo per Bitcoin ed Ethereum?
+            </h3>
             <p>
                 Sì. Puoi inserire manualmente BTC, ETH, SOL o qualsiasi altro ticker
                 crypto. Il calcolo usa prezzi e quantità che inserisci tu.
             </p>
 
-            <h2>Questo calcolatore usa prezzi crypto in tempo reale?</h2>
+            <h3 className="mt-4 font-semibold">
+                Questo calcolatore usa prezzi crypto in tempo reale?
+            </h3>
             <p>
                 No. Questo strumento non scarica prezzi di mercato in tempo reale.
                 Inserisci tu prezzo di acquisto e prezzo di vendita da confrontare.
             </p>
 
-            <h2>Questo calcolatore invia i miei dati da qualche parte?</h2>
+            <h3 className="mt-4 font-semibold">
+                Questo calcolatore invia i miei dati da qualche parte?
+            </h3>
             <p>
                 No. Il calcolo avviene nel browser. I valori possono essere salvati
                 localmente sul tuo dispositivo per ripristinare l’ultimo scenario, ma

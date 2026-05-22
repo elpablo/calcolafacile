@@ -74,19 +74,25 @@ const iso8601ValidatorIt = {
     ],
     faq: (
         <>
-            <h2>Che cos’è ISO8601?</h2>
+            <h3 className="font-semibold">
+                Che cos’è ISO8601?
+            </h3>
             <p>
                 ISO8601 è uno standard per scrivere date e orari, molto usato in
                 API, database, log e sistemi backend.
             </p>
 
-            <h2>Questo validatore invia i miei dati da qualche parte?</h2>
+            <h3 className="mt-4 font-semibold">
+                Questo validatore invia i miei dati da qualche parte?
+            </h3>
             <p>
                 No. La validazione avviene nel browser, quindi i timestamp incollati
                 non vengono inviati a un server esterno.
             </p>
 
-            <h2>Cosa succede se non indico un fuso orario?</h2>
+            <h3 className="mt-4 font-semibold">
+                Cosa succede se non indico un fuso orario?
+            </h3>
             <p>
                 Una data senza orario viene trattata come data di calendario. Una
                 data/ora senza fuso esplicito viene accettata, ma la conversione UTC

@@ -85,32 +85,42 @@ const cryptoProfitCalculatorEn = {
     ],
     faq: (
         <>
-            <h2>How is crypto profit calculated?</h2>
+            <h3 className="font-semibold">
+                How is crypto profit calculated?
+            </h3>
             <p>
                 Crypto profit is calculated by subtracting the total cost of the
                 purchase from the net proceeds of the sale. The calculator includes
                 optional buy and sell fees in the result.
             </p>
 
-            <h2>What is ROI in a crypto trade?</h2>
+            <h3 className="mt-4 font-semibold">
+                What is ROI in a crypto trade?
+            </h3>
             <p>
                 ROI means return on investment. It shows the profit or loss as a
                 percentage of the total amount invested, including the buy fee.
             </p>
 
-            <h2>Can I use this calculator for Bitcoin and Ethereum?</h2>
+            <h3 className="mt-4 font-semibold">
+                Can I use this calculator for Bitcoin and Ethereum?
+            </h3>
             <p>
                 Yes. You can enter BTC, ETH, SOL or any other crypto ticker manually.
                 The calculation uses the prices and quantity you provide.
             </p>
 
-            <h2>Does this calculator use live crypto prices?</h2>
+            <h3 className="mt-4 font-semibold">
+                Does this calculator use live crypto prices?
+            </h3>
             <p>
                 No. This tool does not fetch live market prices. Enter the buy and
                 sell prices you want to compare.
             </p>
 
-            <h2>Does this calculator send my data anywhere?</h2>
+            <h3 className="mt-4 font-semibold">
+                Does this calculator send my data anywhere?
+            </h3>
             <p>
                 No. The calculation runs in your browser. Values may be saved locally
                 on your device to restore the last scenario, but they are not sent to

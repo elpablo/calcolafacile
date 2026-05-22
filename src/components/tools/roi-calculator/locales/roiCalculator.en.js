@@ -79,33 +79,43 @@ const roiCalculatorEn = {
     ],
     faq: (
         <>
-            <h2>What is ROI?</h2>
+            <h3 className="font-semibold">
+                What is ROI?
+            </h3>
             <p>
                 ROI means return on investment. It measures profit or loss compared
                 with the total amount invested, usually expressed as a percentage.
             </p>
 
-            <h2>How is ROI calculated?</h2>
+            <h3 className="mt-4 font-semibold">
+                How is ROI calculated?
+            </h3>
             <p>
                 ROI is calculated by subtracting the total investment from the final
                 value, then dividing the result by the total investment. This calculator
                 also includes optional additional costs.
             </p>
 
-            <h2>What is annualized ROI?</h2>
+            <h3 className="mt-4 font-semibold">
+                What is annualized ROI?
+            </h3>
             <p>
                 Annualized ROI estimates the average yearly return over the duration
                 of the investment. It is useful when comparing investments with
                 different time horizons.
             </p>
 
-            <h2>Can I use this for marketing ROI?</h2>
+            <h3 className="mt-4 font-semibold">
+                Can I use this for marketing ROI?
+            </h3>
             <p>
                 Yes. Enter your campaign spend as the initial investment, add any
                 extra costs, then use the campaign revenue as the final value.
             </p>
 
-            <h2>Does this calculator send my data anywhere?</h2>
+            <h3 className="mt-4 font-semibold">
+                Does this calculator send my data anywhere?
+            </h3>
             <p>
                 No. The calculation runs in your browser. Values may be saved locally
                 on your device to restore the last scenario, but they are not sent to

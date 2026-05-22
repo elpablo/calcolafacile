@@ -79,34 +79,44 @@ const roiCalculatorIt = {
     ],
     faq: (
         <>
-            <h2>Che cos’è il ROI?</h2>
+            <h3 className="font-semibold">
+                Che cos’è il ROI?
+            </h3>
             <p>
                 ROI significa ritorno sull’investimento. Misura profitto o perdita
                 rispetto al capitale investito ed è normalmente espresso come percentuale.
             </p>
 
-            <h2>Come si calcola il ROI?</h2>
+            <h3 className="mt-4 font-semibold">
+                Come si calcola il ROI?
+            </h3>
             <p>
                 Il ROI si calcola sottraendo l’investimento totale dal valore finale,
                 quindi dividendo il risultato per l’investimento totale. Questo
                 calcolatore include anche eventuali costi aggiuntivi.
             </p>
 
-            <h2>Che cos’è il ROI annualizzato?</h2>
+            <h3 className="mt-4 font-semibold">
+                Che cos’è il ROI annualizzato?
+            </h3>
             <p>
                 Il ROI annualizzato stima il rendimento medio annuo durante la durata
                 dell’investimento. È utile per confrontare investimenti con orizzonti
                 temporali differenti.
             </p>
 
-            <h2>Posso usarlo per il ROI marketing?</h2>
+            <h3 className="mt-4 font-semibold">
+                Posso usarlo per il ROI marketing?
+            </h3>
             <p>
                 Sì. Inserisci il costo della campagna come investimento iniziale,
                 aggiungi eventuali costi extra e usa i ricavi della campagna come
                 valore finale.
             </p>
 
-            <h2>Questo calcolatore invia i miei dati da qualche parte?</h2>
+            <h3 className="mt-4 font-semibold">
+                Questo calcolatore invia i miei dati da qualche parte?
+            </h3>
             <p>
                 No. Il calcolo avviene nel browser. I valori possono essere salvati
                 localmente sul dispositivo per ripristinare l’ultimo scenario, ma non

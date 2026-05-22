@@ -74,19 +74,25 @@ const iso8601ValidatorEn = {
     ],
     faq: (
         <>
-            <h2>What is ISO8601?</h2>
+            <h3 className="font-semibold">
+                What is ISO8601?
+            </h3>
             <p>
                 ISO8601 is a standard way to write dates and times, commonly used
                 in APIs, databases, logs and backend systems.
             </p>
 
-            <h2>Does this validator send my data anywhere?</h2>
+            <h3 className="mt-4 font-semibold">
+                Does this validator send my data anywhere?
+            </h3>
             <p>
                 No. The validation runs in your browser, so pasted timestamps are
                 not sent to an external server.
             </p>
 
-            <h2>What happens when no timezone is provided?</h2>
+            <h3 className="mt-4 font-semibold">
+                What happens when no timezone is provided?
+            </h3>
             <p>
                 A date-only value is treated as a calendar date. A datetime without
                 an explicit timezone is accepted, but the UTC conversion is based on
