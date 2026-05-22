@@ -45,4 +45,14 @@ npm run analyze      # Bundle analyzer
 
 ## License & ownership
 
-© NERALAB Srl. All rights reserved.
+Copyright © NERALAB Srl.
+
+This repository is publicly visible for transparency, educational reference,
+and portfolio purposes.
+
+The source code is licensed under the PolyForm Noncommercial License 1.0.0.
+Commercial use, redistribution, hosting, resale or creation of competing
+commercial services based on this project — modified or unmodified — is not
+allowed without prior written permission from NERALAB Srl.
+
+See the `LICENSE` file for the complete license text.
