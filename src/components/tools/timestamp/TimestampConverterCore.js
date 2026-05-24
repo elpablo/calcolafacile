@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import ToolLayout, { ResultBox } from "@/components/ToolLayout";
-import { timestampConverterExamples } from "@/data/toolExamples/timestampConverterExamples";
+import { timestampConverterExamples } from "@/components/tools/timestamp/timestampConverterExamples";
 import { loadLocalState, saveLocalState } from "@/lib/browserStorage";
 
 const STORAGE_KEY = "calcolafacile:timestamp-converter";
