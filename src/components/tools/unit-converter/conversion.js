@@ -3,7 +3,7 @@
  * `UnitConverterCore.js` so it can be unit-tested without rendering React.
  */
 
-import { unitCategories } from "@/data/unitConverter/units";
+import { unitCategories } from "@/components/tools/unit-converter/units";
 
 /**
  * Convert a temperature value between Celsius, Fahrenheit and Kelvin.

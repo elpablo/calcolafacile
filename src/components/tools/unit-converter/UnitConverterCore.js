@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import ToolLayout, { ResultBox } from "@/components/ToolLayout";
-import { unitCategories } from "@/data/unitConverter/units";
+import { unitCategories } from "@/components/tools/unit-converter/units";
 import { loadLocalState, saveLocalState } from "@/lib/browserStorage";
 import { convertTemperature, convertValue } from "./conversion";
 const STORAGE_KEY = "calcolafacile:unit-converter";

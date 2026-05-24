@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { conversions } from "@/config/conversions";
-import { unitCategories } from "@/data/unitConverter/units";
+import { unitCategories } from "@/components/tools/unit-converter/units";
 
 describe("conversions registry", () => {
     it("declares unique IT and EN slugs", () => {
