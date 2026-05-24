@@ -1,5 +1,11 @@
 image: mcr.microsoft.com/playwright:v1.54.2-noble
 
+default:
+  tags:
+    - macbook
+    - docker
+    - calcolafacile
+
 workflow:
   rules:
     - if: '$CI_PROJECT_PATH == "neralab/calcolafacile"'
@@ -45,7 +51,6 @@ build:
 playwright:
   stage: e2e
   script:
-    - npx playwright install --with-deps
     - npm run test:e2e
   artifacts:
     when: always
