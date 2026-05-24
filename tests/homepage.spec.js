@@ -5,7 +5,10 @@ test.describe("Homepage", () => {
         await page.goto("/it");
 
         await expect(page).toHaveTitle(/Calcolatori online/i);
-        await expect(page.getByText(/Tool in evidenza/i)).toBeVisible();
+        await expect(page.getByText(/In evidenza/i)).toBeVisible();
+        await expect(
+            page.locator('section').filter({ hasText: /In evidenza/i }).getByRole("link").first(),
+        ).toBeVisible();
         await expect(page.getByRole("heading", { name: /Esplora per categoria/i })).toBeVisible();
         await expect(page.getByRole("heading", { name: /Conversioni/i })).toBeVisible();
         await expect(page.getByRole("heading", { name: /Strumenti Sviluppatori/i })).toBeVisible();
@@ -15,8 +18,10 @@ test.describe("Homepage", () => {
     test("loads the English homepage and shows the tools grid", async ({ page }) => {
         await page.goto("/en");
 
-        await expect(page).toHaveTitle(/Free Online Calculators/i);
-        await expect(page.getByText(/Featured tool/i)).toBeVisible();
+        await expect(page.getByText(/Recommended tools/i)).toBeVisible();
+        await expect(
+            page.locator('section').filter({ hasText: /Recommended tools/i }).getByRole("link").first(),
+        ).toBeVisible();
         await expect(page.getByRole("heading", { name: /Browse by category/i })).toBeVisible();
         await expect(page.getByRole("link", { name: /Unit Conversions/i })).toBeVisible();
         await expect(page.getByRole("link", { name: /Developer Tools/i })).toBeVisible();
