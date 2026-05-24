@@ -75,6 +75,32 @@ export const tools = [
         hasEn: true,
     },
     {
+        key: "angleConverter",
+        slug: { it: "convertitore-angoli", en: "angle-converter" },
+        title: { it: "Convertitore angoli", en: "Angle Converter" },
+        description: {
+            it: "Converti gradi, radianti, gradianti e giri con anteprima visuale dell'angolo.",
+            en: "Convert degrees, radians, gradians and turns with a visual angle preview.",
+        },
+        categories: ["conversion"],
+        homepage: {
+            it: {
+                featured: true,
+                priority: 82,
+                badge: "NUOVO",
+            },
+            en: {
+                featured: true,
+                priority: 82,
+                badge: "NEW",
+            },
+        },
+        releasedAt: "2026-05-24",
+        tags: ["conversion", "math", "angle", "degrees", "radians", "visual"],
+        hasIt: true,
+        hasEn: true,
+    },
+    {
         key: "percentage",
         slug: { it: "calcolo-percentuale", en: "percentage-calculator" },
         title: { it: "Calcolo percentuale", en: "Percentage Calculator" },
