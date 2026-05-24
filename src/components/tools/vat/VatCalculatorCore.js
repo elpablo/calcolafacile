@@ -270,7 +270,13 @@ function VatCalculatorCoreContent({ content, searchParams, shouldLoadSavedState 
             </div>
 
             {labels.salesTaxNote ? (
-                <div className="mb-5 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm leading-6 text-amber-900 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-200">
+                <div
+                    className="mb-5 rounded-lg border p-3 text-sm leading-6 text-amber-900 dark:text-amber-200"
+                    style={{
+                        backgroundColor: "rgba(255, 251, 235, 0.9)",
+                        borderColor: "#fde68a",
+                    }}
+                >
                     {labels.salesTaxNote}
                 </div>
             ) : null}
