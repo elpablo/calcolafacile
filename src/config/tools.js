@@ -44,6 +44,19 @@ export const tools = [
             en: "Add or remove VAT at 22%, 10% and 4%.",
         },
         categories: ["business"],
+        homepage: {
+            it: {
+                featured: true,
+                priority: 92,
+                badge: "TRENDING",
+            },
+            en: {
+                featured: true,
+                priority: 110,
+                badge: "TRENDING",
+            },
+        },
+        releasedAt: "2026-05-24",
         tags: ["finance", "tax", "vat", "percentage", "business"],
         hasIt: true,
         hasEn: true,
@@ -292,6 +305,19 @@ export const tools = [
             en: "Estimate AI model API costs from tokens and daily request volume.",
         },
         categories: ["ai", "business"],
+        homepage: {
+            it: {
+                featured: true,
+                priority: 88,
+                badge: "AI",
+            },
+            en: {
+                featured: true,
+                priority: 105,
+                badge: "AI",
+            },
+        },
+        releasedAt: "2026-05-24",
         tags: ["ai", "llm", "tokens", "cost", "business"],
         hasIt: true,
         hasEn: true,
@@ -502,9 +528,37 @@ export function getFeaturedTools(lang, limit) {
             badge: tool.homepage?.[lang]?.badge,
         }));
 
-    return typeof limit === "number"
-        ? featuredTools.slice(0, limit)
-        : featuredTools;
+    if (typeof limit !== "number") {
+        return featuredTools;
+    }
+
+    const selectedTools = [];
+    const selectedBadges = new Set();
+
+    for (const tool of featuredTools) {
+        const badgeKey = tool.badge ?? "";
+
+        if (!selectedBadges.has(badgeKey)) {
+            selectedTools.push(tool);
+            selectedBadges.add(badgeKey);
+        }
+
+        if (selectedTools.length >= limit) {
+            return selectedTools;
+        }
+    }
+
+    for (const tool of featuredTools) {
+        if (!selectedTools.some((selectedTool) => selectedTool.key === tool.key)) {
+            selectedTools.push(tool);
+        }
+
+        if (selectedTools.length >= limit) {
+            return selectedTools;
+        }
+    }
+
+    return selectedTools;
 }
 
 /**

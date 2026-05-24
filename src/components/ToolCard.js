@@ -3,16 +3,28 @@ import Link from "next/link";
 function getBadgeStyle(badge) {
     const normalizedBadge = String(badge || "").toLowerCase();
 
-    if (["new", "nuovo"].includes(normalizedBadge)) {
+    if (["trending", "trend"].includes(normalizedBadge)) {
         return { backgroundColor: "#059669" };
     }
 
-    if (normalizedBadge === "dev") {
+    if (["ai", "ia"].includes(normalizedBadge)) {
         return { backgroundColor: "#7c3aed" };
     }
 
-    if (["popular", "popolare"].includes(normalizedBadge)) {
+    if (["new", "nuovo"].includes(normalizedBadge)) {
         return { backgroundColor: "#f59e0b" };
+    }
+
+    if (normalizedBadge === "dev") {
+        return { backgroundColor: "#475569" };
+    }
+
+    if (["popular", "popolare"].includes(normalizedBadge)) {
+        return { backgroundColor: "#ea580c" };
+    }
+
+    if (["featured", "consigliato"].includes(normalizedBadge)) {
+        return { backgroundColor: "#2563eb" };
     }
 
     return { backgroundColor: "#2563eb" };
