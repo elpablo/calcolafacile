@@ -4,7 +4,8 @@ import { expectPageReady } from "./helpers/toolTestHelpers";
 const STORAGE_KEY = "calcolafacile:ai-cost-calculator";
 
 async function openAiCostCalculator(page, lang = "en") {
-    const path = lang === "it" ? "/it/calcolatore-costi-ai" : "/en/ai-cost-calculator";
+    const path =
+        lang === "it" ? "/it/calcolatore-costi-ai" : "/en/ai-cost-calculator";
 
     await page.goto(path);
     await expectPageReady(page, "ai-cost-provider", STORAGE_KEY);
@@ -39,6 +40,20 @@ function getResultCard(page, testId) {
     return page.getByTestId(testId);
 }
 
+function getMonthlyCostHero(page) {
+    return page
+        .locator("section")
+        .filter({ hasText: /Estimated monthly cost|Costo mensile stimato/i })
+        .first();
+}
+
+function getUsagePresetsSection(page) {
+    return page
+        .locator("section")
+        .filter({ hasText: /Usage presets|Preset di utilizzo/i })
+        .first();
+}
+
 async function fillCostScenario(page, {
     inputTokens = "10000",
     outputTokens = "5000",
@@ -58,8 +73,10 @@ test.describe("AI Cost Calculator", () => {
         await expect(page.getByRole("heading", { name: /AI Cost Calculator/i })).toBeVisible();
         await expect(getProviderSelect(page)).toHaveValue("openai");
         await expect(getModelSelect(page)).toHaveValue("gpt-5.5");
+        await expect(getUsagePresetsSection(page)).toBeVisible();
+        await expect(getMonthlyCostHero(page)).toBeVisible();
+        await expect(getMonthlyCostHero(page)).toContainText(/Estimated monthly cost/i);
         await expect(page.getByText(/^Cost per request$/i)).toBeVisible();
-        await expect(page.getByText(/Pricing disclaimer/i)).toBeVisible();
     });
 
     test("calculates costs when token values change", async ({ page }) => {
@@ -75,7 +92,33 @@ test.describe("AI Cost Calculator", () => {
         await expect(getResultCard(page, "ai-cost-output-cost-content")).toContainText(/30([.,]00)?/);
         await expect(getResultCard(page, "ai-cost-request-cost-content")).toContainText(/35([.,]00)?/);
         await expect(getResultCard(page, "ai-cost-daily-cost-content")).toContainText(/350([.,]00)?/);
-        await expect(getResultCard(page, "ai-cost-monthly-cost-content")).toContainText(/10[.,\s]?500([.,]00)?|10500([.,]00)?/);
+        await expect(getMonthlyCostHero(page)).toContainText(/10[.,\s]?500([.,]00)?|10500([.,]00)?/);
+    });
+
+    test("applies a usage preset and updates the monthly estimate", async ({ page }) => {
+        await openAiCostCalculator(page, "en");
+
+        await page.getByRole("button", { name: /AI agent workflow/i }).click();
+
+        await expect(getInputTokensInput(page)).toHaveValue("25000");
+        await expect(getOutputTokensInput(page)).toHaveValue("9000");
+        await expect(getRequestsPerDayInput(page)).toHaveValue("300");
+        await expect(getUsagePresetsSection(page)).toContainText(/Active preset/i);
+        await expect(getUsagePresetsSection(page)).toContainText(/AI agent workflow/i);
+        await expect(getMonthlyCostHero(page)).toContainText(/Estimated monthly cost/i);
+    });
+
+    test("loads scenario values from query params", async ({ page }) => {
+        await page.goto(
+            "/en/ai-cost-calculator?inputTokens=25000&outputTokens=9000&requestsPerDay=300&preset=agentic-workflow",
+        );
+        await expectPageReady(page, "ai-cost-provider", STORAGE_KEY);
+
+        await expect(getInputTokensInput(page)).toHaveValue("25000");
+        await expect(getOutputTokensInput(page)).toHaveValue("9000");
+        await expect(getRequestsPerDayInput(page)).toHaveValue("300");
+        await expect(getUsagePresetsSection(page)).toContainText(/Active preset/i);
+        await expect(getUsagePresetsSection(page)).toContainText(/AI agent workflow/i);
     });
 
     test("switches provider and model", async ({ page }) => {
@@ -135,7 +178,9 @@ test.describe("AI Cost Calculator", () => {
         await expect(page.getByRole("heading", { name: /Calcolatore costi AI/i })).toBeVisible();
         await expect(getProviderSelect(page)).toHaveValue("openai");
         await expect(getModelSelect(page)).toHaveValue("gpt-5.5");
+        await expect(getUsagePresetsSection(page)).toBeVisible();
+        await expect(getMonthlyCostHero(page)).toBeVisible();
+        await expect(getMonthlyCostHero(page)).toContainText(/Costo mensile stimato/i);
         await expect(page.getByText(/^Costo per richiesta$/i)).toBeVisible();
-        await expect(page.getByText(/Nota sui prezzi/i)).toBeVisible();
     });
 });
