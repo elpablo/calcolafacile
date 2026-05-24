@@ -40,7 +40,7 @@ const vatCalculatorIt = {
         mode: "add",
     },
     labels: {
-        amountLabel: "Importo (€)",
+        amountLabel: "Importo",
         amountPlaceholder: "Es. 100",
         amountHelp: "Inserisci l'importo su cui calcolare l'IVA",
         rateLabel: "Aliquota IVA",

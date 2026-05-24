@@ -1,8 +1,8 @@
 "use client";
 
 import VatCalculatorCore from "@/components/tools/vat/VatCalculatorCore";
-import content from "@/locales/tools/vatCalculator.en";
+import vatCalculatorEn from "@/components/tools/vat/locales/vatCalculator.en";
 
 export default function IvaCalculator(props) {
-    return <VatCalculatorCore content={content} {...props} />;
+    return <VatCalculatorCore content={vatCalculatorEn} {...props} />;
 }

@@ -45,7 +45,7 @@ const vatCalculatorEn = {
         mode: "add",
     },
     labels: {
-        amountLabel: "Amount ($)",
+        amountLabel: "Amount",
         amountPlaceholder: "Ex. 100",
         amountHelp: "Enter the amount to calculate VAT",
         rateLabel: "VAT rate",

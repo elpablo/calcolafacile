@@ -1,9 +1,9 @@
 import IvaCalculator from "./IvaCalculator";
 
 export const metadata = {
-    title: "VAT Calculator Online - Add or Remove VAT (22%, 10%, 4%)",
+    title: "VAT Calculator | Add or Remove VAT with Custom Rates",
     description:
-        "Calculate VAT quickly: add or remove VAT at 22%, 10% or 4%. Get net and gross amounts instantly.",
+        "Free online VAT calculator to add or remove VAT with UK, Italy and custom rates. Calculate net amount, VAT amount and total instantly. Looking for US sales tax? A dedicated calculator is coming soon.",
     alternates: {
         canonical: "https://calcolafacile.org/en/vat-calculator",
         languages: {

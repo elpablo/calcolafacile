@@ -1,9 +1,9 @@
 import IvaCalculator from "./IvaCalculator";
 
 export const metadata = {
-    title: "Calcolatore IVA 22%, 10%, 4% (Scorporo e Aggiunta) - Gratis",
+    title: "Calcolatore IVA | Scorporo, Aggiunta e Aliquota Personalizzata",
     description:
-        "Calcola IVA facilmente: aggiungi o scorpora IVA 22%, 10% e 4% in pochi secondi.",
+        "Calcola IVA, scorporo e aggiunta con aliquote 22%, 10%, 4%, preset UK e percentuale personalizzata. Risultato con imponibile, IVA e totale.",
     alternates: {
         canonical: "https://calcolafacile.org/it/calcolatore-iva",
         languages: {
