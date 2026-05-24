@@ -3,26 +3,30 @@ const vatCalculatorEn = {
     locale: "en-IE",
     currency: "USD",
     currencyAffix: { prefix: "$" },
-    title: "VAT Calculator online (add or remove VAT)",
+    toolKey: "vat",
+    title: "VAT Calculator",
     currentPath: "/en/vat-calculator",
     description:
-        "Calculate VAT easily at 22%, 10% or 4%. Add VAT to a net amount or remove VAT from a gross total.",
+        "Add or remove VAT instantly with UK, Italy and custom rates. Enter an amount to calculate net, VAT and total values.",
     contextualTools: [],
     examples: [
         {
-            title: "Add 22% VAT to a net amount",
+            title: "Add 20% UK VAT",
             description:
-                "Enter a net amount, select 22% and choose 'Add VAT' to get VAT and gross total.",
+                "Enter a net amount, select 20% and choose Add VAT to get VAT and gross total.",
+            href: "/en/vat-calculator?amount=100&rate=20&mode=add",
         },
         {
             title: "Remove VAT from a gross price",
             description:
-                "If you have a total including VAT, select 'Remove VAT' to calculate net amount and tax.",
+                "Start from a VAT-inclusive total and choose Remove VAT to calculate net amount and tax.",
+            href: "/en/vat-calculator?amount=120&rate=20&mode=remove",
         },
         {
-            title: "Calculate reduced VAT rates",
+            title: "Use a custom VAT rate",
             description:
-                "Use 10% or 4% rates to compare net, VAT and total for reduced taxation scenarios.",
+                "Enter any VAT percentage, such as 17.5%, 8.25% or 5%, for international scenarios.",
+            href: "/en/vat-calculator?amount=250&rate=17.5&mode=add",
         },
     ],
     faq: (
@@ -40,8 +44,8 @@ const vatCalculatorEn = {
         </>
     ),
     sample: {
-        amount: "",
-        rate: 22,
+        amount: 100,
+        rate: 20,
         mode: "add",
     },
     labels: {
@@ -49,6 +53,11 @@ const vatCalculatorEn = {
         amountPlaceholder: "Ex. 100",
         amountHelp: "Enter the amount to calculate VAT",
         rateLabel: "VAT rate",
+        rateHelp: "Use a UK or Italy preset, or enter a custom VAT percentage.",
+        ukRatesLabel: "UK rates",
+        italyRatesLabel: "Italy rates",
+        salesTaxNote:
+            "Looking for US sales tax? The USA generally uses sales tax rather than VAT, so calculations may differ.",
         modeLabel: "Calculation type",
         modeAdd: "Add VAT",
         modeRemove: "Remove VAT",

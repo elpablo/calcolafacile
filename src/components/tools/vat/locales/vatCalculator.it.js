@@ -3,26 +3,30 @@ const vatCalculatorIt = {
     locale: "it-IT",
     currency: "EUR",
     currencyAffix: { suffix: "€" },
-    title: "Calcolatore IVA online (scorporo e aggiunta)",
+    toolKey: "vat",
+    title: "Calcolatore IVA",
     currentPath: "/it/calcolatore-iva",
     description:
-        "Questo calcolatore IVA ti permette di calcolare facilmente l'IVA al 22%, 10% e 4% in Italia, sia per aggiungere l'imposta a un importo netto, sia per scorporarla da un totale lordo.",
+        "Calcola IVA, scorporo e aggiunta con aliquote Italia, UK e percentuali personalizzate. Ottieni imponibile, IVA e totale in tempo reale.",
     contextualTools: [],
     examples: [
         {
-            title: "Aggiungere l'IVA al 22% a un importo netto",
+            title: "Aggiungere IVA al 22%",
             description:
-                "Inserisci un importo netto, scegli l'aliquota 22% e seleziona 'Aggiungi IVA' per ottenere IVA e totale lordo.",
+                "Inserisci un importo netto, scegli il 22% e seleziona 'Aggiungi IVA' per ottenere IVA e totale lordo.",
+            href: "/it/calcolatore-iva?amount=100&rate=22&mode=add",
         },
         {
-            title: "Scorporare l'IVA da un prezzo lordo",
+            title: "Scorporare IVA da un totale lordo",
             description:
-                "Se hai un totale già comprensivo di IVA, seleziona 'Scorpora IVA' per calcolare imponibile netto e imposta inclusa.",
+                "Parti da un prezzo comprensivo di IVA e usa 'Scorpora IVA' per ottenere imponibile e imposta.",
+            href: "/it/calcolatore-iva?amount=122&rate=22&mode=remove",
         },
         {
-            title: "Calcolare IVA al 10% o al 4%",
+            title: "Usare un'aliquota personalizzata",
             description:
-                "Puoi usare le aliquote ridotte per prodotti o servizi soggetti a IVA agevolata, confrontando netto, IVA e totale.",
+                "Inserisci qualsiasi percentuale IVA, come 17,5%, 5% o 8,25%, per scenari internazionali.",
+            href: "/it/calcolatore-iva?amount=250&rate=17.5&mode=add",
         },
     ],
     faq: (
@@ -35,7 +39,7 @@ const vatCalculatorIt = {
         </>
     ),
     sample: {
-        amount: "",
+        amount: 100,
         rate: 22,
         mode: "add",
     },
@@ -44,6 +48,12 @@ const vatCalculatorIt = {
         amountPlaceholder: "Es. 100",
         amountHelp: "Inserisci l'importo su cui calcolare l'IVA",
         rateLabel: "Aliquota IVA",
+        rateHelp:
+            "Usa un preset Italia o UK oppure inserisci una percentuale IVA personalizzata.",
+        ukRatesLabel: "Aliquote UK",
+        italyRatesLabel: "Aliquote Italia",
+        salesTaxNote:
+            "Negli Stati Uniti viene generalmente utilizzata la sales tax invece dell'IVA, quindi i calcoli possono differire.",
         modeLabel: "Tipo calcolo",
         modeAdd: "Aggiungi IVA",
         modeRemove: "Scorpora IVA",

@@ -102,6 +102,7 @@ function VatCalculatorCoreContent({ content, searchParams, shouldLoadSavedState 
         currency,
         title,
         currentPath,
+        toolKey,
         description,
         examples,
         faq,
@@ -148,6 +149,7 @@ function VatCalculatorCoreContent({ content, searchParams, shouldLoadSavedState 
             title={title}
             lang={lang}
             currentPath={currentPath}
+            toolKey={toolKey}
             description={description}
             examples={examples}
             faq={faq}
