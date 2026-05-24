@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import ToolLayout, { ResultBox } from "@/components/ToolLayout";
 import JsonCodeBlock from "@/components/tools/json/JsonCodeBlock";
-import { jsonFormatterExamples } from "@/data/toolExamples/jsonFormatterExamples";
+import { jsonFormatterExamples } from "@/components/tools/json/jsonFormatterExamples";
 import { loadLocalState, saveLocalState } from "@/lib/browserStorage";
 
 const STORAGE_KEY = "calcolafacile:json-formatter";
