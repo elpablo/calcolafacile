@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import ToolLayout, { ResultBox } from "@/components/ToolLayout";
-import { jwtDecoderExamples } from "@/data/toolExamples/jwtDecoderExamples";
+import { jwtDecoderExamples } from "@/components/tools/jwt/jwtDecoderExamples";
 import { loadLocalState, saveLocalState } from "@/lib/browserStorage";
 
 const STORAGE_KEY = "calcolafacile:jwt-decoder";
@@ -604,26 +604,31 @@ function JwtDecoderCoreContent({
                             <label className="mb-1.5 block text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300">
                                 {labels.encoder.expirationLabel}
                             </label>
-                            <select
-                                value={encoder.expirationPreset}
-                                onChange={(event) =>
-                                    updateEncoder({
-                                        expirationPreset: event.target.value,
-                                    })
-                                }
-                                className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-blue-400"
-                            >
-                                {labels.encoder.expirationOptions.map(
-                                    (option) => (
-                                        <option
-                                            key={option.value}
-                                            value={option.value}
-                                        >
-                                            {option.label}
-                                        </option>
-                                    ),
-                                )}
-                            </select>
+                            <div className="relative">
+                                <select
+                                    value={encoder.expirationPreset}
+                                    onChange={(event) =>
+                                        updateEncoder({
+                                            expirationPreset: event.target.value,
+                                        })
+                                    }
+                                    className="h-10 w-full appearance-none rounded-lg border border-zinc-300 bg-white px-3 py-2 pr-9 text-sm leading-5 text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-blue-400"
+                                >
+                                    {labels.encoder.expirationOptions.map(
+                                        (option) => (
+                                            <option
+                                                key={option.value}
+                                                value={option.value}
+                                            >
+                                                {option.label}
+                                            </option>
+                                        ),
+                                    )}
+                                </select>
+                                <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs text-zinc-500 dark:text-zinc-400">
+                                    ▾
+                                </span>
+                            </div>
                         </div>
 
                         {encoder.expirationPreset === "custom" && (
