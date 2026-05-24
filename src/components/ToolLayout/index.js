@@ -16,6 +16,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { trackToolUsage } from "@/lib/toolUsage";
+import { getRelatedTools, getToolKeyByHref } from "@/config/tools";
 import i18n from "./i18n";
 import { defaultRelatedTools, localizeTool } from "./registry";
 import { ContextualToolLinks } from "./ContextualToolLinks";
@@ -41,6 +42,7 @@ export { ResultBox } from "./ResultBox";
  *   examples?: Array<{ title: string, description: string, href?: string }>,
  *   faq?: React.ReactNode,
  *   currentPath?: string,
+ *   toolKey?: string,
  *   contextualTools?: Array<{ href: string, title: string, description?: string }>,
  *   relatedTools?: Array<object>,
  *   lang?: "it" | "en",
@@ -53,8 +55,9 @@ export default function ToolLayout({
     examples,
     faq,
     currentPath,
+    toolKey,
     contextualTools,
-    relatedTools = defaultRelatedTools,
+    relatedTools,
     lang = "it",
 }) {
     const t = i18n[lang];
@@ -72,9 +75,33 @@ export default function ToolLayout({
         });
     }, [currentPath, title, description, lang]);
 
-    const visibleRelatedTools = relatedTools
-        .map((tool) => localizeTool(tool, lang))
-        .filter((tool) => tool.href && (!currentPath || tool.href !== currentPath));
+    const resolvedToolKey = toolKey ?? getToolKeyByHref(lang, currentPath);
+
+    const visibleRelatedTools = (() => {
+        if (Array.isArray(relatedTools)) {
+            return relatedTools
+                .map((tool) => localizeTool(tool, lang))
+                .filter(
+                    (tool) => tool.href && (!currentPath || tool.href !== currentPath),
+                )
+                .slice(0, 4);
+        }
+
+        if (resolvedToolKey) {
+            const automaticRelatedTools = getRelatedTools(lang, resolvedToolKey, 4);
+
+            if (automaticRelatedTools.length > 0) {
+                return automaticRelatedTools.filter(
+                    (tool) => tool.href && (!currentPath || tool.href !== currentPath),
+                );
+            }
+        }
+
+        return defaultRelatedTools
+            .map((tool) => localizeTool(tool, lang))
+            .filter((tool) => tool.href && (!currentPath || tool.href !== currentPath))
+            .slice(0, 4);
+    })();
 
     return (
         <main className="mx-auto max-w-[1600px] p-6">

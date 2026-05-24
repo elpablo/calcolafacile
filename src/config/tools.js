@@ -44,6 +44,7 @@ export const tools = [
             en: "Add or remove VAT at 22%, 10% and 4%.",
         },
         categories: ["business"],
+        tags: ["finance", "tax", "vat", "percentage", "business"],
         hasIt: true,
         hasEn: true,
     },
@@ -56,6 +57,7 @@ export const tools = [
             en: "Convert length, weight, temperature, volume, area, speed and pressure.",
         },
         categories: ["conversion"],
+        tags: ["conversion", "units", "measurement"],
         hasIt: true,
         hasEn: true,
     },
@@ -68,6 +70,7 @@ export const tools = [
             en: "Calculate percentages, discounts, increases and decreases.",
         },
         categories: ["business"],
+        tags: ["math", "percentage", "business", "discount"],
         hasIt: true,
         hasEn: true,
     },
@@ -80,6 +83,7 @@ export const tools = [
             en: "Calculate profit and margin from cost and selling price.",
         },
         categories: ["business"],
+        tags: ["business", "pricing", "margin", "profit"],
         hasIt: true,
         hasEn: true,
     },
@@ -92,6 +96,7 @@ export const tools = [
             en: "Calculate percentage markup from product cost.",
         },
         categories: ["business"],
+        tags: ["business", "pricing", "markup", "profit"],
         hasIt: true,
         hasEn: true,
     },
@@ -104,6 +109,7 @@ export const tools = [
             en: "Estimate monthly take-home pay from gross annual income.",
         },
         categories: ["business"],
+        tags: ["finance", "salary", "income", "tax"],
         hasIt: true,
         hasEn: true,
     },
@@ -122,6 +128,7 @@ export const tools = [
             en: "Find the original price from a discounted price and discount percentage.",
         },
         categories: ["business"],
+        tags: ["math", "percentage", "discount", "pricing"],
         hasIt: true,
         hasEn: true,
     },
@@ -259,6 +266,7 @@ export const tools = [
             en: "Decode the header and payload of a JSON Web Token directly in your browser.",
         },
         categories: ["developer", "network"],
+        tags: ["developer", "security", "jwt", "api", "network"],
         hasIt: true,
         hasEn: true,
     },
@@ -271,6 +279,7 @@ export const tools = [
             en: "Estimate token usage and approximate cost for text used with AI models.",
         },
         categories: ["ai", "developer"],
+        tags: ["ai", "llm", "tokens", "developer", "cost"],
         hasIt: true,
         hasEn: true,
     },
@@ -283,6 +292,7 @@ export const tools = [
             en: "Estimate AI model API costs from tokens and daily request volume.",
         },
         categories: ["ai", "business"],
+        tags: ["ai", "llm", "tokens", "cost", "business"],
         hasIt: true,
         hasEn: true,
     },
@@ -295,6 +305,7 @@ export const tools = [
             en: "Format, validate, minify and copy JSON directly in your browser.",
         },
         categories: ["developer"],
+        tags: ["developer", "json", "formatting", "validation"],
         hasIt: true,
         hasEn: true,
     },
@@ -307,6 +318,7 @@ export const tools = [
             en: "Encode and decode Base64 directly in your browser.",
         },
         categories: ["developer", "network"],
+        tags: ["developer", "encoding", "base64", "network"],
         hasIt: true,
         hasEn: true,
     },
@@ -319,6 +331,7 @@ export const tools = [
             en: "Convert Unix timestamps to readable dates and back.",
         },
         categories: ["dateTime", "developer"],
+        tags: ["developer", "date-time", "timestamp", "unix"],
         hasIt: true,
         hasEn: true,
     },
@@ -331,6 +344,7 @@ export const tools = [
             en: "Validate ISO8601 dates and datetimes, inspect timezone offsets and convert to UTC and Unix timestamps.",
         },
         categories: ["dateTime", "developer"],
+        tags: ["developer", "date-time", "iso8601", "validation"],
         hasIt: true,
         hasEn: true,
     },
@@ -343,6 +357,7 @@ export const tools = [
             en: "Encode and decode URLs for query strings, APIs and redirects.",
         },
         categories: ["developer", "network"],
+        tags: ["developer", "encoding", "url", "network", "api"],
         hasIt: true,
         hasEn: true,
     },
@@ -355,6 +370,7 @@ export const tools = [
             en: "Generate UUID v4 identifiers for APIs, databases, tests and software development.",
         },
         categories: ["developer"],
+        tags: ["developer", "uuid", "identifier", "testing"],
         hasIt: true,
         hasEn: true,
     },
@@ -399,6 +415,7 @@ export const tools = [
             en: "Check your public IP, approximate geolocation and VPN information.",
         },
         categories: ["network"],
+        tags: ["network", "ip", "vpn", "privacy"],
         hasIt: true,
         hasEn: true,
     },
@@ -507,8 +524,42 @@ export function getNewestTools(lang, limit = 6) {
         .map((tool) => localizeTool(tool, lang));
 }
 
+function normalizePath(path) {
+    if (!path) {
+        return "";
+    }
+
+    return String(path).split("?")[0].split("#")[0].replace(/\/$/, "");
+}
+
 /**
- * Return tools related by shared tags.
+ * Resolve a tool key from a localized href/path.
+ *
+ * @param {"it" | "en"} lang
+ * @param {string} href
+ */
+export function getToolKeyByHref(lang, href) {
+    const normalizedHref = normalizePath(href);
+
+    if (!normalizedHref) {
+        return undefined;
+    }
+
+    return tools.find((tool) => {
+        if (lang === "it" && !tool.hasIt) {
+            return false;
+        }
+
+        if (lang === "en" && !tool.hasEn) {
+            return false;
+        }
+
+        return normalizePath(`/${lang}/${tool.slug[lang]}`) === normalizedHref;
+    })?.key;
+}
+
+/**
+ * Return tools related by shared tags and categories.
  *
  * @param {"it" | "en"} lang
  * @param {string} toolKey
@@ -522,6 +573,7 @@ export function getRelatedTools(lang, toolKey, limit = 4) {
     }
 
     const currentTags = currentTool.tags ?? [];
+    const currentCategories = currentTool.categories ?? [];
 
     return tools
         .filter((tool) => tool.key !== toolKey)
@@ -530,14 +582,30 @@ export function getRelatedTools(lang, toolKey, limit = 4) {
             const sharedTags = (tool.tags ?? []).filter((tag) =>
                 currentTags.includes(tag),
             ).length;
+            const sharedCategories = (tool.categories ?? []).filter((category) =>
+                currentCategories.includes(category),
+            ).length;
 
             return {
                 tool,
+                score: sharedTags * 10 + sharedCategories * 3,
                 sharedTags,
+                sharedCategories,
             };
         })
-        .filter((entry) => entry.sharedTags > 0)
-        .sort((a, b) => b.sharedTags - a.sharedTags)
+        .filter((entry) => entry.score > 0)
+        .sort((a, b) => {
+            if (b.score !== a.score) {
+                return b.score - a.score;
+            }
+
+            if (b.sharedTags !== a.sharedTags) {
+                return b.sharedTags - a.sharedTags;
+            }
+
+            return (b.tool.homepage?.[lang]?.priority ?? 0) -
+                (a.tool.homepage?.[lang]?.priority ?? 0);
+        })
         .slice(0, limit)
         .map((entry) => localizeTool(entry.tool, lang));
 }
