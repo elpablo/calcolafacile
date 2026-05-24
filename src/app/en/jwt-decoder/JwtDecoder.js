@@ -2,7 +2,7 @@
 
 import { Suspense } from "react";
 import JwtDecoderCore from "@/components/tools/jwt/JwtDecoderCore";
-import enContent from "@/locales/tools/jwtDecoder.en";
+import enContent from "@/components/tools/jwt/locales/jwtDecoder.en";
 
 export default function JwtDecoder() {
     return (

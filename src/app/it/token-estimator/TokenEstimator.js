@@ -2,7 +2,7 @@
 
 import { Suspense } from "react";
 import TokenEstimatorCore from "@/components/tools/token-estimator/TokenEstimatorCore";
-import content from "@/locales/tools/tokenEstimator.it";
+import content from "@/components/tools/token-estimator/locales/tokenEstimator.it";
 
 export default function TokenEstimator(props) {
     return (

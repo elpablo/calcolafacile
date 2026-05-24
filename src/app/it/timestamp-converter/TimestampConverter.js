@@ -2,7 +2,7 @@
 
 import { Suspense } from "react";
 import TimestampConverterCore from "@/components/tools/timestamp/TimestampConverterCore";
-import itContent from "@/locales/tools/timestampConverter.it";
+import itContent from "@/components/tools/timestamp/locales/timestampConverter.it";
 
 export default function TimestampConverter() {
     return (

@@ -2,7 +2,7 @@
 
 import { Suspense } from "react";
 import JsonFormatterCore from "@/components/tools/json/JsonFormatterCore";
-import enContent from "@/locales/tools/jsonFormatter.en";
+import enContent from "@/components/tools/json/locales/jsonFormatter.en";
 
 export default function JsonFormatter() {
     return (
