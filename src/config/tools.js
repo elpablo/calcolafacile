@@ -23,6 +23,12 @@
  * @property {{ it?: string, en?: string }} title
  * @property {{ it?: string, en?: string }} description
  * @property {Array<"business" | "conversion" | "ai" | "developer" | "dateTime" | "network">} categories
+ * @property {{
+ *   it?: { featured?: boolean, priority?: number, badge?: string },
+ *   en?: { featured?: boolean, priority?: number, badge?: string },
+ * }} [homepage]
+ * @property {string} [releasedAt]                ISO release date for "new" tools.
+ * @property {string[]} [tags]                    Semantic tags for related tools.
  * @property {boolean} hasIt
  * @property {boolean} hasEn
  */
@@ -131,6 +137,20 @@ export const tools = [
             en: "Simulate investment growth with average annual return and monthly contributions.",
         },
         categories: ["business"],
+        homepage: {
+            it: {
+                featured: true,
+                priority: 95,
+                badge: "CONSIGLIATO",
+            },
+            en: {
+                featured: true,
+                priority: 95,
+                badge: "FEATURED",
+            },
+        },
+        releasedAt: "2026-05-22",
+        tags: ["finance", "investment", "compound-interest"],
         hasIt: true,
         hasEn: true,
     },
@@ -149,6 +169,20 @@ export const tools = [
             en: "Calculate crypto gains, losses and ROI for Bitcoin, Ethereum and other crypto assets.",
         },
         categories: ["business"],
+        homepage: {
+            it: {
+                featured: true,
+                priority: 80,
+                badge: "NUOVO",
+            },
+            en: {
+                featured: true,
+                priority: 80,
+                badge: "NEW",
+            },
+        },
+        releasedAt: "2026-05-22",
+        tags: ["finance", "crypto", "investment"],
         hasIt: true,
         hasEn: true,
     },
@@ -167,6 +201,20 @@ export const tools = [
             en: "Calculate return on investment, net profit and annualized ROI.",
         },
         categories: ["business"],
+        homepage: {
+            it: {
+                featured: true,
+                priority: 85,
+                badge: "NUOVO",
+            },
+            en: {
+                featured: true,
+                priority: 85,
+                badge: "NEW",
+            },
+        },
+        releasedAt: "2026-05-22",
+        tags: ["finance", "business", "marketing", "investment"],
         hasIt: true,
         hasEn: true,
     },
@@ -185,6 +233,20 @@ export const tools = [
             en: "Test regular expressions with live matches, flags, groups and detailed positions.",
         },
         categories: ["developer"],
+        homepage: {
+            it: {
+                featured: true,
+                priority: 75,
+                badge: "DEV",
+            },
+            en: {
+                featured: true,
+                priority: 75,
+                badge: "DEV",
+            },
+        },
+        releasedAt: "2026-05-22",
+        tags: ["developer", "regex", "validation", "testing"],
         hasIt: true,
         hasEn: true,
     },
@@ -311,6 +373,20 @@ export const tools = [
             en: "Calculate mortgage monthly payments, total interest and yearly amortization schedule.",
         },
         categories: ["business"],
+        homepage: {
+            it: {
+                featured: true,
+                priority: 100,
+                badge: "CONSIGLIATO",
+            },
+            en: {
+                featured: true,
+                priority: 90,
+                badge: "FEATURED",
+            },
+        },
+        releasedAt: "2026-05-22",
+        tags: ["finance", "mortgage", "loan", "investment"],
         hasIt: true,
         hasEn: true,
     },
@@ -386,6 +462,84 @@ export function getToolsByCategory(lang, category) {
  */
 export function countToolsByCategory(lang, category) {
     return getToolsByCategory(lang, category).length;
+}
+
+/**
+ * Return featured tools ordered by descending priority.
+ *
+ * @param {"it" | "en"} lang
+ * @param {number} [limit]
+ */
+export function getFeaturedTools(lang, limit) {
+    const featuredTools = tools
+        .filter((tool) => tool.homepage?.[lang]?.featured)
+        .filter((tool) => (lang === "it" ? tool.hasIt : tool.hasEn))
+        .sort((a, b) => {
+            return (
+                (b.homepage?.[lang]?.priority ?? 0) -
+                (a.homepage?.[lang]?.priority ?? 0)
+            );
+        })
+        .map((tool) => ({
+            ...localizeTool(tool, lang),
+            badge: tool.homepage?.[lang]?.badge,
+        }));
+
+    return typeof limit === "number"
+        ? featuredTools.slice(0, limit)
+        : featuredTools;
+}
+
+/**
+ * Return the newest tools ordered by release date.
+ *
+ * @param {"it" | "en"} lang
+ * @param {number} [limit]
+ */
+export function getNewestTools(lang, limit = 6) {
+    return tools
+        .filter((tool) => tool.releasedAt)
+        .filter((tool) => (lang === "it" ? tool.hasIt : tool.hasEn))
+        .sort((a, b) => {
+            return new Date(b.releasedAt) - new Date(a.releasedAt);
+        })
+        .slice(0, limit)
+        .map((tool) => localizeTool(tool, lang));
+}
+
+/**
+ * Return tools related by shared tags.
+ *
+ * @param {"it" | "en"} lang
+ * @param {string} toolKey
+ * @param {number} [limit]
+ */
+export function getRelatedTools(lang, toolKey, limit = 4) {
+    const currentTool = toolsByKey[toolKey];
+
+    if (!currentTool) {
+        return [];
+    }
+
+    const currentTags = currentTool.tags ?? [];
+
+    return tools
+        .filter((tool) => tool.key !== toolKey)
+        .filter((tool) => (lang === "it" ? tool.hasIt : tool.hasEn))
+        .map((tool) => {
+            const sharedTags = (tool.tags ?? []).filter((tag) =>
+                currentTags.includes(tag),
+            ).length;
+
+            return {
+                tool,
+                sharedTags,
+            };
+        })
+        .filter((entry) => entry.sharedTags > 0)
+        .sort((a, b) => b.sharedTags - a.sharedTags)
+        .slice(0, limit)
+        .map((entry) => localizeTool(entry.tool, lang));
 }
 
 /** Slugs for every tool in a given locale (used by the sitemap). */

@@ -1,8 +1,8 @@
-import Link from "next/link";
 import CategoryCardGrid from "@/components/CategoryCardGrid";
 import RecentToolsSection from "@/components/RecentToolsSection";
 import SiteFooter from "@/components/SiteFooter";
-import { getToolsInOrder } from "@/config/tools";
+import ToolCard from "@/components/ToolCard";
+import { getFeaturedTools } from "@/config/tools";
 
 export const metadata = {
     title: "Free Online Calculators and Developer Tools",
@@ -17,9 +17,7 @@ export const metadata = {
     },
 };
 
-const featuredToolKey = "tokenEstimator";
-
-const [featuredTool] = getToolsInOrder("en", [featuredToolKey]);
+const featuredTools = getFeaturedTools("en", 4);
 
 export default function Home() {
     return (
@@ -41,28 +39,30 @@ export default function Home() {
 
             <RecentToolsSection lang="en" limit={6} />
 
-            {featuredTool && (
+            {featuredTools.length > 0 && (
                 <section className="rounded-2xl border border-blue-200 bg-blue-50/70 p-5 shadow-sm dark:border-blue-900/60 dark:bg-blue-950/30">
-                    <div className="mb-3 flex flex-wrap items-center gap-3">
-                        <span className="inline-flex rounded bg-blue-600 px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-white">
-                            Popular
-                        </span>
+                    <div className="mb-4 flex flex-wrap items-center gap-3">
                         <p className="text-sm font-semibold uppercase tracking-wide text-blue-700 dark:text-blue-300">
-                            Featured tool
+                            Recommended tools
                         </p>
                     </div>
 
-                    <Link
-                        href={featuredTool.href}
-                        className="group block rounded-xl border border-blue-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-400 hover:shadow-md dark:border-blue-900/60 dark:bg-zinc-900 dark:hover:border-blue-500"
+                    <div
+                        className="grid gap-4"
+                        style={{
+                            gridTemplateColumns:
+                                "repeat(auto-fit, minmax(16rem, 1fr))",
+                        }}
                     >
-                        <h2 className="text-2xl font-bold tracking-tight text-zinc-900 transition group-hover:text-blue-700 dark:text-zinc-100 dark:group-hover:text-blue-300">
-                            {featuredTool.title}
-                        </h2>
-                        <p className="mt-3 max-w-3xl leading-7 text-zinc-600 dark:text-zinc-400">
-                            {featuredTool.description}
-                        </p>
-                    </Link>
+                        {featuredTools.map((tool) => (
+                            <ToolCard
+                                key={tool.key}
+                                tool={tool}
+                                variant="featured"
+                                headingLevel={2}
+                            />
+                        ))}
+                    </div>
                 </section>
             )}
 

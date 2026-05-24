@@ -1,4 +1,4 @@
-import Link from "next/link";
+import ToolCard from "@/components/ToolCard";
 import { countToolsByCategory } from "@/config/tools";
 import { getLocalizedCategories } from "@/config/toolCategories";
 
@@ -42,29 +42,18 @@ export default function CategoryCardGrid({ lang }) {
                     const href = `/${lang}/${category.slug}`;
 
                     return (
-                        <Link
+                        <ToolCard
                             key={category.key}
-                            href={href}
-                            className="group rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-blue-800"
-                        >
-                            <div className="mb-4 flex items-start justify-between gap-4">
-                                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-2xl dark:bg-blue-950/50">
-                                    <span aria-hidden="true">
-                                        {category.icon}
-                                    </span>
-                                </div>
-                                <span className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-zinc-600 dark:bg-zinc-900 dark:text-zinc-400">
-                                    {count} {toolsLabel[lang]}
-                                </span>
-                            </div>
-
-                            <h3 className="text-lg font-semibold text-zinc-900 transition group-hover:text-blue-700 dark:text-zinc-100 dark:group-hover:text-blue-300">
-                                {category.title}
-                            </h3>
-                            <p className="mt-2 leading-6 text-zinc-600 dark:text-zinc-400">
-                                {category.description}
-                            </p>
-                        </Link>
+                            tool={{
+                                href,
+                                title: category.title,
+                                description: category.description,
+                            }}
+                            variant="category"
+                            icon={category.icon}
+                            counter={count}
+                            counterLabel={toolsLabel[lang]}
+                        />
                     );
                 })}
             </div>
