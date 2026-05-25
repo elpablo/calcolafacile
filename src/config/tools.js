@@ -388,6 +388,38 @@ export const tools = [
         hasEn: true,
     },
     {
+        key: "timeZoneConverter",
+        slug: {
+            it: "convertitore-fusi-orari",
+            en: "time-zone-converter",
+        },
+        title: {
+            it: "Convertitore fusi orari",
+            en: "Time Zone Converter",
+        },
+        description: {
+            it: "Converti data e ora tra fusi orari con timeline visuale e offset UTC.",
+            en: "Convert dates and times across time zones with a visual timeline and UTC offsets.",
+        },
+        categories: ["dateTime", "conversion"],
+        homepage: {
+            it: {
+                featured: true,
+                priority: 84,
+                badge: "NUOVO",
+            },
+            en: {
+                featured: true,
+                priority: 84,
+                badge: "NEW",
+            },
+        },
+        releasedAt: "2026-05-24",
+        tags: ["date-time", "timezone", "utc", "conversion", "developer"],
+        hasIt: true,
+        hasEn: true,
+    },
+    {
         key: "iso8601Validator",
         slug: { it: "validatore-iso8601", en: "iso8601-validator" },
         title: { it: "Validatore ISO8601", en: "ISO8601 Validator" },
@@ -543,12 +575,6 @@ export function getFeaturedTools(lang, limit) {
     const featuredTools = tools
         .filter((tool) => tool.homepage?.[lang]?.featured)
         .filter((tool) => (lang === "it" ? tool.hasIt : tool.hasEn))
-        .sort((a, b) => {
-            return (
-                (b.homepage?.[lang]?.priority ?? 0) -
-                (a.homepage?.[lang]?.priority ?? 0)
-            );
-        })
         .map((tool) => ({
             ...localizeTool(tool, lang),
             badge: tool.homepage?.[lang]?.badge,
@@ -559,26 +585,52 @@ export function getFeaturedTools(lang, limit) {
     }
 
     const selectedTools = [];
-    const selectedBadges = new Set();
+    const bestToolByBadge = new Map();
 
     for (const tool of featuredTools) {
         const badgeKey = tool.badge ?? "";
+        const currentBest = bestToolByBadge.get(badgeKey);
 
-        if (!selectedBadges.has(badgeKey)) {
-            selectedTools.push(tool);
-            selectedBadges.add(badgeKey);
+        if (!currentBest) {
+            bestToolByBadge.set(badgeKey, tool);
+            continue;
         }
 
-        if (selectedTools.length >= limit) {
-            return selectedTools;
+        const toolReleaseDate = new Date(toolsByKey[tool.key]?.releasedAt ?? 0);
+        const currentReleaseDate = new Date(
+            toolsByKey[currentBest.key]?.releasedAt ?? 0,
+        );
+        const toolPriority = toolsByKey[tool.key]?.homepage?.[lang]?.priority ?? 0;
+        const currentPriority =
+            toolsByKey[currentBest.key]?.homepage?.[lang]?.priority ?? 0;
+
+        if (
+            toolReleaseDate > currentReleaseDate ||
+            (toolReleaseDate.getTime() === currentReleaseDate.getTime() &&
+                toolPriority > currentPriority)
+        ) {
+            bestToolByBadge.set(badgeKey, tool);
         }
     }
 
+    selectedTools.push(
+        ...Array.from(bestToolByBadge.values()).sort((a, b) => {
+            return (
+                (toolsByKey[b.key]?.homepage?.[lang]?.priority ?? 0) -
+                (toolsByKey[a.key]?.homepage?.[lang]?.priority ?? 0)
+            );
+        }),
+    );
+
+    if (selectedTools.length >= limit) {
+        return selectedTools.slice(0, limit);
+    }
+
+    // Fill up to limit with remaining featured tools
     for (const tool of featuredTools) {
         if (!selectedTools.some((selectedTool) => selectedTool.key === tool.key)) {
             selectedTools.push(tool);
         }
-
         if (selectedTools.length >= limit) {
             return selectedTools;
         }
