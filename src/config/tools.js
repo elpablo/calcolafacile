@@ -420,6 +420,45 @@ export const tools = [
         hasEn: true,
     },
     {
+        key: "coordinateConverter",
+        slug: {
+            it: "convertitore-coordinate",
+            en: "coordinate-converter",
+        },
+        title: {
+            it: "Convertitore coordinate GPS",
+            en: "GPS Coordinate Converter",
+        },
+        description: {
+            it: "Converti coordinate GPS, genera GeoJSON e costruisci percorsi da più punti.",
+            en: "Convert GPS coordinates, generate GeoJSON and build paths from multiple points.",
+        },
+        categories: ["conversion", "developer"],
+        homepage: {
+            it: {
+                featured: true,
+                priority: 86,
+                badge: "NUOVO",
+            },
+            en: {
+                featured: true,
+                priority: 86,
+                badge: "NEW",
+            },
+        },
+        releasedAt: "2026-05-25",
+        tags: [
+            "conversion",
+            "coordinates",
+            "gps",
+            "geojson",
+            "maps",
+            "developer",
+        ],
+        hasIt: true,
+        hasEn: true,
+    },
+    {
         key: "iso8601Validator",
         slug: { it: "validatore-iso8601", en: "iso8601-validator" },
         title: { it: "Validatore ISO8601", en: "ISO8601 Validator" },
