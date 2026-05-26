@@ -32,22 +32,41 @@ export function ResultBox({
 }) {
     const t = i18n[lang];
     const contentRef = useRef(null);
-    const [copied, setCopied] = useState(false);
-    const resultLabel = label || t.result;
+    const [copyState, setCopyState] = useState("idle");
+
+    const resetCopyState = (delay = 1400) => {
+        window.setTimeout(() => setCopyState("idle"), delay);
+    };
 
     const handleCopy = async () => {
         try {
             const text = copyText ?? contentRef.current?.innerText;
 
-            if (text) {
-                await navigator.clipboard.writeText(text);
-                setCopied(true);
-                window.setTimeout(() => setCopied(false), 1200);
+            if (!text) {
+                setCopyState("error");
+                resetCopyState();
+                return;
             }
+
+            await navigator.clipboard.writeText(text);
+            setCopyState("copied");
+            resetCopyState();
         } catch (err) {
             console.error("Errore copia:", err);
+            setCopyState("error");
+            resetCopyState(1800);
         }
     };
+
+    const isCopied = copyState === "copied";
+    const isError = copyState === "error";
+
+    const copyErrorLabel = t.copyError ?? "Error";
+    const copyLabel = isCopied ? t.copied : isError ? copyErrorLabel : t.copy;
+    const copyButtonMinWidthCh =
+        Math.max(t.copy.length, t.copied.length, copyErrorLabel.length) + 4;
+
+    const resultLabel = label || t.result;
 
     return (
         <section
@@ -63,16 +82,22 @@ export function ResultBox({
                 <button
                     type="button"
                     onClick={handleCopy}
-                    className={`flex h-9 min-w-9 shrink-0 items-center justify-center rounded-lg border text-sm font-medium shadow-sm transition hover:scale-105 active:scale-95 ${
-                        copied
+                    className={`flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-lg border px-3 text-sm font-semibold shadow-sm transition hover:scale-105 active:scale-95 ${
+                        isCopied
                             ? "border-green-300 bg-green-50 text-green-700 dark:border-green-700 dark:bg-green-950/40 dark:text-green-300"
-                            : "border-blue-300 bg-white text-zinc-700 hover:bg-blue-100 dark:border-blue-700 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
+                            : isError
+                              ? "border-red-300 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300"
+                              : "border-blue-300 bg-white text-zinc-700 hover:bg-blue-100 dark:border-blue-700 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
                     }`}
-                    aria-label={copied ? t.copied : t.copy}
-                    title={copied ? t.copied : t.copy}
+                    aria-label={copyLabel}
+                    title={copyLabel}
                     data-testid={testId ? `${testId}-copy` : undefined}
+                    style={{ minWidth: `${copyButtonMinWidthCh}ch` }}
                 >
-                    {copied ? "✓" : "📋"}
+                    <span aria-hidden="true" className="text-base leading-none">
+                        {isCopied ? "✓" : isError ? "!" : "📋"}
+                    </span>
+                    <span className="whitespace-nowrap">{copyLabel}</span>
                 </button>
             </div>
             <div
