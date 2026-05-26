@@ -303,24 +303,6 @@ function JsonFormatterCoreContent({
                 >
                     {labels.minifiedView}
                 </button>
-                <button
-                    onClick={() => {
-                        if (result.formatted)
-                            navigator.clipboard.writeText(result.formatted);
-                    }}
-                    className="rounded-lg border px-3 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
-                >
-                    {labels.copyPretty}
-                </button>
-                <button
-                    onClick={() => {
-                        const min = getMinified(input);
-                        if (min) navigator.clipboard.writeText(min);
-                    }}
-                    className="rounded-lg border px-3 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
-                >
-                    {labels.copyMinified}
-                </button>
             </div>
 
             {result.error && (
@@ -337,7 +319,11 @@ function JsonFormatterCoreContent({
                             ? labels.pretty
                             : labels.minified}
                     </p>
-                    <ResultBox copyText={displayedOutput} lang={lang}>
+                    <ResultBox
+                        copyText={displayedOutput}
+                        lang={lang}
+                        testId="json-formatter-result"
+                    >
                         <div className="max-h-[min(70vh,520px)] overflow-auto rounded-lg">
                             <JsonCodeBlock value={displayedOutput} />
                         </div>
