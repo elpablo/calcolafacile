@@ -19,6 +19,7 @@ import i18n from "./i18n";
  *   label?: string,
  *   lang?: "it" | "en",
  *   testId?: string,
+ *   compactCopy?: boolean,
  *   live?: "polite" | "assertive" | "off",
  * }} props
  */
@@ -29,6 +30,7 @@ export function ResultBox({
     lang = "it",
     testId,
     live = "polite",
+    compactCopy = false,
 }) {
     const t = i18n[lang];
     const contentRef = useRef(null);
@@ -63,8 +65,9 @@ export function ResultBox({
 
     const copyErrorLabel = t.copyError ?? "Error";
     const copyLabel = isCopied ? t.copied : isError ? copyErrorLabel : t.copy;
-    const copyButtonMinWidthCh =
-        Math.max(t.copy.length, t.copied.length, copyErrorLabel.length) + 4;
+    const copyButtonMinWidthCh = compactCopy
+        ? undefined
+        : Math.max(t.copy.length, t.copied.length, copyErrorLabel.length) + 4;
 
     const resultLabel = label || t.result;
 
@@ -82,7 +85,9 @@ export function ResultBox({
                 <button
                     type="button"
                     onClick={handleCopy}
-                    className={`flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-lg border px-3 text-sm font-semibold shadow-sm transition hover:scale-105 active:scale-95 ${
+                    className={`flex h-9 shrink-0 items-center justify-center rounded-lg border text-sm font-semibold shadow-sm transition hover:scale-105 active:scale-95 ${
+                        compactCopy ? "w-9 px-0" : "gap-1.5 px-3"
+                    } ${
                         isCopied
                             ? "border-green-300 bg-green-50 text-green-700 dark:border-green-700 dark:bg-green-950/40 dark:text-green-300"
                             : isError
@@ -92,12 +97,18 @@ export function ResultBox({
                     aria-label={copyLabel}
                     title={copyLabel}
                     data-testid={testId ? `${testId}-copy` : undefined}
-                    style={{ minWidth: `${copyButtonMinWidthCh}ch` }}
+                    style={
+                        copyButtonMinWidthCh
+                            ? { minWidth: `${copyButtonMinWidthCh}ch` }
+                            : undefined
+                    }
                 >
                     <span aria-hidden="true" className="text-base leading-none">
                         {isCopied ? "✓" : isError ? "!" : "📋"}
                     </span>
-                    <span className="whitespace-nowrap">{copyLabel}</span>
+                    {compactCopy ? null : (
+                        <span className="whitespace-nowrap">{copyLabel}</span>
+                    )}
                 </button>
             </div>
             <div
