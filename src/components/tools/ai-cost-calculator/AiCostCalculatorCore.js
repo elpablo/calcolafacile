@@ -443,6 +443,7 @@ function AiCostCalculatorCoreContent({ content, searchParams, shouldLoadSavedSta
                             testId="ai-cost-input-cost"
                             copyText={calculations.inputCost.toFixed(6)}
                             lang={lang}
+                            compactCopy
                         >
                             <p className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-2xl">
                                 {formatCurrency(
@@ -458,6 +459,7 @@ function AiCostCalculatorCoreContent({ content, searchParams, shouldLoadSavedSta
                             testId="ai-cost-output-cost"
                             copyText={calculations.outputCost.toFixed(6)}
                             lang={lang}
+                            compactCopy
                         >
                             <p className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-2xl">
                                 {formatCurrency(
@@ -473,6 +475,7 @@ function AiCostCalculatorCoreContent({ content, searchParams, shouldLoadSavedSta
                             testId="ai-cost-request-cost"
                             copyText={calculations.requestCost.toFixed(6)}
                             lang={lang}
+                            compactCopy
                         >
                             <p className="text-xl font-bold tracking-tight text-blue-700 dark:text-blue-300 sm:text-2xl">
                                 {formatCurrency(
@@ -488,6 +491,7 @@ function AiCostCalculatorCoreContent({ content, searchParams, shouldLoadSavedSta
                             testId="ai-cost-daily-cost"
                             copyText={calculations.dailyCost.toFixed(6)}
                             lang={lang}
+                            compactCopy
                         >
                             <p className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-2xl">
                                 {formatCurrency(
