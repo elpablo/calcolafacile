@@ -5,6 +5,12 @@ import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import ToolLayout, { ResultBox } from "@/components/ToolLayout";
 import { timestampConverterExamples } from "@/components/tools/timestamp/timestampConverterExamples";
 import { loadLocalState, saveLocalState } from "@/lib/browserStorage";
+import {
+    buildDateToTimestampResult,
+    buildTimestampToDateResult,
+    formatDateTimeInput,
+    TIMESTAMP_UNITS,
+} from "./timestampConverterLogic";
 
 const STORAGE_KEY = "calcolafacile:timestamp-converter";
 
@@ -30,7 +36,7 @@ function getInitialConverterState(currentExampleKey, shouldLoadSavedState, sampl
         return {
             mode: example.mode || "timestampToDate",
             timestamp: example.timestamp,
-            timestampUnit: example.unit || "seconds",
+            timestampUnit: example.unit || TIMESTAMP_UNITS.seconds,
             dateTime: example.dateTime,
         };
     }
@@ -39,7 +45,7 @@ function getInitialConverterState(currentExampleKey, shouldLoadSavedState, sampl
         return {
             mode: "timestampToDate",
             timestamp: sample.timestamp,
-            timestampUnit: sample.unit,
+            timestampUnit: sample.unit || TIMESTAMP_UNITS.seconds,
             dateTime: sample.dateTime,
         };
     }
@@ -55,11 +61,11 @@ function getInitialConverterState(currentExampleKey, shouldLoadSavedState, sampl
             typeof storedState?.timestamp === "string"
                 ? storedState.timestamp
                 : sample.timestamp,
-        timestampUnit: ["seconds", "milliseconds"].includes(
+        timestampUnit: [TIMESTAMP_UNITS.seconds, TIMESTAMP_UNITS.milliseconds].includes(
             storedState?.timestampUnit,
         )
             ? storedState.timestampUnit
-            : sample.unit,
+            : sample.unit || TIMESTAMP_UNITS.seconds,
         dateTime:
             typeof storedState?.dateTime === "string"
                 ? storedState.dateTime
@@ -67,95 +73,6 @@ function getInitialConverterState(currentExampleKey, shouldLoadSavedState, sampl
     };
 }
 
-function formatDate(date, locale) {
-    return date.toLocaleString(locale, {
-        dateStyle: "medium",
-        timeStyle: "medium",
-    });
-}
-
-function formatUtcDate(date, locale) {
-    return date.toLocaleString(locale, {
-        dateStyle: "medium",
-        timeStyle: "medium",
-        timeZone: "UTC",
-    });
-}
-
-function formatNumber(value, locale) {
-    return value.toLocaleString(locale);
-}
-
-function pad(value) {
-    return String(value).padStart(2, "0");
-}
-
-function toLocaleDateTimeInput(date) {
-    return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
-}
-
-function parseLocaleDateTimeInput(value) {
-    const match = value.trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2})$/);
-
-    if (!match) {
-        return null;
-    }
-
-    const [, day, month, year, hour, minute] = match.map(Number);
-    const date = new Date(year, month - 1, day, hour, minute, 0, 0);
-
-    const isValid =
-        date.getFullYear() === year &&
-        date.getMonth() === month - 1 &&
-        date.getDate() === day &&
-        date.getHours() === hour &&
-        date.getMinutes() === minute;
-
-    return isValid ? date : null;
-}
-
-function parseTimestamp(value, unit) {
-    const numericValue = Number(value);
-
-    if (!Number.isFinite(numericValue)) {
-        return null;
-    }
-
-    const milliseconds = unit === "seconds" ? numericValue * 1000 : numericValue;
-    const date = new Date(milliseconds);
-
-    if (Number.isNaN(date.getTime())) {
-        return null;
-    }
-
-    return date;
-}
-
-function getRelativeTime(date, locale, labels) {
-    const now = Date.now();
-    const diff = date.getTime() - now;
-    const abs = Math.abs(diff);
-    const minute = 60 * 1000;
-    const hour = 60 * minute;
-    const day = 24 * hour;
-
-    const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
-
-    if (abs < hour) {
-        const m = Math.round(diff / minute);
-        return rtf.format(m, "minute");
-    }
-    if (abs < day) {
-        const h = Math.round(diff / hour);
-        return rtf.format(h, "hour");
-    }
-    const d = Math.round(diff / day);
-    return rtf.format(d, "day");
-}
-
-function getBrowserTimezone() {
-    return Intl.DateTimeFormat().resolvedOptions().timeZone || "Local timezone";
-}
 
 export default function TimestampConverterCore({ content }) {
     const searchParams = useSearchParams();
@@ -230,61 +147,20 @@ function TimestampConverterCoreContent({
         }
 
         if (mode === "timestampToDate") {
-            const date = parseTimestamp(timestamp, timestampUnit);
-
-            if (!date) {
-                return {
-                    error: labels.errors.invalidTimestamp,
-                    lines: null,
-                    copyText: "",
-                };
-            }
-
-            const seconds = Math.floor(date.getTime() / 1000);
-            const milliseconds = date.getTime();
-
-            return {
-                error: null,
-                lines: [
-                    { label: labels.localDateTime, value: formatDate(date, locale) },
-                    { label: labels.utcDateTime, value: formatUtcDate(date, locale) },
-                    { label: "ISO", value: date.toISOString() },
-                    { label: labels.timezone || "Timezone", value: getBrowserTimezone() },
-                    { label: labels.relative, value: getRelativeTime(date, locale, labels) },
-                    { label: labels.units.secondsFull, value: formatNumber(seconds, locale) },
-                    { label: labels.units.millisecondsFull, value: formatNumber(milliseconds, locale) },
-                ],
-                copyText: `${labels.localDateTime}: ${formatDate(date, locale)}\n${labels.utcDateTime}: ${formatUtcDate(date, locale)}\nISO: ${date.toISOString()}\nUnix: ${seconds}`,
-            };
+            return buildTimestampToDateResult({
+                value: timestamp,
+                unit: timestampUnit,
+                locale: lang,
+                labels,
+            });
         }
 
-        const date = parseLocaleDateTimeInput(dateTime);
-
-        if (!date) {
-            return {
-                error: labels.errors.invalidDate,
-                lines: null,
-                copyText: "",
-            };
-        }
-
-        const seconds = Math.floor(date.getTime() / 1000);
-        const milliseconds = date.getTime();
-
-        return {
-            error: null,
-            lines: [
-                { label: labels.units.secondsFull, value: formatNumber(seconds, locale) },
-                { label: labels.units.millisecondsFull, value: formatNumber(milliseconds, locale) },
-                { label: labels.localDateTime, value: formatDate(date, locale) },
-                { label: labels.utcDateTime, value: formatUtcDate(date, locale) },
-                { label: "ISO", value: date.toISOString() },
-                { label: labels.timezone || "Timezone", value: getBrowserTimezone() },
-                { label: labels.relative, value: getRelativeTime(date, locale, labels) },
-            ],
-            copyText: `${labels.units.secondsFull}: ${seconds}\n${labels.units.millisecondsFull}: ${milliseconds}\n${labels.localDateTime}: ${formatDate(date, locale)}\n${labels.utcDateTime}: ${formatUtcDate(date, locale)}\nISO: ${date.toISOString()}`,
-        };
-    }, [dateTime, labels, locale, mode, shouldLoadSavedState, timestamp, timestampUnit]);
+        return buildDateToTimestampResult({
+            value: dateTime,
+            locale: lang,
+            labels,
+        });
+    }, [dateTime, labels, lang, mode, shouldLoadSavedState, timestamp, timestampUnit]);
 
     const setMode = (nextMode) => {
         setConverterState((currentState) => ({
@@ -329,14 +205,14 @@ function TimestampConverterCoreContent({
     const setNow = () => {
         const current = new Date();
         setTimestamp(Math.floor(current.getTime() / 1000));
-        setTimestampUnit("seconds");
-        setDateTime(toLocaleDateTimeInput(current));
+        setTimestampUnit(TIMESTAMP_UNITS.seconds);
+        setDateTime(formatDateTimeInput(current, lang));
     };
 
     const setExample = () => {
         setMode("timestampToDate");
         setTimestamp(sample.timestamp);
-        setTimestampUnit(sample.unit);
+        setTimestampUnit(sample.unit || TIMESTAMP_UNITS.seconds);
         setDateTime(sample.dateTime);
     };
 
@@ -402,8 +278,12 @@ function TimestampConverterCoreContent({
                             }}
                             className={selectClass}
                         >
-                            <option value="seconds">{labels.units.seconds}</option>
-                            <option value="milliseconds">{labels.units.milliseconds}</option>
+                            <option value={TIMESTAMP_UNITS.seconds}>
+                                {labels.units.seconds}
+                            </option>
+                            <option value={TIMESTAMP_UNITS.milliseconds}>
+                                {labels.units.milliseconds}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -450,7 +330,11 @@ function TimestampConverterCoreContent({
             )}
 
             {result.lines && (
-                <ResultBox copyText={result.copyText} lang={lang}>
+                <ResultBox
+                    copyText={result.copyText}
+                    lang={lang}
+                    testId="timestamp-converter-result"
+                >
                     <div className="space-y-3">
                         {result.lines.map((line) => (
                             <div key={line.label}>
