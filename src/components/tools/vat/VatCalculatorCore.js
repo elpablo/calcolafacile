@@ -271,12 +271,26 @@ function VatCalculatorCoreContent({ content, searchParams, shouldLoadSavedState 
 
             {labels.salesTaxNote ? (
                 <div
-                    className="mb-5 rounded-lg border p-3 text-sm leading-6 text-amber-900 dark:text-amber-200"
+                    className="mb-5 rounded-lg border p-3 text-sm leading-6"
                     style={{
-                        backgroundColor: "rgba(255, 251, 235, 0.9)",
-                        borderColor: "#fde68a",
+                        backgroundColor: "var(--vat-note-bg)",
+                        borderColor: "var(--vat-note-border)",
+                        color: "var(--vat-note-text)",
                     }}
                 >
+                    <style jsx>{`
+                        div {
+                            --vat-note-bg: #fffbeb;
+                            --vat-note-border: #fde68a;
+                            --vat-note-text: #78350f;
+                        }
+
+                        :global(.dark) div {
+                            --vat-note-bg: rgba(69, 26, 3, 0.42);
+                            --vat-note-border: rgba(217, 119, 6, 0.65);
+                            --vat-note-text: #f4f4f5;
+                        }
+                    `}</style>
                     {labels.salesTaxNote}
                 </div>
             ) : null}
