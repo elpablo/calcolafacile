@@ -1,11 +1,9 @@
-
-
 import Link from "next/link";
 
 export const metadata = {
     title: "Free Online Tools - Developer Tools and Calculators",
     description:
-        "Browse free online developer tools and calculators for JSON, JWT, Base64, timestamps, URL encoding, UUIDs, percentages, VAT, margins, markup, salary estimates and unit conversions.",
+        "Browse free online developer tools, AI utilities and calculators for JSON, JWT, Base64, timestamps, token estimation, AI cost comparison, percentages, VAT, margins, salary estimates and unit conversions.",
     alternates: {
         canonical: "https://calcolafacile.org/en/tools",
         languages: {
@@ -56,11 +54,24 @@ const toolGroups = [
                 description:
                     "Generate UUID v4 identifiers for APIs, databases, test fixtures and software development.",
             },
+        ],
+    },
+    {
+        title: "AI tools",
+        description:
+            "Practical utilities for estimating token usage, comparing AI model costs and planning LLM-powered workflows.",
+        tools: [
+            {
+                href: "/en/ai-cost-calculator",
+                title: "AI Cost Calculator",
+                description:
+                    "Estimate input, output, request, daily and monthly costs across popular AI models from OpenAI, Anthropic, Google, xAI, DeepSeek and Mistral.",
+            },
             {
                 href: "/en/token-estimator",
                 title: "LLM Token Estimator",
                 description:
-                    "Estimate token usage and approximate cost for prompts, JSON payloads and AI workflows.",
+                    "Estimate token usage and approximate cost for prompts, JSON payloads and AI workflows directly in your browser.",
             },
         ],
     },
@@ -136,7 +147,8 @@ export default function ToolsPage() {
                     A curated collection of fast browser-based tools for developers,
                     makers and everyday calculations. Format JSON, decode JWTs,
                     convert Unix timestamps, encode Base64, generate UUIDs, estimate
-                    LLM tokens, calculate percentages, VAT, margins, markup and more.
+                    LLM tokens, compare AI model costs, calculate percentages, VAT,
+                    margins, markup and more.
                 </p>
             </section>
 
@@ -179,8 +191,8 @@ export default function ToolsPage() {
                 <p className="mt-3 max-w-3xl leading-7 text-zinc-700 dark:text-zinc-300">
                     Most tools run directly in your browser, which makes them fast and
                     practical for quick checks, debugging sessions and everyday calculations.
-                    Tools that handle sensitive text, such as JWT, JSON, Base64 and token
-                    estimation, are designed to work without sending your input to external servers.
+                    Tools that handle sensitive text, such as JWT, JSON, Base64, token
+                    estimation and AI cost planning, are designed to work without sending your input to external servers.
                 </p>
             </section>
         </main>
