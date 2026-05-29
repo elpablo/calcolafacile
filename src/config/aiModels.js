@@ -37,6 +37,11 @@ export const AI_MODEL_PROVIDERS = {
     anthropic: {
         label: "Anthropic",
         models: {
+            "claude-opus-4.8": {
+                label: "Claude Opus 4.8",
+                inputCostPerMillion: 5,
+                outputCostPerMillion: 25,
+            },
             "claude-opus-4.7": {
                 label: "Claude Opus 4.7",
                 inputCostPerMillion: 5,
@@ -71,6 +76,61 @@ export const AI_MODEL_PROVIDERS = {
                 label: "Gemini 2.5 Pro",
                 inputCostPerMillion: 1.25,
                 outputCostPerMillion: 10,
+            },
+        },
+    },
+    xai: {
+        label: "xAI",
+        models: {
+            "grok-4.3": {
+                label: "Grok 4.3",
+                inputCostPerMillion: 1.25,
+                outputCostPerMillion: 2.5,
+            },
+            "grok-build-0.1": {
+                label: "Grok Build 0.1",
+                inputCostPerMillion: 1,
+                outputCostPerMillion: 2,
+            },
+        },
+    },
+    deepseek: {
+        label: "DeepSeek",
+        models: {
+            "deepseek-v3.2": {
+                label: "DeepSeek V3.2",
+                inputCostPerMillion: 0.28,
+                outputCostPerMillion: 0.42,
+            },
+            "deepseek-r1": {
+                label: "DeepSeek R1",
+                inputCostPerMillion: 0.55,
+                outputCostPerMillion: 2.19,
+            },
+        },
+    },
+    mistral: {
+        label: "Mistral",
+        models: {
+            "mistral-large-3-2512": {
+                label: "Mistral Large 3 2512",
+                inputCostPerMillion: 0.5,
+                outputCostPerMillion: 1.5,
+            },
+            "mistral-medium-3.1": {
+                label: "Mistral Medium 3.1",
+                inputCostPerMillion: 0.4,
+                outputCostPerMillion: 2,
+            },
+            "mistral-small-3.2-24b": {
+                label: "Mistral Small 3.2 24B",
+                inputCostPerMillion: 0.075,
+                outputCostPerMillion: 0.2,
+            },
+            "codestral-2508": {
+                label: "Codestral 2508",
+                inputCostPerMillion: 0.3,
+                outputCostPerMillion: 0.9,
             },
         },
     },
