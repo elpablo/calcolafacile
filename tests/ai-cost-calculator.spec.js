@@ -127,7 +127,7 @@ test.describe("AI Cost Calculator", () => {
         await getProviderSelect(page).selectOption("anthropic");
         await expect(getProviderSelect(page)).toHaveValue("anthropic");
 
-        await expect(getModelSelect(page)).toHaveValue("claude-opus-4.7");
+        await expect(getModelSelect(page)).toHaveValue("claude-opus-4.8");
         await getModelSelect(page).selectOption("claude-haiku-4.5");
         await expect(getModelSelect(page)).toHaveValue("claude-haiku-4.5");
     });
