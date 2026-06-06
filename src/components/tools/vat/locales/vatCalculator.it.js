@@ -8,7 +8,23 @@ const vatCalculatorIt = {
     currentPath: "/it/calcolatore-iva",
     description:
         "Calcola IVA, scorporo e aggiunta con aliquote Italia, UK e percentuali personalizzate. Ottieni imponibile, IVA e totale in tempo reale.",
-    contextualTools: [],
+    contextualTools: [
+        {
+            href: "/it/calcolatore-iva-inverso",
+            title: "Calcolatore IVA Inverso",
+            description: "Trova imponibile e IVA partendo da un importo lordo.",
+        },
+        {
+            href: "/it/calcolatore-rimozione-iva",
+            title: "Calcolatore Rimozione IVA",
+            description: "Scopri quanta IVA è inclusa in un totale lordo.",
+        },
+        {
+            href: "/it/strumenti-iva",
+            title: "Strumenti IVA",
+            description: "Panoramica completa del cluster IVA.",
+        },
+    ],
     examples: [
         {
             title: "Aggiungere IVA al 22%",
@@ -36,6 +52,26 @@ const vatCalculatorIt = {
 
             <h3 className="font-semibold mt-2">Come si scorpora l&apos;IVA?</h3>
             <p>Dividi il totale per 1.22 (nel caso di IVA al 22%).</p>
+
+            <h3 className="font-semibold mt-2">
+                Che differenza c&apos;è tra aggiunta e scorporo IVA?
+            </h3>
+            <p>
+                L&apos;aggiunta parte da un netto e calcola il lordo; lo
+                scorporo parte da un lordo e ricava imponibile e IVA.
+            </p>
+
+            <h3 className="font-semibold mt-2">Quali aliquote sono supportate?</h3>
+            <p>
+                Sono disponibili preset Italia (22%, 10%, 4%), UK (20%, 5%,
+                0%) e puoi inserire qualsiasi aliquota personalizzata.
+            </p>
+
+            <h3 className="font-semibold mt-2">Il calcolatore è gratuito?</h3>
+            <p>
+                Sì, è gratuito, senza registrazione e funziona direttamente nel
+                browser.
+            </p>
         </>
     ),
     sample: {

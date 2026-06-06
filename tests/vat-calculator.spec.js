@@ -6,6 +6,30 @@ const enPath = "/en/vat-calculator";
 const storageKey = "calcolafacile:vat-calculator";
 const resultTestId = "vat-result";
 
+async function expectEnglishExampleLinks(page) {
+    await expect(
+        page.locator('a[href="/en/vat-calculator?amount=100&rate=20&mode=add"]'),
+    ).toHaveCount(1);
+    await expect(
+        page.locator('a[href="/en/vat-calculator?amount=120&rate=20&mode=remove"]'),
+    ).toHaveCount(1);
+    await expect(
+        page.locator('a[href="/en/vat-calculator?amount=250&rate=17.5&mode=add"]'),
+    ).toHaveCount(1);
+}
+
+async function expectItalianExampleLinks(page) {
+    await expect(
+        page.locator('a[href="/it/calcolatore-iva?amount=100&rate=22&mode=add"]'),
+    ).toHaveCount(1);
+    await expect(
+        page.locator('a[href="/it/calcolatore-iva?amount=122&rate=22&mode=remove"]'),
+    ).toHaveCount(1);
+    await expect(
+        page.locator('a[href="/it/calcolatore-iva?amount=250&rate=17.5&mode=add"]'),
+    ).toHaveCount(1);
+}
+
 test.beforeEach(async ({ page }) => {
     await clearLocalStorageKey(page, storageKey);
 });
@@ -28,6 +52,7 @@ test.describe("VAT Calculator", () => {
         await expect(resultBox).toContainText("$120.00");
         await expect(resultBox).toContainText("$100.00");
         await expect(resultBox).toContainText("$20.00");
+        await expectEnglishExampleLinks(page);
     });
 
     test("loads values from English query params and removes VAT", async ({ page }) => {
@@ -100,5 +125,69 @@ test.describe("VAT Calculator", () => {
         await expect(resultBox).toContainText("100,00");
         await expect(resultBox).toContainText("20,00");
         await expect(resultBox).toContainText("€");
+        await expectItalianExampleLinks(page);
+    });
+
+    test("navigates through English practical examples and pre-fills the calculator", async ({ page }) => {
+        await page.goto(enPath);
+        await expectPageReady(page, resultTestId, storageKey);
+
+        await page.locator('a[href="/en/vat-calculator?amount=120&rate=20&mode=remove"]').click();
+        await expect(page).toHaveURL(/\/en\/vat-calculator\?amount=120&rate=20&mode=remove$/);
+        await expect(page.locator("#vat-amount")).toHaveValue("120");
+        await expect(page.locator("#vat-rate")).toHaveValue("20");
+        await expect(page.getByRole("radio", { name: /remove vat/i })).toHaveAttribute("aria-checked", "true");
+        await expect(page.getByTestId(resultTestId)).toContainText("$100.00");
+        await expect(page.getByTestId(resultTestId)).toContainText("$20.00");
+
+        await page.goto(enPath);
+        await expectPageReady(page, resultTestId, storageKey);
+        await page.locator('a[href="/en/vat-calculator?amount=250&rate=17.5&mode=add"]').click();
+        await expect(page).toHaveURL(/\/en\/vat-calculator\?amount=250&rate=17.5&mode=add$/);
+        await expect(page.locator("#vat-amount")).toHaveValue("250");
+        await expect(page.locator("#vat-rate")).toHaveValue("17.5");
+        await expect(page.getByRole("radio", { name: /add vat/i })).toHaveAttribute("aria-checked", "true");
+        await expect(page.getByTestId(resultTestId)).toContainText("$293.75");
+    });
+
+    test("navigates through Italian practical examples and pre-fills the calculator", async ({ page }) => {
+        await page.goto(itPath);
+        await expectPageReady(page, resultTestId, storageKey);
+
+        await page.locator('a[href="/it/calcolatore-iva?amount=122&rate=22&mode=remove"]').click();
+        await expect(page).toHaveURL(/\/it\/calcolatore-iva\?amount=122&rate=22&mode=remove$/);
+        await expect(page.locator("#vat-amount")).toHaveValue("122");
+        await expect(page.locator("#vat-rate")).toHaveValue("22");
+        await expect(page.getByRole("radio", { name: /scorpora iva/i })).toHaveAttribute("aria-checked", "true");
+        await expect(page.getByTestId(resultTestId)).toContainText("100,00");
+        await expect(page.getByTestId(resultTestId)).toContainText("22,00");
+    });
+
+    test("connects the VAT calculator to the rest of the English VAT cluster", async ({ page }) => {
+        await page.goto(enPath);
+        await expectPageReady(page, resultTestId, storageKey);
+
+        await page.getByRole("link", { name: /vat reverse calculator/i }).first().click();
+        await expect(page).toHaveURL(/\/en\/vat-reverse-calculator$/);
+
+        await page.getByRole("link", { name: /vat removal calculator/i }).first().click();
+        await expect(page).toHaveURL(/\/en\/vat-removal-calculator$/);
+
+        await page.getByRole("link", { name: /vat tools/i }).first().click();
+        await expect(page).toHaveURL(/\/en\/vat-tools$/);
+    });
+
+    test("connects the VAT calculator to the rest of the Italian VAT cluster", async ({ page }) => {
+        await page.goto(itPath);
+        await expectPageReady(page, resultTestId, storageKey);
+
+        await page.getByRole("link", { name: /calcolatore iva inverso/i }).first().click();
+        await expect(page).toHaveURL(/\/it\/calcolatore-iva-inverso$/);
+
+        await page.getByRole("link", { name: /calcolatore rimozione iva/i }).first().click();
+        await expect(page).toHaveURL(/\/it\/calcolatore-rimozione-iva$/);
+
+        await page.getByRole("link", { name: /strumenti iva/i }).first().click();
+        await expect(page).toHaveURL(/\/it\/strumenti-iva$/);
     });
 });

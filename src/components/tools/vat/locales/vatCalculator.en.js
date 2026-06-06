@@ -8,7 +8,23 @@ const vatCalculatorEn = {
     currentPath: "/en/vat-calculator",
     description:
         "Add or remove VAT instantly with UK, Italy and custom rates. Enter an amount to calculate net, VAT and total values.",
-    contextualTools: [],
+    contextualTools: [
+        {
+            href: "/en/vat-reverse-calculator",
+            title: "VAT Reverse Calculator",
+            description: "Find the net price and VAT amount from a gross price.",
+        },
+        {
+            href: "/en/vat-removal-calculator",
+            title: "VAT Removal Calculator",
+            description: "See how much VAT is embedded in a VAT-inclusive total.",
+        },
+        {
+            href: "/en/vat-tools",
+            title: "VAT Tools",
+            description: "Browse the full VAT calculator toolkit.",
+        },
+    ],
     examples: [
         {
             title: "Add 20% UK VAT",

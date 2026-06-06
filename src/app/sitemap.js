@@ -21,13 +21,19 @@ export default function sitemap() {
     const staticLastModified = new Date("2026-05-01");
     const conversionLastModified = new Date();
 
-    const italianStaticRoutes = ["", "/it", ...getToolPaths("it")];
+    const italianStaticRoutes = [
+        "",
+        "/it",
+        "/it/strumenti-iva",
+        ...getToolPaths("it"),
+    ];
 
     const englishStaticRoutes = [
         "/en",
         "/en/tools",
         "/en/encoding-tools",
         "/en/json-tools",
+        "/en/vat-tools",
         ...getToolPaths("en"),
     ];
 
