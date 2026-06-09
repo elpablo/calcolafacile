@@ -122,6 +122,7 @@ function AiCostCalculatorCoreContent({ content, searchParams, shouldLoadSavedSta
         labels,
         examples,
         faq,
+        faqSchema,
         contextualTools,
     } = content;
 
@@ -191,7 +192,16 @@ function AiCostCalculatorCoreContent({ content, searchParams, shouldLoadSavedSta
     };
 
     return (
-        <ToolLayout
+        <>
+            {faqSchema && (
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify(faqSchema),
+                    }}
+                />
+            )}
+            <ToolLayout
             title={metadata.title}
             lang={lang}
             currentPath={currentPath}
@@ -514,5 +524,6 @@ function AiCostCalculatorCoreContent({ content, searchParams, shouldLoadSavedSta
                 </div>
             </div>
         </ToolLayout>
+        </>
     );
 }

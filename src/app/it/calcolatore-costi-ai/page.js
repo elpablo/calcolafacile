@@ -3,9 +3,9 @@
 import AiCostCalculator from "./AiCostCalculator";
 
 export const metadata = {
-    title: "Calcolatore costi AI | CalcolaFacile",
+    title: "Calcolatore Costi AI | Stima Costi API per GPT, Claude e Gemini",
     description:
-        "Stima i costi API dei modelli AI di OpenAI, Anthropic e Google in base a token di input, token di output e richieste giornaliere.",
+        "Calcolatore gratuito per stimare i costi API di OpenAI, Anthropic e Google. Calcola costo per richiesta, spesa giornaliera e mensile in base a token di input, output e volume di utilizzo.",
     alternates: {
         canonical: "https://calcolafacile.org/it/calcolatore-costi-ai",
         languages: {

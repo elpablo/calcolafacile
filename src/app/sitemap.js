@@ -25,6 +25,7 @@ export default function sitemap() {
         "",
         "/it",
         "/it/strumenti-iva",
+        "/it/strumenti-costi-ai",
         ...getToolPaths("it"),
     ];
 
@@ -34,6 +35,7 @@ export default function sitemap() {
         "/en/encoding-tools",
         "/en/json-tools",
         "/en/vat-tools",
+        "/en/ai-cost-tools",
         ...getToolPaths("en"),
     ];
 
