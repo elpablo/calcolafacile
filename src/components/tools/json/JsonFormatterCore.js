@@ -6,6 +6,11 @@ import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import ToolLayout, { ResultBox } from "@/components/ToolLayout";
 import JsonCodeBlock from "@/components/tools/json/JsonCodeBlock";
 import { jsonFormatterExamples } from "@/components/tools/json/jsonFormatterExamples";
+import {
+    formatJson,
+    getJsonSize,
+    minifyJson,
+} from "@/components/tools/json/jsonFormatterLogic";
 import { loadLocalState, saveLocalState } from "@/lib/browserStorage";
 
 const STORAGE_KEY = "calcolafacile:json-formatter";
@@ -43,21 +48,6 @@ function getInitialFormatterState(currentExampleKey, shouldLoadSavedState) {
             ? storedState.viewMode
             : "pretty",
     };
-}
-
-function formatJson(text) {
-    try {
-        const parsed = JSON.parse(text);
-        return {
-            formatted: JSON.stringify(parsed, null, 2),
-            error: null,
-        };
-    } catch (err) {
-        return {
-            formatted: null,
-            error: err.message,
-        };
-    }
 }
 
 export default function JsonFormatterCore({ content }) {
@@ -197,40 +187,17 @@ function JsonFormatterCoreContent({
         handleDroppedFiles(event.dataTransfer.files);
     };
 
-    const getMinified = (text) => {
-        try {
-            return JSON.stringify(JSON.parse(text));
-        } catch {
-            return null;
-        }
-    };
-
-    const result = useMemo(() => {
-        if (!input.trim()) {
-            return { formatted: null, error: null };
-        }
-        return formatJson(input);
-    }, [input]);
+    const result = useMemo(() => formatJson(input), [input]);
 
     const displayedOutput = useMemo(() => {
         if (!result.formatted) return null;
         if (viewMode === "minified") {
-            return getMinified(input);
+            return minifyJson(input);
         }
         return result.formatted;
     }, [result, viewMode, input]);
 
-    const jsonSize = useMemo(() => {
-        if (!input.trim()) return null;
-        try {
-            const bytes = new TextEncoder().encode(input).length;
-            if (bytes < 1024) return `${bytes} B`;
-            if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-            return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-        } catch {
-            return null;
-        }
-    }, [input]);
+    const jsonSize = useMemo(() => getJsonSize(input), [input]);
 
     return (
         <ToolLayout
@@ -305,9 +272,56 @@ function JsonFormatterCoreContent({
                 </button>
             </div>
 
-            {result.error && (
-                <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-                    <strong>{labels.invalidJson}:</strong> {result.error}
+            {/* Native JSON.parse error text varies by JS engine (SSR is always V8), so this stays client-only to avoid hydration mismatches on Safari/Firefox. */}
+            {shouldLoadSavedState && result.error && (
+                <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-300">
+                    <p>
+                        <strong>{labels.invalidJson}:</strong>{" "}
+                        {result.error.message}
+                    </p>
+                    {result.error.line !== null &&
+                        result.error.column !== null && (
+                            <p className="mt-1 text-xs text-red-600 dark:text-red-400">
+                                {labels.errorLocation
+                                    .replace("{line}", result.error.line)
+                                    .replace("{column}", result.error.column)}
+                            </p>
+                        )}
+                    {result.error.context.length > 0 && (
+                        <pre className="mt-3 overflow-x-auto rounded-lg bg-red-100/70 p-3 font-mono text-xs leading-5 text-red-900 dark:bg-red-950/60 dark:text-red-200">
+                            {result.error.context.map((contextLine) => (
+                                <div key={contextLine.lineNumber}>
+                                    <div
+                                        className={
+                                            contextLine.isErrorLine
+                                                ? "font-semibold"
+                                                : "opacity-70"
+                                        }
+                                    >
+                                        {String(
+                                            contextLine.lineNumber,
+                                        ).padStart(4, " ")}{" "}
+                                        | {contextLine.text}
+                                    </div>
+                                    {contextLine.isErrorLine &&
+                                        result.error.pointerColumn && (
+                                            <div className="text-red-600 dark:text-red-400">
+                                                {"     | " +
+                                                    " ".repeat(
+                                                        Math.max(
+                                                            0,
+                                                            result.error
+                                                                .pointerColumn -
+                                                                1,
+                                                        ),
+                                                    ) +
+                                                    "^"}
+                                            </div>
+                                        )}
+                                </div>
+                            ))}
+                        </pre>
+                    )}
                 </div>
             )}
 

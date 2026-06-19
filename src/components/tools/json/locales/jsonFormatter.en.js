@@ -74,6 +74,7 @@ const jsonFormatterEn = {
         copyPretty: "Copy pretty",
         copyMinified: "Copy minified",
         invalidJson: "Invalid JSON",
+        errorLocation: "Line {line}, column {column}",
         format: "Format",
         pretty: "Pretty",
         minified: "Minified",

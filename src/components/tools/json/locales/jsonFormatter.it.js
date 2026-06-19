@@ -76,6 +76,7 @@ const jsonFormatterIt = {
         copyPretty: "Copia leggibile",
         copyMinified: "Copia compatta",
         invalidJson: "JSON non valido",
+        errorLocation: "Riga {line}, colonna {column}",
         format: "Formato",
         pretty: "Leggibile",
         minified: "Compatto",
