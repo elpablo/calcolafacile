@@ -77,6 +77,16 @@ const jsonFormatterIt = {
         copyMinified: "Copia compatta",
         invalidJson: "JSON non valido",
         errorLocation: "Riga {line}, colonna {column}",
+        goToError: "Vai all’errore",
+        tryRepairJson: "Prova a correggere il JSON",
+        repairAvailable: "Abbiamo trovato alcune correzioni sicure per questo JSON:",
+        partialRepairAvailable:
+            "Sono state applicate alcune correzioni sicure, ma il JSON richiede ancora una correzione manuale.",
+        repairFailed:
+            "Non è stato possibile correggere automaticamente questo JSON. Correggilo manualmente.",
+        applyRepairedJson: "Applica il JSON corretto",
+        applyPartialRepairJson: "Applica la correzione parziale",
+        appliedFixes: "Correzioni applicate",
         format: "Formato",
         pretty: "Leggibile",
         minified: "Compatto",

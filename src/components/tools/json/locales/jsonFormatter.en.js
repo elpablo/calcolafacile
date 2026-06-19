@@ -75,6 +75,16 @@ const jsonFormatterEn = {
         copyMinified: "Copy minified",
         invalidJson: "Invalid JSON",
         errorLocation: "Line {line}, column {column}",
+        goToError: "Go to error",
+        tryRepairJson: "Try to repair JSON",
+        repairAvailable: "We found some safe fixes for this JSON:",
+        partialRepairAvailable:
+            "Some safe fixes were applied, but the JSON still needs manual correction.",
+        repairFailed:
+            "Automatic repair wasn't possible for this JSON. Please fix it manually.",
+        applyRepairedJson: "Apply repaired JSON",
+        applyPartialRepairJson: "Apply partial repair",
+        appliedFixes: "Applied fixes",
         format: "Format",
         pretty: "Pretty",
         minified: "Minified",

@@ -7,6 +7,7 @@ import {
     locateJsonSyntaxError,
     minifyJson,
     parseJsonError,
+    repairJson,
 } from "../jsonFormatterLogic";
 
 describe("jsonFormatterLogic", () => {
@@ -348,6 +349,221 @@ describe("jsonFormatterLogic", () => {
         it("does not crash on deeply nested input", () => {
             const input = "[".repeat(500);
             expect(() => locateJsonSyntaxError(input)).not.toThrow();
+        });
+    });
+
+    describe("repairJson", () => {
+        it("removes trailing commas before } or ]", () => {
+            const result = repairJson('{"a": 1, "b": [1, 2,],}');
+
+            expect(result.error).toBeNull();
+            expect(result.appliedFixes).toContain("Removed trailing commas");
+            expect(JSON.parse(result.repaired)).toEqual({ a: 1, b: [1, 2] });
+        });
+
+        it("removes // line comments and /* block comments */", () => {
+            const result = repairJson(
+                '{\n  // who\n  "a": 1, /* inline */\n  "b": 2\n}',
+            );
+
+            expect(result.error).toBeNull();
+            expect(result.appliedFixes).toContain(
+                "Removed JavaScript-style comments",
+            );
+            expect(JSON.parse(result.repaired)).toEqual({ a: 1, b: 2 });
+        });
+
+        it("does not treat // inside a string value as a comment", () => {
+            const result = repairJson(
+                '{"url": "http://example.com", "b": 2,}',
+            );
+
+            expect(result.error).toBeNull();
+            expect(result.appliedFixes).not.toContain(
+                "Removed JavaScript-style comments",
+            );
+            expect(JSON.parse(result.repaired)).toEqual({
+                url: "http://example.com",
+                b: 2,
+            });
+        });
+
+        it("removes a trailing comma left behind by a stripped comment", () => {
+            const result = repairJson('{"a": 1, // trailing\n}');
+
+            expect(result.error).toBeNull();
+            expect(result.appliedFixes).toEqual(
+                expect.arrayContaining([
+                    "Removed JavaScript-style comments",
+                    "Removed trailing commas",
+                ]),
+            );
+            expect(JSON.parse(result.repaired)).toEqual({ a: 1 });
+        });
+
+        it("quotes simple unquoted object keys", () => {
+            const result = repairJson('{ name: "Mario", age: 42 }');
+
+            expect(result.error).toBeNull();
+            expect(result.appliedFixes).toContain(
+                "Quoted unquoted object keys",
+            );
+            expect(JSON.parse(result.repaired)).toEqual({
+                name: "Mario",
+                age: 42,
+            });
+        });
+
+        it("converts safe single-quoted strings (keys and values) to double-quoted", () => {
+            const result = repairJson("{'name': 'Mario'}");
+
+            expect(result.error).toBeNull();
+            expect(result.appliedFixes).toContain(
+                "Converted safe single-quoted strings to double-quoted strings",
+            );
+            expect(JSON.parse(result.repaired)).toEqual({ name: "Mario" });
+        });
+
+        it("unescapes \\' and leaves other escapes untouched when converting quotes", () => {
+            const result = repairJson("{\"a\": 'it\\'s a \\ttest'}");
+
+            expect(result.error).toBeNull();
+            expect(JSON.parse(result.repaired)).toEqual({
+                a: "it's a \ttest",
+            });
+        });
+
+        it("does not convert a single-quoted string containing an unescaped double quote", () => {
+            const result = repairJson(
+                '{"a": \'has "quotes" inside\'}',
+            );
+
+            expect(result.repaired).toBeNull();
+            expect(result.partialRepaired).toBeNull();
+            expect(result.isFullyValid).toBe(false);
+            expect(result.appliedFixes).toEqual([]);
+            expect(typeof result.error).toBe("string");
+        });
+
+        it("removes a leading BOM", () => {
+            const result = repairJson('﻿{"a": 1}');
+
+            expect(result.error).toBeNull();
+            expect(result.appliedFixes).toContain(
+                "Removed BOM or invisible leading characters",
+            );
+            expect(JSON.parse(result.repaired)).toEqual({ a: 1 });
+        });
+
+        it("combines multiple fixes in one pass", () => {
+            const result = repairJson(
+                "﻿{ name: 'Mario', /* note */ age: 42, }",
+            );
+
+            expect(result.error).toBeNull();
+            expect(result.appliedFixes).toEqual(
+                expect.arrayContaining([
+                    "Removed BOM or invisible leading characters",
+                    "Removed JavaScript-style comments",
+                    "Converted safe single-quoted strings to double-quoted strings",
+                    "Removed trailing commas",
+                    "Quoted unquoted object keys",
+                ]),
+            );
+            expect(JSON.parse(result.repaired)).toEqual({
+                name: "Mario",
+                age: 42,
+            });
+        });
+
+        it("returns null for ambiguous invalid JSON with no safe fix", () => {
+            const result = repairJson('{"a": 1');
+
+            expect(result.repaired).toBeNull();
+            expect(result.appliedFixes).toEqual([]);
+            expect(typeof result.error).toBe("string");
+        });
+
+        it("returns null when a double comma is found (not a supported fix)", () => {
+            const result = repairJson('{"a": 1,, "b": 2}');
+
+            expect(result.repaired).toBeNull();
+            expect(result.appliedFixes).toEqual([]);
+        });
+
+        it("returns repaired JSON that is itself valid JSON.parse input", () => {
+            const result = repairJson("{ name: 'Mario', age: 42, }");
+
+            expect(result.repaired).not.toBeNull();
+            expect(() => JSON.parse(result.repaired)).not.toThrow();
+        });
+
+        it("never invents missing brackets", () => {
+            const result = repairJson('{"a": [1, 2, 3');
+
+            expect(result.repaired).toBeNull();
+        });
+
+        it("treats empty input as nothing to repair", () => {
+            const result = repairJson("");
+
+            expect(result.repaired).toBeNull();
+            expect(result.partialRepaired).toBeNull();
+            expect(result.isFullyValid).toBe(false);
+            expect(result.appliedFixes).toEqual([]);
+            expect(typeof result.error).toBe("string");
+        });
+
+        it("does not throw for non-string input", () => {
+            expect(() => repairJson(null)).not.toThrow();
+            expect(() => repairJson(undefined)).not.toThrow();
+            expect(() => repairJson(42)).not.toThrow();
+        });
+
+        describe("partial repair", () => {
+            it("returns isFullyValid true with repaired === partialRepaired for fully repairable JSON", () => {
+                const result = repairJson("{ name: 'Mario', age: 42, }");
+
+                expect(result.isFullyValid).toBe(true);
+                expect(result.error).toBeNull();
+                expect(result.repaired).not.toBeNull();
+                expect(result.partialRepaired).toBe(result.repaired);
+                expect(JSON.parse(result.repaired)).toEqual({
+                    name: "Mario",
+                    age: 42,
+                });
+            });
+
+            it("returns partialRepaired when safe fixes apply but an unrelated error remains", () => {
+                // Comment and trailing comma are both safely fixable, but
+                // the missing ':' after "b" is a genuine, unrelated syntax
+                // error we must not try to guess our way out of.
+                const result = repairJson(
+                    '{\n  // comment\n  "a": 1,\n  "b" 2,\n}',
+                );
+
+                expect(result.isFullyValid).toBe(false);
+                expect(result.repaired).toBeNull();
+                expect(result.partialRepaired).not.toBeNull();
+                expect(result.appliedFixes).toEqual(
+                    expect.arrayContaining([
+                        "Removed JavaScript-style comments",
+                        "Removed trailing commas",
+                    ]),
+                );
+                expect(typeof result.error).toBe("string");
+                expect(() => JSON.parse(result.partialRepaired)).toThrow();
+            });
+
+            it("returns no partialRepaired when no safe fix is available at all", () => {
+                const result = repairJson('{"a": 1');
+
+                expect(result.isFullyValid).toBe(false);
+                expect(result.repaired).toBeNull();
+                expect(result.partialRepaired).toBeNull();
+                expect(result.appliedFixes).toEqual([]);
+                expect(typeof result.error).toBe("string");
+            });
         });
     });
 });

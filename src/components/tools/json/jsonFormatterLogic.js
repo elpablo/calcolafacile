@@ -342,3 +342,250 @@ function lineColumnToPosition(input, line, column) {
 
     return position + (column - 1);
 }
+
+// BOM (U+FEFF) and common zero-width characters that sometimes end up at
+// the start of a pasted/saved file.
+const BOM_PATTERN = /^[\uFEFF\u200B\u200C\u200D\u2060]+/;
+const TRAILING_COMMA_PATTERN = /,(\s*)([}\]])/g;
+const UNQUOTED_KEY_PATTERN = /([{,]\s*)([A-Za-z_$][A-Za-z0-9_$]*)(\s*:)/g;
+
+// Only ever deletes/replaces text that's unambiguously safe (BOM, comments,
+// trailing commas, bare keys, "-quotable single-quoted strings). Never
+// invents brackets or values, so genuinely broken structure is reported as
+// unrepairable rather than guessed at. `partialRepaired` holds the result of
+// the safe fixes even when that still isn't valid JSON (e.g. one remaining
+// unrelated syntax error), so the caller can offer it as a starting point
+// for manual correction instead of discarding the fixes entirely.
+export function repairJson(input) {
+    if (typeof input !== "string" || !input.trim()) {
+        return {
+            repaired: null,
+            partialRepaired: null,
+            appliedFixes: [],
+            error: "Nothing to repair.",
+            isFullyValid: false,
+        };
+    }
+
+    const appliedFixes = [];
+    let text = input;
+
+    if (BOM_PATTERN.test(text)) {
+        text = text.replace(BOM_PATTERN, "");
+        appliedFixes.push("Removed BOM or invisible leading characters");
+    }
+
+    const { text: withoutComments, removedComments } = stripJsonComments(text);
+    if (removedComments) {
+        appliedFixes.push("Removed JavaScript-style comments");
+    }
+    text = withoutComments;
+
+    let convertedQuotes = false;
+    let removedTrailingCommas = false;
+    let quotedKeys = false;
+
+    const rebuilt = tokenizeJsonish(text)
+        .map((segment) => {
+            if (segment.type === "string") {
+                if (segment.quote === "'" && segment.terminated) {
+                    const converted = convertSingleQuotedString(
+                        segment.content,
+                    );
+                    if (converted !== null) {
+                        convertedQuotes = true;
+                        return converted;
+                    }
+                }
+                return segment.content;
+            }
+
+            return segment.content
+                .replace(TRAILING_COMMA_PATTERN, (match, ws, bracket) => {
+                    removedTrailingCommas = true;
+                    return ws + bracket;
+                })
+                .replace(UNQUOTED_KEY_PATTERN, (match, prefix, key, suffix) => {
+                    quotedKeys = true;
+                    return `${prefix}"${key}"${suffix}`;
+                });
+        })
+        .join("");
+
+    if (convertedQuotes) {
+        appliedFixes.push(
+            "Converted safe single-quoted strings to double-quoted strings",
+        );
+    }
+    if (removedTrailingCommas) {
+        appliedFixes.push("Removed trailing commas");
+    }
+    if (quotedKeys) {
+        appliedFixes.push("Quoted unquoted object keys");
+    }
+
+    if (appliedFixes.length === 0) {
+        return {
+            repaired: null,
+            partialRepaired: null,
+            appliedFixes: [],
+            error: "No safe automatic fix was found for this JSON.",
+            isFullyValid: false,
+        };
+    }
+
+    try {
+        JSON.parse(rebuilt);
+    } catch (err) {
+        return {
+            repaired: null,
+            partialRepaired: rebuilt,
+            appliedFixes,
+            error: err.message,
+            isFullyValid: false,
+        };
+    }
+
+    return {
+        repaired: rebuilt,
+        partialRepaired: rebuilt,
+        appliedFixes,
+        error: null,
+        isFullyValid: true,
+    };
+}
+
+// Splits text into "string" segments (single- or double-quoted, with their
+// quote/escape handling) and "code"/comment segments in between. Comments
+// and quotes have to be tokenized together in one pass: a comment can
+// contain a quote character (and vice versa for a string containing `//`),
+// so detecting either one in isolation misreads the other.
+function tokenizeJsonish(text) {
+    const segments = [];
+    const len = text.length;
+    let i = 0;
+    let codeBuffer = "";
+
+    const flushCode = () => {
+        if (codeBuffer) {
+            segments.push({ type: "code", content: codeBuffer });
+            codeBuffer = "";
+        }
+    };
+
+    while (i < len) {
+        const ch = text[i];
+        const next = text[i + 1];
+
+        if (ch === '"' || ch === "'") {
+            flushCode();
+            const quote = ch;
+            let content = quote;
+            let j = i + 1;
+            let terminated = false;
+            while (j < len) {
+                const c = text[j];
+                if (c === "\\" && j + 1 < len) {
+                    content += c + text[j + 1];
+                    j += 2;
+                    continue;
+                }
+                content += c;
+                j++;
+                if (c === quote) {
+                    terminated = true;
+                    break;
+                }
+            }
+            segments.push({ type: "string", quote, content, terminated });
+            i = j;
+            continue;
+        }
+
+        if (ch === "/" && next === "/") {
+            flushCode();
+            let j = i;
+            let content = "";
+            while (j < len && text[j] !== "\n") {
+                content += text[j];
+                j++;
+            }
+            segments.push({ type: "lineComment", content });
+            i = j;
+            continue;
+        }
+
+        if (ch === "/" && next === "*") {
+            flushCode();
+            const end = text.indexOf("*/", i + 2);
+            if (end === -1) {
+                segments.push({
+                    type: "blockComment",
+                    content: text.slice(i),
+                    terminated: false,
+                });
+                i = len;
+            } else {
+                segments.push({
+                    type: "blockComment",
+                    content: text.slice(i, end + 2),
+                    terminated: true,
+                });
+                i = end + 2;
+            }
+            continue;
+        }
+
+        codeBuffer += ch;
+        i++;
+    }
+
+    flushCode();
+    return segments;
+}
+
+function stripJsonComments(text) {
+    let removedComments = false;
+
+    const rebuilt = tokenizeJsonish(text)
+        .map((segment) => {
+            if (
+                segment.type === "lineComment" ||
+                segment.type === "blockComment"
+            ) {
+                removedComments = true;
+                return " ";
+            }
+            return segment.content;
+        })
+        .join("");
+
+    return { text: rebuilt, removedComments };
+}
+
+// Only converts when the content needs no further escaping decisions: an
+// unescaped double quote inside would require guessing how to escape it, so
+// that string is left single-quoted (and the overall repair attempt will
+// fail JSON.parse validation, which is the intended conservative outcome).
+function convertSingleQuotedString(raw) {
+    const inner = raw.slice(1, -1);
+    let result = "";
+    let i = 0;
+
+    while (i < inner.length) {
+        const ch = inner[i];
+        if (ch === "\\" && i + 1 < inner.length) {
+            const next = inner[i + 1];
+            result += next === "'" ? "'" : ch + next;
+            i += 2;
+            continue;
+        }
+        if (ch === '"') {
+            return null;
+        }
+        result += ch;
+        i++;
+    }
+
+    return `"${result}"`;
+}

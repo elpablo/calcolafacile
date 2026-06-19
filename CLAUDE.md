@@ -226,6 +226,52 @@ Desired direction:
 - Add Vitest tests before doing larger UI changes.
 - Do not implement a full line-number textarea UI in the first refactor step.
 
+## Safari compatibility notes
+
+Safari has shown inconsistent behavior with some color-related styling approaches used in the project.
+
+Observed issues:
+
+- Some Tailwind color utilities may render differently than Chrome.
+- Some color combinations behave differently after page reloads.
+- Dark mode color rendering is more likely to expose Safari-specific issues.
+- Visual regressions are often styling issues rather than logic issues.
+
+When investigating a Safari-only visual problem:
+
+1. Verify the behavior in both Chrome and Safari.
+2. Do not assume the underlying logic is broken.
+3. Check color rendering first.
+4. Prefer explicit hexadecimal colors or CSS variables when reliability is more important than Tailwind convenience.
+
+Preferred approach for critical UI elements such as:
+
+- success messages
+- warning banners
+- info boxes
+- repair/status notifications
+- custom highlighted areas
+
+Use explicit colors such as:
+
+```css
+color: #059669;
+background-color: #ecfdf5;
+border-color: #a7f3d0;
+```
+
+or CSS variables:
+
+```css
+color: var(--success-text);
+background-color: var(--success-bg);
+border-color: var(--success-border);
+```
+
+instead of relying exclusively on Tailwind-generated color utilities when Safari compatibility is important.
+
+This project has previously encountered Safari-specific color rendering issues. Consider explicit colors a valid and preferred workaround when visual consistency is required.
+
 ## Coding preferences
 
 - Prefer small, focused patches.
