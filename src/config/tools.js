@@ -381,8 +381,20 @@ export const tools = [
         slug: { it: "json-formatter", en: "json-formatter" },
         title: { it: "JSON Formatter", en: "JSON Formatter" },
         description: {
-            it: "Formatta, valida e copia JSON direttamente nel browser.",
-            en: "Format, validate, minify and copy JSON directly in your browser.",
+            it: "Formatta, valida, ripara e copia JSON direttamente nel browser.",
+            en: "Format, validate, repair, minify and copy JSON directly in your browser.",
+        },
+        homepage: {
+            it: {
+                featured: true,
+                priority: 96,
+                badge: "AGGIORNATO",
+            },
+            en: {
+                featured: true,
+                priority: 108,
+                badge: "UPDATED",
+            },
         },
         categories: ["developer"],
         tags: ["developer", "json", "formatting", "validation"],
