@@ -105,6 +105,7 @@ const jsonFormatterEn = {
         minifiedView: "Minified view",
         copyPretty: "Copy pretty",
         copyMinified: "Copy minified",
+        download: "Download JSON",
         invalidJson: "Invalid JSON",
         errorLocation: "Line {line}, column {column}",
         goToError: "Go to error",

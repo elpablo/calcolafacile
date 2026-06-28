@@ -106,6 +106,7 @@ const jsonFormatterIt = {
         minifiedView: "Vista compatta",
         copyPretty: "Copia leggibile",
         copyMinified: "Copia compatta",
+        download: "Scarica JSON",
         invalidJson: "JSON non valido",
         errorLocation: "Riga {line}, colonna {column}",
         goToError: "Vai all’errore",

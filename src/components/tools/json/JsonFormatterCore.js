@@ -19,6 +19,7 @@ import {
     repairJson,
 } from "@/components/tools/json/jsonFormatterLogic";
 import { loadLocalState, saveLocalState } from "@/lib/browserStorage";
+import { downloadFile } from "@/lib/downloadFile";
 
 const STORAGE_KEY = "calcolafacile:json-formatter";
 const MAX_DROPPED_FILE_SIZE = 2 * 1024 * 1024;
@@ -466,6 +467,24 @@ function JsonFormatterCoreContent({
                         >
                             <div className="max-h-[min(70vh,520px)] overflow-auto rounded-lg">
                                 <JsonCodeBlock value={displayedOutput} />
+                            </div>
+                            <div className="mt-4 flex flex-wrap gap-2">
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        downloadFile(
+                                            viewMode === "minified"
+                                                ? "minified.json"
+                                                : "formatted.json",
+                                            displayedOutput,
+                                            "application/json",
+                                        )
+                                    }
+                                    className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-semibold text-zinc-700 shadow-sm hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300"
+                                    data-testid="json-formatter-download"
+                                >
+                                    {labels.download}
+                                </button>
                             </div>
                         </ResultBox>
                     </>
