@@ -1,3 +1,23 @@
+import { Fragment } from "react";
+
+const faqItems = [
+    {
+        question: "Is the JSON sent to a server?",
+        answer:
+            "No. Formatting, validation and minification happen locally in your browser.",
+    },
+    {
+        question: "Can this tool validate invalid JSON?",
+        answer:
+            "Yes. If the JSON is malformed, the tool shows a parsing error so you can quickly fix the problem.",
+    },
+    {
+        question: "Can I minify JSON?",
+        answer:
+            "Yes. Use the Minified view to create compact JSON for API payloads, configuration files or environment variables.",
+    },
+];
+
 const jsonFormatterEn = {
     lang: "en",
     title: "JSON Formatter and Validator Online",
@@ -46,22 +66,34 @@ const jsonFormatterEn = {
     ],
     faq: (
         <>
-            <h3 className="font-semibold">Is the JSON sent to a server?</h3>
-            <p>
-                No. Formatting, validation and minification happen locally in your browser.
-            </p>
-
-            <h3 className="mt-2 font-semibold">Can this tool validate invalid JSON?</h3>
-            <p>
-                Yes. If the JSON is malformed, the tool shows a parsing error so you can quickly fix the problem.
-            </p>
-
-            <h3 className="mt-2 font-semibold">Can I minify JSON?</h3>
-            <p>
-                Yes. Use the Minified view to create compact JSON for API payloads, configuration files or environment variables.
-            </p>
+            {faqItems.map((item, index) => (
+                <Fragment key={item.question}>
+                    <h3
+                        className={
+                            index === 0
+                                ? "font-semibold"
+                                : "mt-2 font-semibold"
+                        }
+                    >
+                        {item.question}
+                    </h3>
+                    <p>{item.answer}</p>
+                </Fragment>
+            ))}
         </>
     ),
+    faqSchema: {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqItems.map((item) => ({
+            "@type": "Question",
+            name: item.question,
+            acceptedAnswer: {
+                "@type": "Answer",
+                text: item.answer,
+            },
+        })),
+    },
     sampleJson: `{"name":"John","age":30,"city":"New York","skills":["JS","Node","AI"]}`,
     labels: {
         inputLabel: "JSON",

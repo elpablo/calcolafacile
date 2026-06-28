@@ -1,3 +1,24 @@
+import { Fragment } from "react";
+
+const faqItems = [
+    {
+        question: "Il JSON viene inviato a un server?",
+        answer:
+            "No. La formattazione, la validazione e la minimizzazione avvengono localmente nel tuo browser.",
+    },
+    {
+        question:
+            "Questo strumento può segnalare errori in un JSON non valido?",
+        answer:
+            "Sì. Se il JSON è malformato, lo strumento mostra un errore di parsing in modo da poter correggere rapidamente il problema.",
+    },
+    {
+        question: "Posso minimizzare il JSON?",
+        answer:
+            "Sì. Usa la visualizzazione Minified per creare JSON compatto per payload API, file di configurazione o variabili d'ambiente.",
+    },
+];
+
 const jsonFormatterIt = {
     lang: "it",
     title: "JSON Formatter e Validatore JSON Online",
@@ -46,24 +67,34 @@ const jsonFormatterIt = {
     ],
     faq: (
         <>
-            <h3 className="font-semibold">Il JSON viene inviato a un server?</h3>
-            <p>
-                No. La formattazione, la validazione e la minimizzazione avvengono localmente nel tuo browser.
-            </p>
-
-            <h3 className="mt-2 font-semibold">
-                Questo strumento può segnalare errori in un JSON non valido?
-            </h3>
-            <p>
-                Sì. Se il JSON è malformato, lo strumento mostra un errore di parsing in modo da poter correggere rapidamente il problema.
-            </p>
-
-            <h3 className="mt-2 font-semibold">Posso minimizzare il JSON?</h3>
-            <p>
-                Sì. Usa la visualizzazione Minified per creare JSON compatto per payload API, file di configurazione o variabili d&apos;ambiente.
-            </p>
+            {faqItems.map((item, index) => (
+                <Fragment key={item.question}>
+                    <h3
+                        className={
+                            index === 0
+                                ? "font-semibold"
+                                : "mt-2 font-semibold"
+                        }
+                    >
+                        {item.question}
+                    </h3>
+                    <p>{item.answer}</p>
+                </Fragment>
+            ))}
         </>
     ),
+    faqSchema: {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqItems.map((item) => ({
+            "@type": "Question",
+            name: item.question,
+            acceptedAnswer: {
+                "@type": "Answer",
+                text: item.answer,
+            },
+        })),
+    },
     sampleJson: `{"nome":"Mario","eta":30,"citta":"Bologna","competenze":["JS","Node","AI"]}`,
     labels: {
         inputLabel: "JSON",
