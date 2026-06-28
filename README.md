@@ -1,16 +1,50 @@
 # CalcolaFacile
 
-Bilingual (Italian / English) website hosting fast, free, browser-based
-calculators and developer utilities such as VAT, percentage, margin, salary,
-unit conversion, JWT decoding, JSON formatting, Base64, timestamp conversion,
-URL encoding, UUID generation, public-IP checking and LLM token estimation.
 
-## Stack
+[![Website](https://img.shields.io/badge/Website-calcolafacile.org-2563eb?style=flat)](https://calcolafacile.org)
+![License](https://img.shields.io/badge/License-PolyForm%20NC-success?style=flat)
+![Next.js](https://img.shields.io/badge/Next.js-black?style=flat&logo=next.js)
+![React](https://img.shields.io/badge/React-149eca?style=flat&logo=react)
+![JavaScript](https://img.shields.io/badge/JavaScript-f7df1e?style=flat&logo=javascript&logoColor=black)
+![Vercel](https://img.shields.io/badge/Deploy-Vercel-black?style=flat&logo=vercel)
+![Vitest](https://img.shields.io/badge/Tested-Vitest-6E9F18?style=flat&logo=vitest)
+![Playwright](https://img.shields.io/badge/E2E-Playwright-45ba63?style=flat&logo=playwright)
+![Client-side](https://img.shields.io/badge/Privacy-Client--side-blue?style=flat)
 
-- **Next.js 16** (App Router, React 19, JavaScript — see `AGENTS.md`).
-- **Tailwind v4** via `@tailwindcss/postcss`.
-- **Vercel**: Analytics, Speed Insights, geolocation helpers.
-- **Playwright** for end-to-end tests; **Vitest** for unit tests.
+
+Privacy-first collection of browser-based web tools for developers, AI workflows, finance and everyday calculations.
+
+Fast, free and privacy-first utilities with no registration and no server-side processing whenever possible.
+
+
+## Features
+
+- 🤖 AI tools (AI Cost Calculator, Token Estimator)
+- 👨‍💻 Developer tools (JSON Formatter, JWT Decoder, Regex Tester, UUID Generator, Base64, URL Encoder)
+- 💰 Finance tools (VAT, Margin, Markup, ROI, Mortgage, Crypto Profit)
+- 📏 Unit and time converters
+- 🔒 Privacy-first: calculations run locally in your browser whenever possible
+
+## Philosophy
+
+CalcolaFacile is built around a few simple principles.
+
+- Privacy comes first.
+- Fast tools beat complex software.
+- Every calculator should solve one problem well.
+- Continuous improvement over feature bloat.
+- Accessible from any device.
+- Open development with a transparent roadmap.
+
+## Built with
+
+- **Next.js** (App Router)
+- **React**
+- **JavaScript**
+- **Tailwind CSS**
+- **Vitest**
+- **Playwright**
+- **Vercel**
 
 ## Local development
 
@@ -43,17 +77,8 @@ npm run analyze      # Bundle analyzer
 - `proxy.js` — request preprocessor that exposes `x-pathname` to the root
   layout so it can set `<html lang>` correctly.
 
-## License & ownership
+## License
 
-Copyright © NERALAB Srl.
+CalcolaFacile is released under the **PolyForm Noncommercial License 1.0.0**.
 
-This repository is publicly visible for transparency, educational reference,
-and portfolio purposes.
-
-The source code is licensed under the PolyForm Noncommercial License 1.0.0.
-Commercial use, redistribution, hosting, resale or creation of competing
-commercial services based on this project — modified or unmodified — is not
-allowed without prior written permission from NERALAB Srl.
-
-
-See the `LICENSE` file for the complete license text.
+See the [LICENSE](LICENSE) file for license details and commercial usage terms.
