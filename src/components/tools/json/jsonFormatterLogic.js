@@ -13,15 +13,39 @@ class JsonSyntaxScanError extends Error {
     }
 }
 
-export function formatJson(text) {
+// Rebuilds objects with Object.fromEntries rather than assigning into a `{}`
+// accumulator: fromEntries creates own properties via CreateDataProperty,
+// which never invokes the inherited Object.prototype.__proto__ setter. A
+// manual `sorted[key] = value` loop would let a JSON document containing a
+// literal "__proto__" key pollute the result's prototype instead of just
+// becoming a regular own property (which is how JSON.parse itself treats
+// it). Never mutates `value`, so the parsed input is left untouched.
+export function sortObjectKeysDeep(value) {
+    if (Array.isArray(value)) {
+        return value.map(sortObjectKeysDeep);
+    }
+
+    if (value !== null && typeof value === "object") {
+        return Object.fromEntries(
+            Object.keys(value)
+                .sort()
+                .map((key) => [key, sortObjectKeysDeep(value[key])]),
+        );
+    }
+
+    return value;
+}
+
+export function formatJson(text, { sortKeys = false } = {}) {
     if (typeof text !== "string" || !text.trim()) {
         return { formatted: null, error: null };
     }
 
     try {
         const parsed = JSON.parse(text);
+        const output = sortKeys ? sortObjectKeysDeep(parsed) : parsed;
         return {
-            formatted: JSON.stringify(parsed, null, 2),
+            formatted: JSON.stringify(output, null, 2),
             error: null,
         };
     } catch (err) {
@@ -45,13 +69,15 @@ export function formatJson(text) {
     }
 }
 
-export function minifyJson(text) {
+export function minifyJson(text, { sortKeys = false } = {}) {
     if (typeof text !== "string" || !text.trim()) {
         return null;
     }
 
     try {
-        return JSON.stringify(JSON.parse(text));
+        const parsed = JSON.parse(text);
+        const output = sortKeys ? sortObjectKeysDeep(parsed) : parsed;
+        return JSON.stringify(output);
     } catch {
         return null;
     }

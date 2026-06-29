@@ -26,6 +26,7 @@ const MAX_DROPPED_FILE_SIZE = 2 * 1024 * 1024;
 const DEFAULT_FORMATTER_STATE = {
     input: "",
     viewMode: "pretty",
+    sortKeys: false,
 };
 
 function subscribeToHydration() {
@@ -41,6 +42,7 @@ function getInitialFormatterState(currentExampleKey, shouldLoadSavedState) {
         return {
             input: example.input,
             viewMode: example.viewMode ?? "pretty",
+            sortKeys: example.sortKeys ?? false,
         };
     }
 
@@ -55,6 +57,10 @@ function getInitialFormatterState(currentExampleKey, shouldLoadSavedState) {
         viewMode: ["pretty", "minified"].includes(storedState?.viewMode)
             ? storedState.viewMode
             : "pretty",
+        sortKeys:
+            typeof storedState?.sortKeys === "boolean"
+                ? storedState.sortKeys
+                : false,
     };
 }
 
@@ -104,7 +110,7 @@ function JsonFormatterCoreContent({
     });
     const [dropError, setDropError] = useState(null);
     const [repairResult, setRepairResult] = useState(null);
-    const { input, viewMode } = formatterState;
+    const { input, viewMode, sortKeys } = formatterState;
     const textareaRef = useRef(null);
 
     useEffect(() => {
@@ -119,8 +125,9 @@ function JsonFormatterCoreContent({
         saveLocalState(STORAGE_KEY, {
             input,
             viewMode,
+            sortKeys,
         });
-    }, [currentExampleKey, input, shouldLoadSavedState, viewMode]);
+    }, [currentExampleKey, input, shouldLoadSavedState, sortKeys, viewMode]);
 
     const setInput = (nextInput) => {
         setRepairResult(null);
@@ -140,6 +147,16 @@ function JsonFormatterCoreContent({
                 typeof nextViewMode === "function"
                     ? nextViewMode(currentState.viewMode)
                     : nextViewMode,
+        }));
+    };
+
+    const setSortKeys = (nextSortKeys) => {
+        setFormatterState((currentState) => ({
+            ...currentState,
+            sortKeys:
+                typeof nextSortKeys === "function"
+                    ? nextSortKeys(currentState.sortKeys)
+                    : nextSortKeys,
         }));
     };
 
@@ -199,7 +216,10 @@ function JsonFormatterCoreContent({
         handleDroppedFiles(event.dataTransfer.files);
     };
 
-    const result = useMemo(() => formatJson(input), [input]);
+    const result = useMemo(
+        () => formatJson(input, { sortKeys }),
+        [input, sortKeys],
+    );
 
     const handleGoToError = () => {
         const textarea = textareaRef.current;
@@ -247,10 +267,10 @@ function JsonFormatterCoreContent({
     const displayedOutput = useMemo(() => {
         if (!result.formatted) return null;
         if (viewMode === "minified") {
-            return minifyJson(input);
+            return minifyJson(input, { sortKeys });
         }
         return result.formatted;
-    }, [result, viewMode, input]);
+    }, [result, viewMode, input, sortKeys]);
 
     const jsonSize = useMemo(() => getJsonSize(input), [input]);
 
@@ -335,6 +355,17 @@ function JsonFormatterCoreContent({
                     >
                         {labels.minifiedView}
                     </button>
+                    <label className="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300">
+                        <input
+                            type="checkbox"
+                            checked={sortKeys}
+                            onChange={(event) =>
+                                setSortKeys(event.target.checked)
+                            }
+                            className="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        {labels.sortKeys}
+                    </label>
                 </div>
 
                 {/* Native JSON.parse error text varies by JS engine (SSR is always V8), so this stays client-only to avoid hydration mismatches on Safari/Firefox. */}

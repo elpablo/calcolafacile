@@ -104,6 +104,7 @@ const jsonFormatterIt = {
         clear: "Cancella",
         prettyView: "Vista leggibile",
         minifiedView: "Vista compatta",
+        sortKeys: "Ordina chiavi oggetto",
         copyPretty: "Copia leggibile",
         copyMinified: "Copia compatta",
         download: "Scarica JSON",

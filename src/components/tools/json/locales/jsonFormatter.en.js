@@ -103,6 +103,7 @@ const jsonFormatterEn = {
         clear: "Clear",
         prettyView: "Pretty view",
         minifiedView: "Minified view",
+        sortKeys: "Sort object keys",
         copyPretty: "Copy pretty",
         copyMinified: "Copy minified",
         download: "Download JSON",

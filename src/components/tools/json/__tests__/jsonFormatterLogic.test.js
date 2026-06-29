@@ -8,6 +8,7 @@ import {
     minifyJson,
     parseJsonError,
     repairJson,
+    sortObjectKeysDeep,
 } from "../jsonFormatterLogic";
 
 describe("jsonFormatterLogic", () => {
@@ -98,6 +99,36 @@ describe("jsonFormatterLogic", () => {
             expect(result.error.column).toBe(4);
             expect(result.error.position).toBe(3);
         });
+
+        it("does not sort keys by default", () => {
+            const result = formatJson('{"b": 1, "a": 2}');
+
+            expect(result.formatted).toBe('{\n  "b": 1,\n  "a": 2\n}');
+        });
+
+        it("sorts object keys alphabetically when sortKeys is true", () => {
+            const result = formatJson('{"b": 1, "a": 2}', { sortKeys: true });
+
+            expect(result.formatted).toBe('{\n  "a": 2,\n  "b": 1\n}');
+        });
+
+        it("sorts nested object keys and preserves array order when sortKeys is true", () => {
+            const result = formatJson(
+                '{"z": [{"b": 1, "a": 2}, {"d": 3, "c": 4}], "y": {"b": 1, "a": 2}}',
+                { sortKeys: true },
+            );
+
+            expect(JSON.parse(result.formatted)).toEqual({
+                y: { a: 2, b: 1 },
+                z: [
+                    { a: 2, b: 1 },
+                    { c: 4, d: 3 },
+                ],
+            });
+            expect(result.formatted.indexOf('"y"')).toBeLessThan(
+                result.formatted.indexOf('"z"'),
+            );
+        });
     });
 
     describe("minifyJson", () => {
@@ -113,6 +144,155 @@ describe("jsonFormatterLogic", () => {
 
         it("returns null for empty input", () => {
             expect(minifyJson("")).toBeNull();
+        });
+
+        it("does not sort keys by default", () => {
+            expect(minifyJson('{"b": 1, "a": 2}')).toBe('{"b":1,"a":2}');
+        });
+
+        it("sorts object keys alphabetically when sortKeys is true", () => {
+            expect(minifyJson('{"b": 1, "a": 2}', { sortKeys: true })).toBe(
+                '{"a":2,"b":1}',
+            );
+        });
+
+        it("sorts keys of objects nested inside arrays when sortKeys is true", () => {
+            const result = minifyJson(
+                '[{"b": 1, "a": 2}, {"d": 3, "c": 4}]',
+                { sortKeys: true },
+            );
+
+            expect(result).toBe('[{"a":2,"b":1},{"c":4,"d":3}]');
+        });
+    });
+
+    describe("sortObjectKeysDeep", () => {
+        it("sorts keys of a flat object alphabetically", () => {
+            expect(sortObjectKeysDeep({ b: 1, a: 2, c: 3 })).toEqual({
+                a: 2,
+                b: 1,
+                c: 3,
+            });
+            expect(Object.keys(sortObjectKeysDeep({ b: 1, a: 2, c: 3 }))).toEqual(
+                ["a", "b", "c"],
+            );
+        });
+
+        it("sorts keys recursively in nested objects", () => {
+            const input = { z: { d: 1, b: { y: 1, x: 2 }, a: 2 }, m: 1 };
+
+            const result = sortObjectKeysDeep(input);
+
+            expect(Object.keys(result)).toEqual(["m", "z"]);
+            expect(Object.keys(result.z)).toEqual(["a", "b", "d"]);
+            expect(Object.keys(result.z.b)).toEqual(["x", "y"]);
+        });
+
+        it("preserves array element order", () => {
+            const input = [3, 1, 2, "z", "a"];
+
+            expect(sortObjectKeysDeep(input)).toEqual([3, 1, 2, "z", "a"]);
+        });
+
+        it("sorts keys of objects nested inside arrays without reordering the array", () => {
+            const input = [
+                { b: 1, a: 2 },
+                { d: 3, c: 4 },
+            ];
+
+            const result = sortObjectKeysDeep(input);
+
+            expect(result).toEqual([
+                { a: 2, b: 1 },
+                { c: 4, d: 3 },
+            ]);
+            expect(Object.keys(result[0])).toEqual(["a", "b"]);
+            expect(Object.keys(result[1])).toEqual(["c", "d"]);
+        });
+
+        it("does not modify primitive values", () => {
+            expect(sortObjectKeysDeep("hello")).toBe("hello");
+            expect(sortObjectKeysDeep(42)).toBe(42);
+            expect(sortObjectKeysDeep(true)).toBe(true);
+            expect(sortObjectKeysDeep(false)).toBe(false);
+        });
+
+        it("returns null unchanged for a top-level null value", () => {
+            expect(sortObjectKeysDeep(null)).toBeNull();
+        });
+
+        it("treats null values inside objects safely instead of throwing", () => {
+            expect(sortObjectKeysDeep({ b: null, a: 1 })).toEqual({
+                a: 1,
+                b: null,
+            });
+        });
+
+        it("treats null values inside arrays safely instead of throwing", () => {
+            expect(sortObjectKeysDeep([null, { b: 1, a: 2 }, null])).toEqual([
+                null,
+                { a: 2, b: 1 },
+                null,
+            ]);
+        });
+
+        it("leaves canonical numeric-looking keys in ascending numeric order, since that ordering is intrinsic to plain JS objects", () => {
+            // "10" and "2" are canonical array-index strings. Per the JS
+            // spec, plain objects always enumerate such keys in ascending
+            // numeric order ahead of any other string keys, regardless of
+            // insertion order -- so this is unaffected by our .sort() call,
+            // which produces ["10", "2"] internally but is overridden by
+            // the engine's own key-ordering rules on read-back.
+            const result = sortObjectKeysDeep({ "10": "ten", "2": "two" });
+
+            expect(Object.keys(result)).toEqual(["2", "10"]);
+        });
+
+        it("applies alphabetical order to non-canonical numeric-looking keys", () => {
+            // "1.5" and "2.5" are numeric-looking but not canonical
+            // array-index strings, so they remain ordinary string keys and
+            // our alphabetical sort is the one that determines their order.
+            const result = sortObjectKeysDeep({ "2.5": "b", "1.5": "a" });
+
+            expect(Object.keys(result)).toEqual(["1.5", "2.5"]);
+        });
+
+        it("sorts keys case-sensitively (uppercase before lowercase)", () => {
+            const result = sortObjectKeysDeep({ name: 1, Name: 2, NAME: 3 });
+
+            expect(Object.keys(result)).toEqual(["NAME", "Name", "name"]);
+        });
+
+        it("does not mutate the original input", () => {
+            const input = { b: 1, a: { d: 2, c: 3 } };
+            const inputCopy = JSON.parse(JSON.stringify(input));
+
+            sortObjectKeysDeep(input);
+
+            expect(input).toEqual(inputCopy);
+            expect(Object.keys(input)).toEqual(["b", "a"]);
+        });
+
+        it("leaves string values, including date-like strings, untouched", () => {
+            const result = sortObjectKeysDeep({
+                b: "2024-01-15T10:00:00.000Z",
+                a: "plain text",
+            });
+
+            expect(result).toEqual({
+                a: "plain text",
+                b: "2024-01-15T10:00:00.000Z",
+            });
+        });
+
+        it("does not let a literal __proto__ key pollute the result's prototype", () => {
+            const input = JSON.parse('{"b": 1, "__proto__": {"a": 2}}');
+
+            const result = sortObjectKeysDeep(input);
+
+            expect(Object.getPrototypeOf(result)).toBe(Object.prototype);
+            expect(Object.keys(result)).toEqual(["__proto__", "b"]);
+            expect(result.b).toBe(1);
         });
     });
 
