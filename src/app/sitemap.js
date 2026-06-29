@@ -26,6 +26,12 @@ export default function sitemap() {
         "/it",
         "/it/strumenti-iva",
         "/it/strumenti-costi-ai",
+        "/it/strumenti-sviluppatori",
+        "/it/strumenti-ai",
+        "/it/conversioni-unita",
+        "/it/calcolatori-business",
+        "/it/rete-e-sicurezza",
+        "/it/data-e-ora",
         ...getToolPaths("it"),
     ];
 
@@ -36,6 +42,12 @@ export default function sitemap() {
         "/en/json-tools",
         "/en/vat-tools",
         "/en/ai-cost-tools",
+        "/en/developer-tools",
+        "/en/ai-tools",
+        "/en/unit-conversion",
+        "/en/business-calculators",
+        "/en/network-security",
+        "/en/date-time-tools",
         ...getToolPaths("en"),
     ];
 
