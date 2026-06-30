@@ -22,6 +22,11 @@ const jwtDecoderIt = {
             title: "Codifica e decodifica Base64",
             description: "per ispezionare payload codificati e stringhe collegate ai token.",
         },
+        {
+            href: "/it/json-formatter",
+            title: "Formatta JSON",
+            description: "per formattare e validare l'header o il payload decodificato come JSON.",
+        },
     ],
     examples: [
         {

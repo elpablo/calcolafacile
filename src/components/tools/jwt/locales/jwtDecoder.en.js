@@ -24,6 +24,11 @@ const jwtDecoderEn = {
             title: "Encode and decode Base64",
             description: "to inspect encoded payloads and token-related strings.",
         },
+        {
+            href: "/en/json-formatter",
+            title: "Format JSON",
+            description: "to format and validate the decoded header or payload as JSON.",
+        },
     ],
     examples: [
         {
