@@ -5,7 +5,20 @@ const tokenEstimatorEn = {
     currentPath: "/en/token-estimator",
     description:
         "Estimate how many tokens your text will use in an LLM and calculate approximate API costs. Useful for prompts, API payloads and AI workflows. Everything runs locally in your browser.",
-    contextualTools: [],
+    contextualTools: [
+        {
+            href: "/en/ai-cost-calculator",
+            title: "AI Cost Calculator",
+            description:
+                "Convert estimated tokens into a daily or monthly cost based on your usage volume.",
+        },
+        {
+            href: "/en/json-formatter",
+            title: "JSON Formatter",
+            description:
+                "Format and validate JSON payloads before estimating their token usage.",
+        },
+    ],
     examples: [
         {
             title: "Estimate prompt cost before sending",

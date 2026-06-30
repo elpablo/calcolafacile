@@ -5,7 +5,20 @@ const tokenEstimatorIt = {
     currentPath: "/it/token-estimator",
     description:
         "Incolla un testo e ottieni una stima dei token usati da un modello LLM, insieme a un costo indicativo per input e output. La stima è approssimativa e avviene localmente nel browser.",
-    contextualTools: [],
+    contextualTools: [
+        {
+            href: "/it/calcolatore-costi-ai",
+            title: "Calcolatore costi AI",
+            description:
+                "Converti i token stimati in un costo giornaliero o mensile in base al volume d'uso.",
+        },
+        {
+            href: "/it/json-formatter",
+            title: "JSON Formatter",
+            description:
+                "Formatta e valida payload JSON prima di stimarne l'uso in token.",
+        },
+    ],
     examples: [
         {
             title: "Stimare il costo di un prompt prima di inviarlo",
