@@ -43,6 +43,18 @@ const jsonFormatterEn = {
             description:
                 "to inspect header and payload when your JSON comes from a token.",
         },
+        {
+            href: "/en/uuid-generator",
+            title: "Generate UUIDs",
+            description:
+                "to create unique identifiers for IDs used inside JSON fixtures and payloads.",
+        },
+        {
+            href: "/en/regex-tester",
+            title: "Test a regular expression",
+            description:
+                "to validate or extract string values found inside JSON fields.",
+        },
     ],
     examples: [
         {

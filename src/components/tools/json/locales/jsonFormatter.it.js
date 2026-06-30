@@ -44,6 +44,18 @@ const jsonFormatterIt = {
             description:
                 "per ispezionare header e payload quando il tuo JSON proviene da un token.",
         },
+        {
+            href: "/it/uuid-generator",
+            title: "Genera UUID",
+            description:
+                "per creare identificatori univoci da usare nei campi e nelle fixture JSON.",
+        },
+        {
+            href: "/it/test-regex",
+            title: "Testa un'espressione regolare",
+            description:
+                "per validare o estrarre valori testuali presenti nei campi JSON.",
+        },
     ],
     examples: [
         {
