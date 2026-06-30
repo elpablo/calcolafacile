@@ -59,7 +59,20 @@ const timeZoneConverterEn = {
         },
     },
     examples: localizeTimeZoneConverterExamples("en", "/en/time-zone-converter"),
-    contextualTools: [],
+    contextualTools: [
+        {
+            href: "/en/timestamp-converter",
+            title: "Timestamp Converter",
+            description:
+                "Convert Unix timestamps to readable dates, or get a timestamp for a specific date and time.",
+        },
+        {
+            href: "/en/iso8601-validator",
+            title: "ISO8601 Validator",
+            description:
+                "Validate and convert ISO8601 date strings used by APIs and databases.",
+        },
+    ],
     faq: (
         <>
             <h3 className="mt-4 font-semibold">How does the time zone converter work?</h3>

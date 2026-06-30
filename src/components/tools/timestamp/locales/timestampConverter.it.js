@@ -26,6 +26,11 @@ const timestampConverterIt = {
             title: "Validatore ISO8601",
             description: "per controllare e convertire stringhe data ISO8601 usate da API e database.",
         },
+        {
+            href: "/it/convertitore-fusi-orari",
+            title: "Convertitore fusi orari",
+            description: "per confrontare l'orario convertito su più fusi orari con una timeline visuale.",
+        },
     ],
     examples: [
         {

@@ -66,6 +66,12 @@ const iso8601ValidatorEn = {
                 "Format and validate JSON payloads that often contain ISO date strings.",
         },
         {
+            href: "/en/time-zone-converter",
+            title: "Time Zone Converter",
+            description:
+                "Compare a validated date and time across multiple time zones.",
+        },
+        {
             href: "/en/developer-tools",
             title: "Developer Tools",
             description:

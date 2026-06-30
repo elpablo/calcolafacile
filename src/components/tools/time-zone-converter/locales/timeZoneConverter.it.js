@@ -63,7 +63,20 @@ const timeZoneConverterIt = {
         },
     },
     examples: localizeTimeZoneConverterExamples("it", "/it/convertitore-fusi-orari"),
-    contextualTools: [],
+    contextualTools: [
+        {
+            href: "/it/timestamp-converter",
+            title: "Convertitore timestamp",
+            description:
+                "Converti timestamp Unix in date leggibili, oppure ottieni un timestamp da una data e ora specifiche.",
+        },
+        {
+            href: "/it/validatore-iso8601",
+            title: "Validatore ISO8601",
+            description:
+                "Valida e converti stringhe data ISO8601 usate da API e database.",
+        },
+    ],
     faq: (
         <>
             <h3 className="mt-4 font-semibold">

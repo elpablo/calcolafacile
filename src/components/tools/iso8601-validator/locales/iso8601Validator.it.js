@@ -66,6 +66,12 @@ const iso8601ValidatorIt = {
                 "Formatta e valida payload JSON che spesso contengono stringhe data ISO.",
         },
         {
+            href: "/it/convertitore-fusi-orari",
+            title: "Convertitore fusi orari",
+            description:
+                "Confronta una data e ora validata su più fusi orari.",
+        },
+        {
             href: "/it/strumenti-sviluppatori",
             title: "Strumenti sviluppatori",
             description:

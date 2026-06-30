@@ -28,6 +28,11 @@ const timestampConverterEn = {
             title: "ISO8601 Validator",
             description: "to check and convert ISO8601 date strings used by APIs and databases.",
         },
+        {
+            href: "/en/time-zone-converter",
+            title: "Time Zone Converter",
+            description: "to compare the converted time across multiple time zones on a visual timeline.",
+        },
     ],
     examples: [
         {
