@@ -54,13 +54,13 @@ const iso8601ValidatorIt = {
     ],
     contextualTools: [
         {
-            href: "/it/convertitore-timestamp",
+            href: "/it/timestamp-converter",
             title: "Convertitore timestamp",
             description:
                 "Converti timestamp Unix in date leggibili e viceversa.",
         },
         {
-            href: "/it/formatta-json",
+            href: "/it/json-formatter",
             title: "Formattatore JSON",
             description:
                 "Formatta e valida payload JSON che spesso contengono stringhe data ISO.",
