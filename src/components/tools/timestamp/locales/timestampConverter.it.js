@@ -21,6 +21,11 @@ const timestampConverterIt = {
             title: "URL Encoder/Decoder",
             description: "per decodificare timestamp passati dentro query string o callback URL.",
         },
+        {
+            href: "/it/validatore-iso8601",
+            title: "Validatore ISO8601",
+            description: "per controllare e convertire stringhe data ISO8601 usate da API e database.",
+        },
     ],
     examples: [
         {
