@@ -72,7 +72,7 @@ test.describe("AI Cost Calculator", () => {
         await expect(page).toHaveURL(/\/en\/ai-cost-calculator$/);
         await expect(page.getByRole("heading", { name: /AI Cost Calculator/i })).toBeVisible();
         await expect(getProviderSelect(page)).toHaveValue("openai");
-        await expect(getModelSelect(page)).toHaveValue("gpt-5.5");
+        await expect(getModelSelect(page)).toHaveValue("gpt-5.6-sol");
         await expect(getUsagePresetsSection(page)).toBeVisible();
         await expect(getMonthlyCostHero(page)).toBeVisible();
         await expect(getMonthlyCostHero(page)).toContainText(/Estimated monthly cost/i);
@@ -127,7 +127,7 @@ test.describe("AI Cost Calculator", () => {
         await getProviderSelect(page).selectOption("anthropic");
         await expect(getProviderSelect(page)).toHaveValue("anthropic");
 
-        await expect(getModelSelect(page)).toHaveValue("claude-opus-4.8");
+        await expect(getModelSelect(page)).toHaveValue("claude-fable-5");
         await getModelSelect(page).selectOption("claude-haiku-4.5");
         await expect(getModelSelect(page)).toHaveValue("claude-haiku-4.5");
     });
@@ -137,7 +137,7 @@ test.describe("AI Cost Calculator", () => {
 
         await getProviderSelect(page).selectOption("google");
         await expect(getProviderSelect(page)).toHaveValue("google");
-        await expect(getModelSelect(page)).toHaveValue("gemini-2.5-pro");
+        await expect(getModelSelect(page)).toHaveValue("gemini-3.5-flash");
 
         await fillCostScenario(page, {
             inputTokens: "12345",
@@ -165,7 +165,7 @@ test.describe("AI Cost Calculator", () => {
         await page.reload();
 
         await expect(getProviderSelect(page)).toHaveValue("google");
-        await expect(getModelSelect(page)).toHaveValue("gemini-2.5-pro");
+        await expect(getModelSelect(page)).toHaveValue("gemini-3.5-flash");
         await expect(getInputTokensInput(page)).toHaveValue("12345");
         await expect(getOutputTokensInput(page)).toHaveValue("6789");
         await expect(getRequestsPerDayInput(page)).toHaveValue("42");
@@ -177,7 +177,7 @@ test.describe("AI Cost Calculator", () => {
         await expect(page).toHaveURL(/\/it\/calcolatore-costi-ai$/);
         await expect(page.getByRole("heading", { name: /Calcolatore costi AI/i })).toBeVisible();
         await expect(getProviderSelect(page)).toHaveValue("openai");
-        await expect(getModelSelect(page)).toHaveValue("gpt-5.5");
+        await expect(getModelSelect(page)).toHaveValue("gpt-5.6-sol");
         await expect(getUsagePresetsSection(page)).toBeVisible();
         await expect(getMonthlyCostHero(page)).toBeVisible();
         await expect(getMonthlyCostHero(page)).toContainText(/Costo mensile stimato/i);
