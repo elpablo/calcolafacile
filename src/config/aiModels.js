@@ -2,6 +2,26 @@ export const AI_MODEL_PROVIDERS = {
     openai: {
         label: "OpenAI",
         models: {
+            "gpt-5.6-sol": {
+                label: "GPT-5.6 Sol",
+                inputCostPerMillion: 5,
+                outputCostPerMillion: 30,
+            },
+            "gpt-5.6-terra": {
+                label: "GPT-5.6 Terra",
+                inputCostPerMillion: 2.5,
+                outputCostPerMillion: 15,
+            },
+            "gpt-5.6-luna": {
+                label: "GPT-5.6 Luna",
+                inputCostPerMillion: 1,
+                outputCostPerMillion: 6,
+            },
+            "gpt-5.5-pro": {
+                label: "GPT-5.5 Pro",
+                inputCostPerMillion: 30,
+                outputCostPerMillion: 180,
+            },
             "gpt-5.5": {
                 label: "GPT-5.5",
                 inputCostPerMillion: 5,
@@ -12,31 +32,26 @@ export const AI_MODEL_PROVIDERS = {
                 inputCostPerMillion: 2.5,
                 outputCostPerMillion: 15,
             },
-            "gpt-5.4-mini": {
-                label: "GPT-5.4 Mini",
-                inputCostPerMillion: 0.25,
-                outputCostPerMillion: 2,
-            },
-            "gpt-4.1": {
-                label: "GPT-4.1",
-                inputCostPerMillion: 2,
-                outputCostPerMillion: 8,
-            },
-            "gpt-4o": {
-                label: "GPT-4o",
-                inputCostPerMillion: 2.5,
-                outputCostPerMillion: 10,
-            },
-            "gpt-4o-mini": {
-                label: "GPT-4o Mini",
-                inputCostPerMillion: 0.15,
-                outputCostPerMillion: 0.6,
-            },
         },
     },
     anthropic: {
         label: "Anthropic",
         models: {
+            "claude-fable-5": {
+                label: "Claude Fable 5",
+                inputCostPerMillion: 10,
+                outputCostPerMillion: 50,
+            },
+            "claude-mythos-5": {
+                label: "Claude Mythos 5",
+                inputCostPerMillion: 10,
+                outputCostPerMillion: 50,
+            },
+            "claude-opus-5": {
+                label: "Claude Opus 5",
+                inputCostPerMillion: 5,
+                outputCostPerMillion: 25,
+            },
             "claude-opus-4.8": {
                 label: "Claude Opus 4.8",
                 inputCostPerMillion: 5,
@@ -57,11 +72,6 @@ export const AI_MODEL_PROVIDERS = {
                 inputCostPerMillion: 3,
                 outputCostPerMillion: 15,
             },
-            "claude-sonnet-4": {
-                label: "Claude Sonnet 4",
-                inputCostPerMillion: 3,
-                outputCostPerMillion: 15,
-            },
             "claude-haiku-4.5": {
                 label: "Claude Haiku 4.5",
                 inputCostPerMillion: 1,
@@ -72,6 +82,11 @@ export const AI_MODEL_PROVIDERS = {
     google: {
         label: "Google",
         models: {
+            "gemini-3.5-flash": {
+                label: "Gemini 3.5 Flash",
+                inputCostPerMillion: 0.75,
+                outputCostPerMillion: 4.5,
+            },
             "gemini-2.5-pro": {
                 label: "Gemini 2.5 Pro",
                 inputCostPerMillion: 1.25,
@@ -82,6 +97,11 @@ export const AI_MODEL_PROVIDERS = {
     xai: {
         label: "xAI",
         models: {
+            "grok-4.5": {
+                label: "Grok 4.5",
+                inputCostPerMillion: 2.0,
+                outputCostPerMillion: 6.0,
+            },
             "grok-4.3": {
                 label: "Grok 4.3",
                 inputCostPerMillion: 1.25,
@@ -97,6 +117,16 @@ export const AI_MODEL_PROVIDERS = {
     deepseek: {
         label: "DeepSeek",
         models: {
+            "deepseek-v4-pro": {
+                label: "DeepSeek V4 Pro",
+                inputCostPerMillion: 0.43,
+                outputCostPerMillion: 0.87,
+            },
+            "deepseek-v4": {
+                label: "DeepSeek V4 Non-Reasoning",
+                inputCostPerMillion: 0.09,
+                outputCostPerMillion: 0.18,
+            },
             "deepseek-v3.2": {
                 label: "DeepSeek V3.2",
                 inputCostPerMillion: 0.28,
@@ -112,15 +142,25 @@ export const AI_MODEL_PROVIDERS = {
     mistral: {
         label: "Mistral",
         models: {
+            "mistral-medium-3.5": {
+                label: "Mistral Medium 3.5",
+                inputCostPerMillion: 1.5,
+                outputCostPerMillion: 7.5,
+            },
+            "mistral-small-2603": {
+                label: "Mistral Small 2603",
+                inputCostPerMillion: 0.15,
+                outputCostPerMillion: 0.6,
+            },
+            "mistral-small-creative": {
+                label: "Mistral Small Creative",
+                inputCostPerMillion: 0.1,
+                outputCostPerMillion: 0.3,
+            },
             "mistral-large-3-2512": {
                 label: "Mistral Large 3 2512",
                 inputCostPerMillion: 0.5,
                 outputCostPerMillion: 1.5,
-            },
-            "mistral-medium-3.1": {
-                label: "Mistral Medium 3.1",
-                inputCostPerMillion: 0.4,
-                outputCostPerMillion: 2,
             },
             "mistral-small-3.2-24b": {
                 label: "Mistral Small 3.2 24B",
