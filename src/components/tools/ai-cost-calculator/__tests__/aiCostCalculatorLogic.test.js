@@ -5,6 +5,8 @@ import {
     applyAiCostPreset,
     buildModelCostComparison,
     calculateAiCostEstimate,
+    formatCurrencyDeterministic,
+    formatNumberDeterministic,
     getAiCostPreset,
     getDefaultAiCostInput,
     getDefaultModelKeyForProvider,
@@ -610,6 +612,77 @@ describe("aiCostCalculatorLogic", () => {
                 result.selected.monthlyCost - result.cheapest.monthlyCost,
                 10,
             );
+        });
+    });
+
+    describe("formatCurrencyDeterministic", () => {
+        // Regression test for the SSR/CSR hydration mismatch: Node's bundled
+        // ICU formats it-IT/USD 7200 without a thousands separator
+        // ("7200,00 USD"), while Safari/WebKit's ICU adds one
+        // ("7.200,00 USD"). This formatter must produce the same,
+        // correctly-grouped string regardless of which engine renders it.
+        it("formats a four-digit value for en-US with comma grouping and a $ prefix", () => {
+            expect(formatCurrencyDeterministic(7200, "en-US")).toBe("$7,200.00");
+        });
+
+        it("formats a four-digit value for it-IT with period grouping and a USD suffix", () => {
+            expect(formatCurrencyDeterministic(7200, "it-IT")).toBe("7.200,00 USD");
+        });
+
+        it("formats larger values with multiple grouping separators", () => {
+            expect(formatCurrencyDeterministic(1234567.89, "en-US")).toBe("$1,234,567.89");
+            expect(formatCurrencyDeterministic(1234567.89, "it-IT")).toBe("1.234.567,89 USD");
+        });
+
+        it("formats decimal (cent-level) values without unnecessary grouping", () => {
+            expect(formatCurrencyDeterministic(0.2, "en-US")).toBe("$0.20");
+            expect(formatCurrencyDeterministic(0.2, "it-IT")).toBe("0,20 USD");
+        });
+
+        it("uses four fraction digits for sub-cent values, per the tool's existing convention", () => {
+            expect(formatCurrencyDeterministic(0.0034, "en-US")).toBe("$0.0034");
+            expect(formatCurrencyDeterministic(0.0034, "it-IT")).toBe("0,0034 USD");
+        });
+
+        it("does not add a grouping separator below one thousand", () => {
+            expect(formatCurrencyDeterministic(600, "en-US")).toBe("$600.00");
+            expect(formatCurrencyDeterministic(600, "it-IT")).toBe("600,00 USD");
+        });
+
+        it("falls back to en-US formatting for an unknown locale instead of throwing", () => {
+            expect(formatCurrencyDeterministic(7200, "fr-FR")).toBe("$7,200.00");
+        });
+
+        it("treats non-finite input as zero instead of throwing or producing NaN", () => {
+            // Matches the pre-existing formatter's convention: 0 < 0.01, so
+            // zero also gets 4 fraction digits, same as any other sub-cent value.
+            expect(formatCurrencyDeterministic(NaN, "en-US")).toBe("$0.0000");
+            expect(formatCurrencyDeterministic(undefined, "en-US")).toBe("$0.0000");
+        });
+
+        it("produces byte-identical output across repeated calls (determinism check)", () => {
+            const calls = Array.from({ length: 5 }, () => formatCurrencyDeterministic(7200, "it-IT"));
+            expect(new Set(calls).size).toBe(1);
+        });
+    });
+
+    describe("formatNumberDeterministic", () => {
+        it("groups a four-digit integer with the locale's thousands separator", () => {
+            expect(formatNumberDeterministic(7200, "en-US")).toBe("7,200");
+            expect(formatNumberDeterministic(7200, "it-IT")).toBe("7.200");
+        });
+
+        it("does not add a grouping separator below one thousand", () => {
+            expect(formatNumberDeterministic(500, "en-US")).toBe("500");
+            expect(formatNumberDeterministic(500, "it-IT")).toBe("500");
+        });
+
+        it("rounds fractional values to the nearest integer", () => {
+            expect(formatNumberDeterministic(1234.6, "en-US")).toBe("1,235");
+        });
+
+        it("treats non-finite input as zero instead of throwing or producing NaN", () => {
+            expect(formatNumberDeterministic(NaN, "en-US")).toBe("0");
         });
     });
 });

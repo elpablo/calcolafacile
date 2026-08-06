@@ -18,6 +18,8 @@ import { loadLocalState, saveLocalState } from "@/lib/browserStorage";
 import {
     AI_COST_USE_CASE_PRESETS,
     calculateAiCostEstimate,
+    formatCurrencyDeterministic as formatCurrency,
+    formatNumberDeterministic as formatNumber,
     getDefaultModelKeyForProvider,
     getModelCostComparison,
     normalizeAiCostInput,
@@ -61,21 +63,6 @@ function getInitialState(shouldLoadSavedState, searchParams) {
 
     const stored = loadLocalState(STORAGE_KEY, {});
     return normalizeAiCostInput({ ...fallback, ...stored });
-}
-
-function formatCurrency(value, locale, currency = "USD") {
-    return new Intl.NumberFormat(locale, {
-        style: "currency",
-        currency,
-        minimumFractionDigits: value < 0.01 ? 4 : 2,
-        maximumFractionDigits: value < 0.01 ? 4 : 2,
-    }).format(value);
-}
-
-function formatNumber(value, locale) {
-    return new Intl.NumberFormat(locale, {
-        maximumFractionDigits: 0,
-    }).format(value);
 }
 
 function getInputValue(valueOrEvent) {

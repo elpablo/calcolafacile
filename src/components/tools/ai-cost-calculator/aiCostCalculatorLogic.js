@@ -8,6 +8,68 @@ import {
     getProviderModelKeys,
 } from "@/config/aiModels";
 
+// Only en-US and it-IT are used by this tool's locale files today. USD is
+// the only currency ever passed in, so the symbol is fixed per locale
+// rather than derived from the currency code.
+const CURRENCY_FORMAT_BY_LOCALE = {
+    "en-US": { thousands: ",", decimal: ".", symbol: "$", symbolPosition: "prefix" },
+    "it-IT": { thousands: ".", decimal: ",", symbol: "USD", symbolPosition: "suffix" },
+};
+
+const NUMBER_FORMAT_BY_LOCALE = {
+    "en-US": { thousands: "," },
+    "it-IT": { thousands: "." },
+};
+
+function groupThousands(digits, separator) {
+    return digits.replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+}
+
+/**
+ * Deterministic currency formatter for en-US/it-IT USD values, shared by
+ * server and client rendering.
+ *
+ * Intl.NumberFormat's thousands-grouping rules for a given locale come from
+ * the runtime's bundled ICU data, and that data is not guaranteed to match
+ * between Node.js (SSR) and a browser's JS engine (CSR). Observed example:
+ * for it-IT/USD, Node (ICU 77) formats 7200 as "7200,00 USD" (no grouping
+ * separator) while Safari/WebKit formats the same input as "7.200,00 USD"
+ * (with one). Server- and client-rendered markup then disagree, which React
+ * reports as a hydration mismatch. This formatter builds the string by hand
+ * — fixed decimal digits, then manual thousands grouping — instead of
+ * delegating to Intl, so the output is identical on every engine.
+ */
+export function formatCurrencyDeterministic(value, locale, currency = "USD") {
+    const numericValue = Number.isFinite(value) ? value : 0;
+    const format = CURRENCY_FORMAT_BY_LOCALE[locale] ?? CURRENCY_FORMAT_BY_LOCALE["en-US"];
+    // Matches the tool's existing convention of showing extra precision for
+    // sub-cent amounts (e.g. per-token costs) instead of rounding to $0.00.
+    const fractionDigits = numericValue < 0.01 ? 4 : 2;
+    const isNegative = numericValue < 0;
+    const [integerPart, fractionPart] = Math.abs(numericValue).toFixed(fractionDigits).split(".");
+    const numberString = `${groupThousands(integerPart, format.thousands)}${format.decimal}${fractionPart}`;
+    const sign = isNegative ? "-" : "";
+    const symbol = currency === "USD" ? format.symbol : currency;
+
+    return format.symbolPosition === "prefix"
+        ? `${sign}${symbol}${numberString}`
+        : `${sign}${numberString} ${symbol}`;
+}
+
+/**
+ * Deterministic integer/grouped-number formatter, for the same
+ * cross-engine-ICU reason as formatCurrencyDeterministic above.
+ */
+export function formatNumberDeterministic(value, locale) {
+    const numericValue = Number.isFinite(value) ? value : 0;
+    const format = NUMBER_FORMAT_BY_LOCALE[locale] ?? NUMBER_FORMAT_BY_LOCALE["en-US"];
+    const isNegative = numericValue < 0;
+    const integerPart = Math.round(Math.abs(numericValue)).toString();
+    const sign = isNegative ? "-" : "";
+
+    return `${sign}${groupThousands(integerPart, format.thousands)}`;
+}
+
 // Explicit, currently-supported defaults per provider. These intentionally
 // match the catalog's current first entry so the golden-path UX is
 // unchanged, but they no longer depend on Object.keys/registry ordering:
