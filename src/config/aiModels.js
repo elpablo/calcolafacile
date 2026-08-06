@@ -119,8 +119,13 @@ export const AI_MODEL_PROVIDERS = {
         models: {
             "deepseek-v4-pro": {
                 label: "DeepSeek V4 Pro",
-                inputCostPerMillion: 0.43,
+                inputCostPerMillion: 0.435,
                 outputCostPerMillion: 0.87,
+            },
+            "deepseek-v4-flash": {
+                label: "DeepSeek V4 Flash",
+                inputCostPerMillion: 0.14,
+                outputCostPerMillion: 0.28,
             },
             "deepseek-v4": {
                 label: "DeepSeek V4 Non-Reasoning",

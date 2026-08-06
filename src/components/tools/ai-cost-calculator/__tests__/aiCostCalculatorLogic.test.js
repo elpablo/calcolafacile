@@ -83,6 +83,13 @@ describe("aiCostCalculatorLogic", () => {
             expect(first).toBe(second);
             expect(getProviderModelKeys("anthropic")).toContain(first);
         });
+
+        it("keeps deepseek-v4-pro as the DeepSeek default after adding deepseek-v4-flash to the catalog", () => {
+            // deepseek-v4-flash was inserted before deepseek-v4-pro's sibling
+            // entries in the catalog; this guards against it accidentally
+            // becoming the default via Object.keys(...)[0] fallback.
+            expect(getDefaultModelKeyForProvider("deepseek")).toBe("deepseek-v4-pro");
+        });
     });
 
     describe("normalizeAiCostInput", () => {
@@ -593,6 +600,18 @@ describe("aiCostCalculatorLogic", () => {
                     modelKey: "removed-model",
                 }),
             ).not.toThrow();
+        });
+
+        it("includes both new DeepSeek models in the cross-model comparison ranking", () => {
+            const result = getModelCostComparison({
+                inputTokens: "10000",
+                outputTokens: "5000",
+                requestsPerDay: "100",
+            });
+
+            const modelKeys = result.entries.map((entry) => entry.modelKey);
+            expect(modelKeys).toContain("deepseek-v4-flash");
+            expect(modelKeys).toContain("deepseek-v4-pro");
         });
 
         it("reports a valid rank and non-negative cost delta for the selected model in the real catalog", () => {

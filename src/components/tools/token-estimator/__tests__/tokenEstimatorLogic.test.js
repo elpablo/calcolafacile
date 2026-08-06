@@ -50,6 +50,21 @@ describe("tokenEstimatorLogic", () => {
         it("returns the matching model for a valid key", () => {
             expect(resolveModel("gpt-5.6-terra")).toEqual(MODELS["gpt-5.6-terra"]);
         });
+
+        it("resolves the new DeepSeek V4 Flash and Pro models with cache-miss pricing", () => {
+            expect(resolveModel("deepseek-v4-flash")).toEqual({
+                label: "DeepSeek V4 Flash",
+                providerLabel: "DeepSeek",
+                inputPricePerMillion: 0.14,
+                outputPricePerMillion: 0.28,
+            });
+            expect(resolveModel("deepseek-v4-pro")).toEqual({
+                label: "DeepSeek V4 Pro",
+                providerLabel: "DeepSeek",
+                inputPricePerMillion: 0.435,
+                outputPricePerMillion: 0.87,
+            });
+        });
     });
 
     describe("normalizeTokenEstimatorState", () => {
