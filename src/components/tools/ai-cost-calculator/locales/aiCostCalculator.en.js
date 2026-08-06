@@ -79,6 +79,32 @@ const aiCostCalculatorEn = {
         pricingDisclaimerTitle: "Pricing disclaimer",
         pricingDisclaimer:
             "Prices are approximate and based on public per-million-token pricing. AI providers may change prices, apply volume discounts or use different pricing for cached tokens, batch APIs or regional billing. Always verify current pricing on the provider website before making production decisions.",
+        comparison: {
+            title: "Compare monthly cost across all models",
+            description:
+                "The same workload (input tokens, output tokens and requests per day) computed for every supported model, sorted from cheapest to most expensive.",
+            chartTitle: "Monthly cost by model",
+            tableTitle: "All models, cheapest to most expensive",
+            selectedBadge: "Selected",
+            cheapestTitle: "Cheapest model",
+            mostExpensiveTitle: "Most expensive model",
+            yourSelectionTitle: "Your selection",
+            selectedRank: (rank, total) => `Rank ${rank} of ${total} models`,
+            selectedDelta: (formattedAmount) => `${formattedAmount} more than the cheapest model`,
+            selectedIsCheapest: "This is the cheapest model for this workload.",
+            allEqualNote: "All compared models cost the same for this workload.",
+            tieNote: (otherCount) =>
+                otherCount === 1
+                    ? "Tied with 1 other model at this price."
+                    : `Tied with ${otherCount} other models at this price.`,
+            tableHeaders: {
+                rank: "#",
+                model: "Model",
+                provider: "Provider",
+                monthlyCost: "Monthly cost",
+            },
+            empty: "No models with complete pricing data are available to compare.",
+        },
     },
     examples: localizeExamples("en"),
     faq: (

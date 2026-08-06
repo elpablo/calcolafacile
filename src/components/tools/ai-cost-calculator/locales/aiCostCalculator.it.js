@@ -80,6 +80,32 @@ const aiCostCalculatorIt = {
         pricingDisclaimerTitle: "Nota sui prezzi",
         pricingDisclaimer:
             "I prezzi sono indicativi e basati sui listini pubblici per milione di token. I provider AI possono modificare i prezzi, applicare sconti a volume o usare tariffe diverse per token in cache, API batch o fatturazione regionale. Verifica sempre i prezzi aggiornati sul sito ufficiale del provider prima di prendere decisioni di produzione.",
+        comparison: {
+            title: "Confronta il costo mensile tra tutti i modelli",
+            description:
+                "Lo stesso carico di lavoro (token di input, token di output e richieste al giorno) calcolato per ogni modello supportato, ordinato dal più economico al più costoso.",
+            chartTitle: "Costo mensile per modello",
+            tableTitle: "Tutti i modelli, dal più economico al più costoso",
+            selectedBadge: "Selezionato",
+            cheapestTitle: "Modello più economico",
+            mostExpensiveTitle: "Modello più costoso",
+            yourSelectionTitle: "La tua selezione",
+            selectedRank: (rank, total) => `Posizione ${rank} di ${total} modelli`,
+            selectedDelta: (formattedAmount) => `${formattedAmount} in più rispetto al modello più economico`,
+            selectedIsCheapest: "Questo è il modello più economico per questo carico di lavoro.",
+            allEqualNote: "Tutti i modelli confrontati hanno lo stesso costo per questo carico di lavoro.",
+            tieNote: (otherCount) =>
+                otherCount === 1
+                    ? "In parità con 1 altro modello a questo prezzo."
+                    : `In parità con altri ${otherCount} modelli a questo prezzo.`,
+            tableHeaders: {
+                rank: "#",
+                model: "Modello",
+                provider: "Provider",
+                monthlyCost: "Costo mensile",
+            },
+            empty: "Nessun modello con dati di prezzo completi disponibile per il confronto.",
+        },
     },
     examples: localizeExamples("it"),
     faq: (

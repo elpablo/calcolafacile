@@ -9,7 +9,6 @@ import ToolLayout, {
 } from "@/components/ToolLayout";
 
 import {
-    getFirstModelKey,
     getProvider,
     getProviderKeys,
     getProviderModelKeys,
@@ -19,6 +18,8 @@ import { loadLocalState, saveLocalState } from "@/lib/browserStorage";
 import {
     AI_COST_USE_CASE_PRESETS,
     calculateAiCostEstimate,
+    getDefaultModelKeyForProvider,
+    getModelCostComparison,
     normalizeAiCostInput,
 } from "./aiCostCalculatorLogic";
 const STORAGE_KEY = "calcolafacile:ai-cost-calculator";
@@ -184,6 +185,26 @@ function AiCostCalculatorCoreContent({ content, searchParams, shouldLoadSavedSta
         (preset) => preset.key === activePresetKey,
     );
 
+    const comparison = useMemo(
+        () =>
+            getModelCostComparison({
+                providerKey,
+                modelKey,
+                inputTokens,
+                outputTokens,
+                requestsPerDay,
+                activePresetKey,
+            }),
+        [
+            providerKey,
+            modelKey,
+            inputTokens,
+            outputTokens,
+            requestsPerDay,
+            activePresetKey,
+        ],
+    );
+
     const applyPreset = (preset) => {
         setInputTokens(preset.inputTokens);
         setOutputTokens(preset.outputTokens);
@@ -233,7 +254,7 @@ function AiCostCalculatorCoreContent({ content, searchParams, shouldLoadSavedSta
 
                                     setActivePresetKey(null);
                                     setProviderKey(nextProvider);
-                                    setModelKey(getFirstModelKey(nextProvider));
+                                    setModelKey(getDefaultModelKeyForProvider(nextProvider));
                                 }}
                                 className={selectClassName}
                             >
@@ -512,6 +533,271 @@ function AiCostCalculatorCoreContent({ content, searchParams, shouldLoadSavedSta
                             </p>
                         </ResultBox>
                     </div>
+                </section>
+
+                <section className="mt-8" data-testid="ai-cost-comparison">
+                    <div className="mb-3">
+                        <h2 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+                            {labels.comparison.title}
+                        </h2>
+                        <p className="mt-1 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+                            {labels.comparison.description}
+                        </p>
+                    </div>
+
+                    {comparison.entries.length === 0 ? (
+                        <p className="rounded-xl border border-zinc-200 bg-white/70 p-4 text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-400">
+                            {labels.comparison.empty}
+                        </p>
+                    ) : (
+                        <>
+                            <div className="mb-4 grid gap-3 sm:grid-cols-3">
+                                <div
+                                    data-testid="ai-cost-comparison-cheapest"
+                                    className="rounded-xl border p-4 shadow-sm"
+                                    style={{
+                                        backgroundColor: "var(--cf-success-bg)",
+                                        borderColor: "var(--cf-success-border)",
+                                    }}
+                                >
+                                    <p
+                                        className="text-xs font-semibold uppercase tracking-wide"
+                                        style={{ color: "var(--cf-success-text)" }}
+                                    >
+                                        {labels.comparison.cheapestTitle}
+                                    </p>
+                                    <p className="mt-1 font-semibold text-zinc-900 dark:text-zinc-50">
+                                        {comparison.cheapest.providerLabel} · {comparison.cheapest.label}
+                                    </p>
+                                    <p
+                                        className="mt-1 text-xl font-bold"
+                                        style={{ color: "var(--cf-success-text)" }}
+                                    >
+                                        {formatCurrency(comparison.cheapest.monthlyCost, locale, currency)}
+                                    </p>
+                                    {comparison.cheapestTieCount > 1 && (
+                                        <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
+                                            {labels.comparison.tieNote(comparison.cheapestTieCount - 1)}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <div
+                                    data-testid="ai-cost-comparison-most-expensive"
+                                    className="rounded-xl border p-4 shadow-sm"
+                                    style={{
+                                        backgroundColor: "var(--cf-danger-bg)",
+                                        borderColor: "var(--cf-danger-border)",
+                                    }}
+                                >
+                                    <p
+                                        className="text-xs font-semibold uppercase tracking-wide"
+                                        style={{ color: "var(--cf-danger-text)" }}
+                                    >
+                                        {labels.comparison.mostExpensiveTitle}
+                                    </p>
+                                    <p className="mt-1 font-semibold text-zinc-900 dark:text-zinc-50">
+                                        {comparison.mostExpensive.providerLabel} · {comparison.mostExpensive.label}
+                                    </p>
+                                    <p
+                                        className="mt-1 text-xl font-bold"
+                                        style={{ color: "var(--cf-danger-text)" }}
+                                    >
+                                        {formatCurrency(comparison.mostExpensive.monthlyCost, locale, currency)}
+                                    </p>
+                                    {comparison.mostExpensiveTieCount > 1 && (
+                                        <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
+                                            {labels.comparison.tieNote(comparison.mostExpensiveTieCount - 1)}
+                                        </p>
+                                    )}
+                                </div>
+
+                                {comparison.selected && (
+                                    <div
+                                        data-testid="ai-cost-comparison-selected"
+                                        className="rounded-xl border p-4 shadow-sm"
+                                        style={{
+                                            backgroundColor: "var(--cf-info-bg)",
+                                            borderColor: "var(--cf-info-border)",
+                                        }}
+                                    >
+                                        <p
+                                            className="text-xs font-semibold uppercase tracking-wide"
+                                            style={{ color: "var(--cf-info-text)" }}
+                                        >
+                                            {labels.comparison.yourSelectionTitle}
+                                        </p>
+                                        <p className="mt-1 font-semibold text-zinc-900 dark:text-zinc-50">
+                                            {comparison.selected.providerLabel} · {comparison.selected.label}
+                                        </p>
+                                        <p
+                                            className="mt-1 text-xl font-bold"
+                                            style={{ color: "var(--cf-info-text)" }}
+                                        >
+                                            {formatCurrency(comparison.selected.monthlyCost, locale, currency)}
+                                        </p>
+                                        <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
+                                            {labels.comparison.selectedRank(
+                                                comparison.selectedRank,
+                                                comparison.totalCount,
+                                            )}
+                                        </p>
+                                        <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
+                                            {comparison.selectedCostDeltaFromCheapest > 0
+                                                ? labels.comparison.selectedDelta(
+                                                      formatCurrency(
+                                                          comparison.selectedCostDeltaFromCheapest,
+                                                          locale,
+                                                          currency,
+                                                      ),
+                                                  )
+                                                : labels.comparison.selectedIsCheapest}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+
+                            {comparison.allEqual && (
+                                <p className="mb-4 text-sm text-zinc-600 dark:text-zinc-400">
+                                    {labels.comparison.allEqualNote}
+                                </p>
+                            )}
+
+                            <div
+                                data-testid="ai-cost-comparison-chart"
+                                className="mb-6 rounded-xl border border-zinc-200 bg-white/70 p-4 dark:border-zinc-800 dark:bg-zinc-900/60"
+                            >
+                                <p className="mb-3 text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                                    {labels.comparison.chartTitle}
+                                </p>
+                                <div className="max-h-105 min-w-0 space-y-2 overflow-y-auto pr-1">
+                                    {comparison.entries.map((entry) => {
+                                        const widthPercent =
+                                            comparison.maxMonthlyCost > 0
+                                                ? (entry.monthlyCost / comparison.maxMonthlyCost) * 100
+                                                : 0;
+
+                                        return (
+                                            <div
+                                                key={`${entry.providerKey}:${entry.modelKey}`}
+                                                data-testid={`ai-cost-comparison-chart-row-${entry.providerKey}-${entry.modelKey}`}
+                                                data-selected={entry.isSelected}
+                                                className="rounded-lg border p-2"
+                                                style={{
+                                                    backgroundColor: entry.isSelected
+                                                        ? "var(--cf-success-bg)"
+                                                        : "transparent",
+                                                    borderColor: entry.isSelected
+                                                        ? "var(--cf-success-border)"
+                                                        : "transparent",
+                                                }}
+                                            >
+                                                <div className="flex flex-wrap items-baseline justify-between gap-x-2 text-xs">
+                                                    <span className="font-medium wrap-break-word text-zinc-700 dark:text-zinc-300">
+                                                        {entry.providerLabel} · {entry.label}
+                                                        {entry.isSelected && (
+                                                            <span
+                                                                className="ml-2 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
+                                                                style={{
+                                                                    backgroundColor: "var(--cf-success-text)",
+                                                                    color: "var(--cf-success-badge-text)",
+                                                                }}
+                                                            >
+                                                                {labels.comparison.selectedBadge}
+                                                            </span>
+                                                        )}
+                                                    </span>
+                                                    <span className="shrink-0 font-semibold text-zinc-900 dark:text-zinc-100">
+                                                        {formatCurrency(entry.monthlyCost, locale, currency)}
+                                                    </span>
+                                                </div>
+                                                <div className="mt-1 h-2.5 w-full overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+                                                    <div
+                                                        className="h-full rounded-full"
+                                                        style={{
+                                                            width: `${widthPercent}%`,
+                                                            backgroundColor: entry.isSelected
+                                                                ? "var(--cf-success-text)"
+                                                                : "var(--cf-bar-default)",
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            <div
+                                data-testid="ai-cost-comparison-table"
+                                className="overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800"
+                            >
+                                <p className="border-b border-zinc-200 bg-zinc-50 p-3 text-sm font-semibold text-zinc-900 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100">
+                                    {labels.comparison.tableTitle}
+                                </p>
+                                <div className="max-h-105 overflow-auto">
+                                    <table className="w-full table-fixed border-collapse text-left text-sm">
+                                        <thead className="sticky top-0 bg-zinc-50 text-xs uppercase tracking-wide text-zinc-500 dark:bg-zinc-900 dark:text-zinc-400">
+                                            <tr>
+                                                <th className="w-10 px-3 py-2 font-semibold">
+                                                    {labels.comparison.tableHeaders.rank}
+                                                </th>
+                                                <th className="px-3 py-2 font-semibold">
+                                                    {labels.comparison.tableHeaders.model}
+                                                </th>
+                                                <th className="w-20 px-3 py-2 font-semibold sm:w-28">
+                                                    {labels.comparison.tableHeaders.provider}
+                                                </th>
+                                                <th className="w-20 px-3 py-2 text-right font-semibold sm:w-28">
+                                                    {labels.comparison.tableHeaders.monthlyCost}
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {comparison.entries.map((entry, index) => (
+                                                <tr
+                                                    key={`${entry.providerKey}:${entry.modelKey}`}
+                                                    data-testid={`ai-cost-comparison-row-${entry.providerKey}-${entry.modelKey}`}
+                                                    data-selected={entry.isSelected}
+                                                    className="border-t border-zinc-100 dark:border-zinc-800"
+                                                    style={{
+                                                        backgroundColor: entry.isSelected
+                                                            ? "var(--cf-success-bg)"
+                                                            : "transparent",
+                                                    }}
+                                                >
+                                                    <td className="px-3 py-2 text-zinc-500 dark:text-zinc-400">
+                                                        {index + 1}
+                                                    </td>
+                                                    <td className="px-3 py-2 font-medium text-zinc-900 dark:text-zinc-100">
+                                                        {entry.label}
+                                                        {entry.isSelected && (
+                                                            <span
+                                                                data-testid="ai-cost-comparison-selected-badge"
+                                                                className="ml-2 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
+                                                                style={{
+                                                                    backgroundColor: "var(--cf-success-text)",
+                                                                    color: "var(--cf-success-badge-text)",
+                                                                }}
+                                                            >
+                                                                {labels.comparison.selectedBadge}
+                                                            </span>
+                                                        )}
+                                                    </td>
+                                                    <td className="px-3 py-2 text-zinc-600 dark:text-zinc-300">
+                                                        {entry.providerLabel}
+                                                    </td>
+                                                    <td className="px-3 py-2 text-right font-semibold text-zinc-900 dark:text-zinc-100">
+                                                        {formatCurrency(entry.monthlyCost, locale, currency)}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </>
+                    )}
                 </section>
 
                 <div className="mt-6 rounded-xl border border-zinc-200 bg-zinc-50 p-4 text-sm leading-6 text-zinc-700 shadow-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300">

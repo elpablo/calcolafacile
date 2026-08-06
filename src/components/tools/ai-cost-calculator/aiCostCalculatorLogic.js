@@ -2,10 +2,43 @@ import { calculateAiCosts as calculateAiCostsBase } from "@/lib/aiCostCalculator
 import {
     getFirstModelKey,
     getFirstProviderKey,
+    getFlatModels,
     getProvider,
     getProviderKeys,
     getProviderModelKeys,
 } from "@/config/aiModels";
+
+// Explicit, currently-supported defaults per provider. These intentionally
+// match the catalog's current first entry so the golden-path UX is
+// unchanged, but they no longer depend on Object.keys/registry ordering:
+// if a provider is reordered or these exact keys are ever removed from the
+// catalog, getDefaultModelKeyForProvider() degrades to the first remaining
+// model for that provider instead of crashing or silently misselecting.
+const DEFAULT_PROVIDER_KEY = "openai";
+
+const PROVIDER_DEFAULT_MODEL_KEYS = {
+    openai: "gpt-5.6-sol",
+    anthropic: "claude-fable-5",
+    google: "gemini-3.5-flash",
+    xai: "grok-4.5",
+    deepseek: "deepseek-v4-pro",
+    mistral: "mistral-medium-3.5",
+};
+
+export function getDefaultProviderKey() {
+    return getProviderKeys().includes(DEFAULT_PROVIDER_KEY)
+        ? DEFAULT_PROVIDER_KEY
+        : getFirstProviderKey();
+}
+
+export function getDefaultModelKeyForProvider(providerKey) {
+    const explicitDefault = PROVIDER_DEFAULT_MODEL_KEYS[providerKey];
+    const providerModelKeys = getProviderModelKeys(providerKey);
+
+    return providerModelKeys.includes(explicitDefault)
+        ? explicitDefault
+        : getFirstModelKey(providerKey);
+}
 
 export const AI_COST_USE_CASE_PRESETS = [
     {
@@ -81,8 +114,8 @@ export const AI_COST_USE_CASE_PRESETS = [
 ];
 
 export function getDefaultAiCostInput() {
-    const providerKey = getFirstProviderKey();
-    const modelKey = getFirstModelKey(providerKey);
+    const providerKey = getDefaultProviderKey();
+    const modelKey = getDefaultModelKeyForProvider(providerKey);
 
     return {
         providerKey,
@@ -101,9 +134,13 @@ export function normalizeAiCostInput(input = {}) {
         ? input.providerKey
         : fallback.providerKey;
     const providerModelKeys = getProviderModelKeys(providerKey);
-    const modelKey = providerModelKeys.includes(input.modelKey)
-        ? input.modelKey
-        : getFirstModelKey(providerKey);
+    // A modelKey persisted under a previous provider, or removed from the
+    // catalog entirely, will not appear in this provider's own model list,
+    // so it correctly falls through to this provider's explicit default.
+    const modelKey =
+        typeof input.modelKey === "string" && providerModelKeys.includes(input.modelKey)
+            ? input.modelKey
+            : getDefaultModelKeyForProvider(providerKey);
 
     return {
         providerKey,
@@ -154,5 +191,115 @@ export function calculateAiCostEstimate(input = {}) {
             ...calculations,
             annualCost: calculations.monthlyCost * 12,
         },
+    };
+}
+
+// A model is only included in the cross-model comparison when both prices
+// are present, finite, non-negative numbers. Models with missing or
+// malformed pricing are excluded from the comparison entirely rather than
+// treated as free (0) or shown as a misleading "N/A" row, since either
+// would distort the cheapest/most-expensive ranking.
+export function isComparableModel(model) {
+    return Boolean(
+        model &&
+            Number.isFinite(model.inputCostPerMillion) &&
+            model.inputCostPerMillion >= 0 &&
+            Number.isFinite(model.outputCostPerMillion) &&
+            model.outputCostPerMillion >= 0,
+    );
+}
+
+// Deterministic ordering: primarily by monthly cost, then by provider label
+// and model label as tie-breakers. This keeps equal-cost models (including
+// the all-zero-cost case, e.g. before the user enters any usage) in a
+// stable, reproducible order instead of relying on catalog/object iteration
+// order.
+function compareComparisonEntries(a, b) {
+    if (a.monthlyCost !== b.monthlyCost) {
+        return a.monthlyCost - b.monthlyCost;
+    }
+    if (a.providerLabel !== b.providerLabel) {
+        return a.providerLabel.localeCompare(b.providerLabel);
+    }
+    return a.label.localeCompare(b.label);
+}
+
+/**
+ * Pure comparison builder over an arbitrary list of flat model entries
+ * (same shape as getFlatModels()). Kept separate from getModelCostComparison
+ * so tests can exercise sorting/ties/incomplete-pricing behavior with
+ * synthetic catalogs, without depending on the real AI model registry.
+ */
+export function buildModelCostComparison(models, normalizedInput) {
+    const entries = (models ?? [])
+        .filter(isComparableModel)
+        .map((model) => {
+            const calculations = calculateAiCostsBase({
+                inputTokens: normalizedInput.inputTokens,
+                outputTokens: normalizedInput.outputTokens,
+                requestsPerDay: normalizedInput.requestsPerDay,
+                model,
+            });
+
+            return {
+                providerKey: model.providerKey,
+                providerLabel: model.providerLabel,
+                modelKey: model.modelKey,
+                label: model.label,
+                isSelected:
+                    model.providerKey === normalizedInput.providerKey &&
+                    model.modelKey === normalizedInput.modelKey,
+                ...calculations,
+            };
+        })
+        .sort(compareComparisonEntries);
+
+    if (entries.length === 0) {
+        return {
+            entries: [],
+            cheapest: null,
+            cheapestTieCount: 0,
+            mostExpensive: null,
+            mostExpensiveTieCount: 0,
+            maxMonthlyCost: 0,
+            allEqual: false,
+            selected: null,
+            selectedRank: null,
+            selectedCostDeltaFromCheapest: null,
+            totalCount: 0,
+        };
+    }
+
+    const cheapest = entries[0];
+    const mostExpensive = entries[entries.length - 1];
+    // entries is already deterministically sorted/tie-broken, so the index
+    // found here (and thus the rank derived from it) is deterministic too.
+    const selectedIndex = entries.findIndex((entry) => entry.isSelected);
+    const selected = selectedIndex === -1 ? null : entries[selectedIndex];
+
+    return {
+        entries,
+        cheapest,
+        cheapestTieCount: entries.filter((entry) => entry.monthlyCost === cheapest.monthlyCost)
+            .length,
+        mostExpensive,
+        mostExpensiveTieCount: entries.filter(
+            (entry) => entry.monthlyCost === mostExpensive.monthlyCost,
+        ).length,
+        maxMonthlyCost: mostExpensive.monthlyCost,
+        allEqual: cheapest.monthlyCost === mostExpensive.monthlyCost,
+        selected,
+        selectedRank: selected ? selectedIndex + 1 : null,
+        selectedCostDeltaFromCheapest: selected ? selected.monthlyCost - cheapest.monthlyCost : null,
+        totalCount: entries.length,
+    };
+}
+
+export function getModelCostComparison(input = {}) {
+    const normalized = normalizeAiCostInput(input);
+
+    return {
+        input: normalized,
+        ...buildModelCostComparison(getFlatModels(), normalized),
     };
 }

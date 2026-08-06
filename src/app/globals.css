@@ -16,6 +16,24 @@ input[type="number"] {
   --background: #ffffff;
   --foreground: #171717;
   color-scheme: light;
+
+  /* Semantic highlight colors for critical UI (success/warning states,
+     selected-item highlights). Referenced via inline styles rather than
+     Tailwind's bracket-arbitrary-value utilities, which have shown
+     Safari-specific rendering issues in this project (see CLAUDE.md). Plain
+     custom properties avoid the escaped-selector CSS Tailwind generates for
+     arbitrary hex classes and have been supported since Safari 9.1. */
+  --cf-success-bg: #ecfdf5;
+  --cf-success-border: #a7f3d0;
+  --cf-success-text: #059669;
+  --cf-success-badge-text: #ffffff;
+  --cf-danger-bg: #fff7ed;
+  --cf-danger-border: #fed7aa;
+  --cf-danger-text: #c2410c;
+  --cf-bar-default: #2563eb;
+  --cf-info-bg: #eff6ff;
+  --cf-info-border: #bfdbfe;
+  --cf-info-text: #1d4ed8;
 }
 
 @theme inline {
@@ -30,6 +48,18 @@ input[type="number"] {
     --background: #0a0a0a;
     --foreground: #ededed;
     color-scheme: dark;
+
+    --cf-success-bg: #022c22;
+    --cf-success-border: #065f46;
+    --cf-success-text: #34d399;
+    --cf-success-badge-text: #022c22;
+    --cf-danger-bg: #431407;
+    --cf-danger-border: #9a3412;
+    --cf-danger-text: #fb923c;
+    --cf-bar-default: #60a5fa;
+    --cf-info-bg: #172554;
+    --cf-info-border: #1e3a8a;
+    --cf-info-text: #93c5fd;
   }
 }
 
@@ -37,12 +67,36 @@ input[type="number"] {
   --background: #0a0a0a;
   --foreground: #ededed;
   color-scheme: dark;
+
+  --cf-success-bg: #022c22;
+  --cf-success-border: #065f46;
+  --cf-success-text: #34d399;
+  --cf-success-badge-text: #022c22;
+  --cf-danger-bg: #431407;
+  --cf-danger-border: #9a3412;
+  --cf-danger-text: #fb923c;
+  --cf-bar-default: #60a5fa;
+  --cf-info-bg: #172554;
+  --cf-info-border: #1e3a8a;
+  --cf-info-text: #93c5fd;
 }
 
 :root.light {
   --background: #ffffff;
   --foreground: #171717;
   color-scheme: light;
+
+  --cf-success-bg: #ecfdf5;
+  --cf-success-border: #a7f3d0;
+  --cf-success-text: #059669;
+  --cf-success-badge-text: #ffffff;
+  --cf-danger-bg: #fff7ed;
+  --cf-danger-border: #fed7aa;
+  --cf-danger-text: #c2410c;
+  --cf-bar-default: #2563eb;
+  --cf-info-bg: #eff6ff;
+  --cf-info-border: #bfdbfe;
+  --cf-info-text: #1d4ed8;
 }
 
 body {
