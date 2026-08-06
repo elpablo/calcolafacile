@@ -4,21 +4,9 @@ import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { useSearchParams } from "next/navigation";
 import ToolLayout, { ResultBox } from "@/components/ToolLayout";
 import { loadLocalState, saveLocalState } from "@/lib/browserStorage";
-import { getFlatModels } from "@/config/aiModels";
+import { MODELS, normalizeTokenEstimatorState, resolveModel } from "./tokenEstimatorLogic";
 
 const STORAGE_KEY = "calcolafacile:token-estimator";
-const MODEL_OPTIONS = getFlatModels();
-const MODELS = Object.fromEntries(
-    MODEL_OPTIONS.map((model) => [
-        model.modelKey,
-        {
-            label: model.label,
-            providerLabel: model.providerLabel,
-            inputPricePerMillion: model.inputCostPerMillion,
-            outputPricePerMillion: model.outputCostPerMillion,
-        },
-    ]),
-);
 
 const selectClass =
     "h-12 w-full rounded-lg border border-zinc-300 bg-white px-3 text-base font-medium leading-none text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-blue-400";
@@ -53,20 +41,13 @@ function decodeInitialText(value) {
 
 function getInitialState(shouldLoadSavedState, sample, urlText) {
     if (!shouldLoadSavedState) {
-        return { text: "", modelKey: sample.modelKey, estimatedOutputTokens: sample.estimatedOutputTokens };
+        return normalizeTokenEstimatorState({}, sample);
     }
     if (urlText) {
-        return { text: urlText, modelKey: sample.modelKey, estimatedOutputTokens: sample.estimatedOutputTokens };
+        return normalizeTokenEstimatorState({ text: urlText }, sample);
     }
     const stored = loadLocalState(STORAGE_KEY, {});
-    return {
-        text: typeof stored?.text === "string" ? stored.text : "",
-        modelKey: stored?.modelKey && stored.modelKey in MODELS ? stored.modelKey : sample.modelKey,
-        estimatedOutputTokens:
-            typeof stored?.estimatedOutputTokens === "string"
-                ? stored.estimatedOutputTokens
-                : sample.estimatedOutputTokens,
-    };
+    return normalizeTokenEstimatorState(stored, sample);
 }
 
 export default function TokenEstimatorCore({ content }) {
@@ -126,7 +107,7 @@ function TokenEstimatorCoreContent({ content, shouldLoadSavedState }) {
         const outputTokens = Number.parseInt(estimatedOutputTokens, 10);
         const safeOutputTokens =
             Number.isNaN(outputTokens) || outputTokens < 0 ? 0 : outputTokens;
-        const model = MODELS[modelKey];
+        const model = resolveModel(modelKey);
 
         const inputCost = (inputTokens / 1_000_000) * model.inputPricePerMillion;
         const outputCost = (safeOutputTokens / 1_000_000) * model.outputPricePerMillion;
@@ -153,7 +134,7 @@ function TokenEstimatorCoreContent({ content, shouldLoadSavedState }) {
             maximumFractionDigits: 6,
         });
 
-    const selectedModel = MODELS[modelKey];
+    const selectedModel = resolveModel(modelKey);
     const copyText = labels.copyText({
         inputTokens: formatNumber(stats.inputTokens),
         outputTokens: formatNumber(stats.outputTokens),
@@ -191,6 +172,7 @@ function TokenEstimatorCoreContent({ content, shouldLoadSavedState }) {
                         value={modelKey}
                         onChange={(event) => setModelKey(event.target.value)}
                         className={selectClass}
+                        data-testid="token-estimator-model"
                     >
                         {Object.entries(MODELS).map(([key, model]) => (
                             <option key={key} value={key}>
@@ -234,7 +216,7 @@ function TokenEstimatorCoreContent({ content, shouldLoadSavedState }) {
                 </button>
             </div>
 
-            <ResultBox copyText={copyText} lang={lang}>
+            <ResultBox copyText={copyText} lang={lang} testId="token-estimator-result">
                 <p className="text-sm text-zinc-500 dark:text-zinc-400">
                     {labels.inputTokensResult}
                 </p>

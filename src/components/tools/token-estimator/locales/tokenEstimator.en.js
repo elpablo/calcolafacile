@@ -56,7 +56,7 @@ const tokenEstimatorEn = {
     ),
     sampleText: `Write a short description of an app that helps users compare prices of nearby grocery stores using a simple and direct tone.`,
     sample: {
-        modelKey: "gpt-4o-mini",
+        modelKey: "gpt-5.6-luna",
         estimatedOutputTokens: "500",
     },
     labels: {
