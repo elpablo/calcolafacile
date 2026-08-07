@@ -9,13 +9,13 @@ export const AI_MODEL_PROVIDERS = {
             },
             "gpt-5.6-terra": {
                 label: "GPT-5.6 Terra",
-                inputCostPerMillion: 2.5,
-                outputCostPerMillion: 15,
+                inputCostPerMillion: 2,
+                outputCostPerMillion: 12,
             },
             "gpt-5.6-luna": {
                 label: "GPT-5.6 Luna",
-                inputCostPerMillion: 1,
-                outputCostPerMillion: 6,
+                inputCostPerMillion: 0.2,
+                outputCostPerMillion: 1.2,
             },
             "gpt-5.5-pro": {
                 label: "GPT-5.5 Pro",
