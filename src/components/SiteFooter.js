@@ -8,7 +8,7 @@ const COPY = {
         cookies: "Cookie Policy",
         terms: "Termini di utilizzo",
         tagline:
-            "NERALAB Srl · Strumenti online veloci e privacy-friendly.",
+            "Paolo Quadrani · Strumenti online veloci e privacy-friendly.",
         paths: {
             privacy: "/it/privacy",
             cookies: "/it/cookie-policy",
@@ -20,7 +20,7 @@ const COPY = {
         cookies: "Cookie Policy",
         terms: "Terms of Service",
         tagline:
-            "NERALAB Srl · Fast and privacy-friendly online tools.",
+            "Paolo Quadrani · Fast and privacy-friendly online tools.",
         paths: {
             privacy: "/en/privacy",
             cookies: "/en/cookie-policy",

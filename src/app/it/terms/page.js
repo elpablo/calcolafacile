@@ -24,7 +24,7 @@ export default function TermsPage() {
                     calcoli, conversioni, formattazione di dati e altre utilità
                     tecniche o quotidiane.
                 </p>
-                <p>Il servizio è fornito da NERALAB Srl, Bologna (Italia).</p>
+                <p>Il servizio è fornito da Paolo Quadrani, Bologna (Italia).</p>
             </LegalSection>
 
             <LegalSection title="2. Uso degli strumenti">
@@ -115,7 +115,7 @@ export default function TermsPage() {
 
             <LegalSection title="7. Limitazione di responsabilità">
                 <p>
-                    Nei limiti consentiti dalla legge applicabile, NERALAB Srl
+                    Nei limiti consentiti dalla legge applicabile, Paolo Quadrani
                     non potrà essere ritenuta responsabile per danni diretti o
                     indiretti, perdite economiche, errori, omissioni,
                     interruzioni del servizio o conseguenze derivanti
@@ -144,7 +144,7 @@ export default function TermsPage() {
             <LegalSection title="9. Link a siti o servizi di terzi">
                 <p>
                     CalcolaFacile può contenere link verso siti, servizi o
-                    risorse di terzi. NERALAB Srl non controlla tali contenuti e
+                    risorse di terzi. Paolo Quadrani non controlla tali contenuti e
                     non è responsabile per disponibilità, correttezza, sicurezza
                     o pratiche privacy di siti esterni.
                 </p>
@@ -168,7 +168,7 @@ export default function TermsPage() {
 
             <LegalSection title="12. Modifiche ai Termini">
                 <p>
-                    NERALAB Srl può aggiornare questi Termini di utilizzo nel
+                    Paolo Quadrani può aggiornare questi Termini di utilizzo nel
                     tempo per riflettere modifiche normative, tecniche,
                     funzionali o organizzative. La versione più recente è sempre
                     pubblicata su questa pagina.

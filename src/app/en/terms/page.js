@@ -23,7 +23,7 @@ export default function TermsPage() {
                     calculations, conversions, data formatting and other
                     technical or everyday utilities.
                 </p>
-                <p>The service is provided by NERALAB Srl, Bologna, Italy.</p>
+                <p>The service is provided by Paolo Quadrani, Bologna, Italy.</p>
             </LegalSection>
 
             <LegalSection title="2. Use of the tools">
@@ -109,8 +109,8 @@ export default function TermsPage() {
 
             <LegalSection title="7. Limitation of liability">
                 <p>
-                    To the maximum extent permitted by applicable law, NERALAB
-                    Srl shall not be liable for direct or indirect damages,
+                    To the maximum extent permitted by applicable law, Paolo Quadrani
+                    shall not be liable for direct or indirect damages,
                     economic losses, errors, omissions, service interruptions or
                     consequences arising from the use of, or inability to use,
                     CalcolaFacile.
@@ -137,7 +137,7 @@ export default function TermsPage() {
             <LegalSection title="9. Links to third-party websites or services">
                 <p>
                     CalcolaFacile may contain links to third-party websites,
-                    services or resources. NERALAB Srl does not control such
+                    services or resources. Paolo Quadrani does not control such
                     content and is not responsible for the availability,
                     accuracy, security or privacy practices of external
                     websites.
@@ -162,7 +162,7 @@ export default function TermsPage() {
 
             <LegalSection title="12. Changes to these Terms">
                 <p>
-                    NERALAB Srl may update these Terms of Service over time to
+                    Paolo Quadrani may update these Terms of Service over time to
                     reflect legal, technical, functional or organizational
                     changes. The most recent version is always published on this
                     page.

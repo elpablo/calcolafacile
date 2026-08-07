@@ -18,11 +18,11 @@ export default function PrivacyPolicyPage() {
         >
             <LegalSection title="Data Controller">
                 <p>
-                    The data controller is NERALAB Srl, based in Bologna, Italy.
+                    The data controller is Paolo Quadrani, based in Bologna, Italy.
                 </p>
                 <p>
                     For privacy-related requests or to exercise GDPR rights,
-                    users may contact the controller at info@neralab.it.
+                    users may contact the controller at paolo.quadrani [at] gmail.com.
                 </p>
             </LegalSection>
 

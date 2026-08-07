@@ -20,13 +20,12 @@ export default function PrivacyPolicyPage() {
         >
             <LegalSection title="Titolare del trattamento">
                 <p>
-                    Il titolare del trattamento dei dati personali è NERALAB
-                    Srl, Bologna (Italia).
+                    Il titolare del trattamento dei dati personali è Paolo Quadrani, Bologna (Italia).
                 </p>
                 <p>
                     Per richieste relative alla privacy o all&apos;esercizio dei
                     diritti previsti dal GDPR è possibile contattare il titolare
-                    all&apos;indirizzo email info@neralab.it.
+                    all&apos;indirizzo email paolo.quadrani [at] gmail.com.
                 </p>
             </LegalSection>
 
